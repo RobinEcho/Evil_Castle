@@ -26,7 +26,7 @@ import library
   
   PImage bg, bag_img;
   PFont font;
-  
+  int total_jobs = 6;
    protected int steps = 0, encounter;
    protected float side_margin, height_margin;
    protected int boxwidth,boxheight;
@@ -152,6 +152,7 @@ import library
         background(0,0,100);
         
         bag.display_bag();
+        
         
         break;
         

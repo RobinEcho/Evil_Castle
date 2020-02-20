@@ -44,6 +44,14 @@ class Bag{
     vertical_margin = (height - UI_height)/2;
     horizontal_margin = (width - 2*UI_width - UI_dis)/2;
     
+    for(int i = 0; i < row; i++){
+      for(int j = 0; j < col; j++)
+      {
+        //image(item_pic[j%3], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
+        inv[i][j] = j%3;
+      }    //for loop(j)
+    }    //for loop (i)
+    
   }                    //close Bag()
   
   
@@ -55,6 +63,9 @@ class Bag{
     PropertyPanel();
     BagPanel();
     BagSquare();
+    if(move_item){
+      image(item_pic[temp_item_code], mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
+    }
   }                    //close display_bag()
   
 /*-----------------------------------------------------------------------------------------------------*/
@@ -98,8 +109,8 @@ class Bag{
     for(int i = 0; i < row; i++){
       for(int j = 0; j < col; j++)
       {
-        image(item_pic[j%3], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
-        inv[i][j] = j%3;
+        image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
+        
       }    //for loop(j)
     }    //for loop (i)
   }                    //close BagSquare()

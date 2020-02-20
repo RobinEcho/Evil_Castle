@@ -64,7 +64,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     rect(boxX,boxY,boxwidth,boxheight,9);
     textAlign(CENTER);
     textSize(text_height);
-    for(int i =0; i<6;i++)
+    for(int i =0; i<total_jobs;i++)
     {
       fill(40,100);
       text(job_list[i],boxX+boxwidth/2,i*60+boxY+40);
