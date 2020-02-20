@@ -48,14 +48,23 @@ void monsterappear() {
       encounter   = steps + r.nextInt(20);
       
       if(encounter >= 60){
+        Units[] order;
         
-        enemy_count =  r.nextInt(room % 3 ) + 1;
+        if(floor > 4){
+          enemy_count =  r.nextInt(100) % 4 + 1;
+        }else{
+          enemy_count =  r.nextInt(100) % floor + 1;
+        }
+        
+        enemy_setup();
         
         room = 90;
                 
         steps = 0;
         
         encounter = 0;
+        
+        order = round_order();
       }
   }  
 }                    //close monsterappear()

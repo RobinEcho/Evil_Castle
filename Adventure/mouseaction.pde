@@ -4,6 +4,7 @@ function about mouse, set variable first, all action base on room
 int trial = 0;
 float ogx, ogy;
 int bag_x, bag_y, temp_item_code;
+float skill_box_width, skill_box_height;
 boolean move_item = false, select_item = false;
  
  public void mousePressed(){
@@ -55,18 +56,38 @@ boolean move_item = false, select_item = false;
  /*******************************************
  */
        case 90:
-         /*
-         switch(mode){
-           case 1:
-             break;
-         }
-         */
-         distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y + command_radius)) * (y - (command_y + command_radius)) ) ) );
-         if(distance <= command_radius / 2.0){
-           escape();
-         }
-         break;
          
+             distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y - command_radius)) * (y - (command_y - command_radius)) ) ) );
+             if(distance <= command_radius / 2.0){
+               attack(0,0,0);
+               //println("pa: " + p[0].get_patk() + " md: " + m[0].get_pdef());
+               //println("dmg: " + (p[0].get_patk() -  m[0].get_pdef()));
+               println("attack! " + m[0].get_cur_hp() + " hp down: " + m[0].get_hp_dec());
+               mode = 1;
+               if(m[0].get_cur_hp() <= 0){
+                 println("dead!");
+               }
+             }
+             
+             distance = (float) ( Math.sqrt(( (x - (command_x + command_radius)) * (x - (command_x + command_radius)) + (y - command_y) * (y - command_y) ) ) );
+             if(distance <= command_radius / 2.0){
+               println("skill!");
+               mode = 2;
+             }
+             
+             distance = (float) ( Math.sqrt(( (x - (command_x - command_radius)) * (x - (command_x - command_radius)) + (y - command_y) * (y - command_y) ) ) );
+             if(distance <= command_radius / 2.0){
+               println("item!");
+               mode = 3;
+             }
+             
+             distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y + command_radius)) * (y - (command_y + command_radius)) ) ) );
+             if(distance <= command_radius / 2.0){
+               escape();
+             }
+         
+        
+       break;
        case 91:  //  item selct drop-down menu
           ogx = x;
           ogy = y;
@@ -98,8 +119,9 @@ boolean move_item = false, select_item = false;
        
        case 98:
            if((x >= bagoptX && x<= bagoptX+bag.square_width*3) && (y >= bagoptY && y <= bagoptY+bag.square_height)){
-             
-             println("used");
+             println("x: " + bag_x + " y: " + bag_y);
+             println("used " + (bag_y * 5 + bag_x + 1));
+             room = 91;
            
            }
            
@@ -154,14 +176,17 @@ void mouseDragged(){
     move_item = true;
     
     image(item_pic[temp_item_code], mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
-    
+    //room = 91;
   }
 }
   
 void mouseReleased(){
   float sqx, sqy;
   
-  if(move_item){
+  switch(room){
+    
+    case 91:
+    if(move_item){
             
           for(int i = 0; i < bag.row; i++){
             for(int j = 0; j < bag.col; j++)
@@ -176,7 +201,6 @@ void mouseReleased(){
                    if(bag.inv[i][j] > 0){
                      bagoptX = mouseX+bag.hs;
                      bagoptY = mouseY;
-                     room = 98;
                    }
                  }else{
                    bag.inv[bag_y][bag_x] = temp_item_code;
@@ -198,9 +222,10 @@ void mouseReleased(){
                select_item = false;
             }
           }
-  }else{
-    for(int i = 0; i < bag.row; i++){
-          for(int j = 0; j < bag.col; j++)
+      }else{
+        if(select_item){
+        for(int i = 0; i < bag.row; i++){
+            for(int j = 0; j < bag.col; j++)
           {
             sqx = (j+1)*bag.hs + (j*bag.square_width) + (width + bag.UI_dis)/2;
             sqy = (i+1)*bag.vs + (i * bag.square_height) + bag.vertical_margin;
@@ -216,10 +241,12 @@ void mouseReleased(){
                  bagoptX = mouseX+bag.hs;
                  bagoptY = mouseY;
                  room = 98;
-                 select_item = false;
                }
              }
           }
+        }
     }
+  }
+  break;
   }
 }

@@ -2,28 +2,69 @@
   /*******************************************
   Monster status setting
   ********************************************/ 
-  
+
 
 
 class Monster extends Units{
-  private int type = 1;
-  private String monster_type = "Normal";
-  private String name;
-  private int skillset = 0;
-
-	public Monster(int t, int lv, float pa, float pd, float ma, float md, float mhp, float mmp, float sp){
-    this.type = t;
+  protected int m_type;
+  protected String monster_type = "Normal";
+  protected String name;
+  protected int skillset = 0;
+  protected float mod = 1.0;
+  
+  public Monster(){
+    type = 0;
+  }
+  
+  public Monster(int t){
+    this.m_type = t;
+    
+    type = 0;
+  }
+  
+	public Monster(int t, int lv){
+    this.m_type = t;
 		this.level = lv;
-		this.patk = pa;
-		this.pdef = pd;
-		this.matk = ma;
-		this.mdef = md;
-		this.spd = sp;
-		this.max_hp = mhp;
-		this.max_mp = mmp;
-		this.cur_hp = mhp;
-		this.cur_mp = mmp;
+    type = 0;
+  
+    init_stats();
 	}
+
+  
+  public void init_stats(){
+    switch(m_type){
+      case 1:
+        this.monster_type = "Normal";
+        this.mod = 1.0;
+        this.img = loadImage("src/monster/normal/n1.png");
+        break;
+      
+      case 2:
+        this.monster_type = "Elite";
+        this.mod = 1.5;
+        this.img = loadImage("src/monster/elite/e1.png");
+        break;
+      
+      case 3:
+        this.monster_type = "Boss";
+        this.mod = 2.0;
+        this.img = loadImage("src/monster/boss/b1.png");
+        break;
+      
+    }
+    
+    this.patk = (level * 10) * mod;
+    this.pdef = (level * 10) * mod;
+    this.matk = (level * 10) * mod;
+    this.mdef = (level * 10) * mod;
+    this.spd = (level * 10) * mod;
+    this.max_hp = (level * 10) * mod;
+    this.max_mp = (level * 10) * mod;
+    this.cur_hp = (level * 10) * mod;
+    this.cur_mp = (level * 10) * mod;
+    
+    
+  }
 	
 	public void calc_stats(){
 		this.patk = patk + bonus_patk;
@@ -37,8 +78,8 @@ class Monster extends Units{
 		this.cur_mp = max_mp - mp_dec + bonus_mp;
 	}
 
-  public void setType(int x){
-    this.type = x;
+  public void setMType(int x){
+    this.m_type = x;
   }
   
   public void setMonsterType(String s){
@@ -53,8 +94,8 @@ class Monster extends Units{
     return this.name;
   }
   
-  public int getType(){
-    return this.type;
+  public int getMType(){
+    return this.m_type;
   }
   
   public String getMonsterType(){

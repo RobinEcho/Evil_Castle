@@ -5,6 +5,7 @@
    
    protected int item_count = 3;
    PImage item_pic[] = new PImage[item_count];
+   PImage arrow[] = new PImage[2];
 
 
 
@@ -29,11 +30,9 @@ class Bag{
   public int row, col;
   int UI_width, UI_height, UI_dis;
   int vertical_margin, horizontal_margin;
-  float square_width, square_height, vs, hs;  
+  float square_width, square_height, vs, hs;
   
   public Bag(int row, int col){
-    
-   
     
     inv = new int[row][col];
     this.row = row;
@@ -61,8 +60,7 @@ class Bag{
 
   public void display_bag(){
     PropertyPanel();
-    BagPanel();
-    BagSquare();
+    BagSquare(1);
     if(move_item){
       image(item_pic[temp_item_code], mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
     }
@@ -78,25 +76,12 @@ class Bag{
     
   }                    //close PropertyPanel()
 
-/*-----------------------------------------------------------------------------------------------------*/
-   
-
-
-  public void BagPanel(){
-    noStroke();
-    fill(60, 100, 100);
-    
-    rect((width + UI_dis)/2, vertical_margin, UI_width, UI_height);
-  
-  }                    //close BagPanel()
-
 
   /*******************************************
   BagSquare base on rows and column
   ********************************************/ 
 
-  public void BagSquare(){
-    
+  public void BagSquare(int mode){
     
     square_width = (float)UI_width / (float)(col+((col+1)/2.0));
     square_height = (float)UI_height / (float)(row+((row+1)/2.0));
@@ -104,16 +89,42 @@ class Bag{
     hs = square_width / 2;
     
     noStroke();
-    fill(0, 0, 100);
+    fill(60, 100, 100);
     
-    for(int i = 0; i < row; i++){
-      for(int j = 0; j < col; j++)
-      {
-        image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
+    switch(mode){
+      case 1:
+        rect((width + UI_dis)/2, vertical_margin, UI_width, UI_height);
         
-      }    //for loop(j)
-    }    //for loop (i)
-  }                    //close BagSquare()
+        fill(0, 0, 100);
+        
+        for(int i = 0; i < row; i++){
+          for(int j = 0; j < col; j++)
+          {
+            image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
+            
+          }    //for loop(j)
+        }    //for loop (i)
+        break;
+        
+        case 2:
+          rect(width/2 - UI_width, vertical_margin, UI_width * 2, (( (row / 2 + row % 2) + 1) *vs + (row / 2 + ((row) % 2)) * square_height));
+        fill(0, 0, 100);
+        
+        for(int i = 0; i < row; i++){
+          for(int j = 0; j < col; j++)
+          {
+            if(i > row / 2 - ((row + 1) % 2)){
+              image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + width/2, ((i+1-(row / 2 + row % 2))*vs + ((i-(row / 2 + ((row) % 2))) * square_height))+ vertical_margin, square_width, square_height);
+            }else{
+              image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + width/2 - UI_width, ((i+1)*vs + (i * square_height))+ vertical_margin, square_width, square_height);
+            }
+            
+          }    //for loop(j)
+        }    //for loop (i)
+        
+        break;
+      }
+    }                    //close BagSquare()
    
 }                    //cloase class Bag
 

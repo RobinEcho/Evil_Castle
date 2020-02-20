@@ -6,20 +6,27 @@
 
 class Player extends Units{
 	protected float str = 1, con = 1, intel = 1, wis = 1, agi = 1;
-  protected int exp = 0;
-  public final int type = 0;
+  protected int exp = 0, job_code;
+  public int dir = 1;
 	Job job;
+  Skill skills;
 	
 	public Player(){
+    type = 1;
 	}
 
 	public Player(int x){
+    this.job_code = x;
 		job = new Job(x);
+    type = 1;
     init_stats();
     calc_stats();
+    init_skillset();
 	}
 
 	public Player(int x, int lv, float st, float co, float in, float wi, float ag){
+    type = 1;
+    this.job_code = x;
     job = new Job(x);
 		this.level = lv;
 		this.str = st;
@@ -28,6 +35,15 @@ class Player extends Units{
 		this.wis = wi;
 		this.agi = ag;
 	}
+
+  public void init_skillset(){
+    switch(this.job_code){
+      case 1:
+        skills = new Knight_skill_list();
+        
+        break;
+    }
+  }
 
   public void init_stats(){
     this.str = job.stats[0];
@@ -138,6 +154,42 @@ class Player extends Units{
 	public float get_agi(){
 		return this.agi;
 	}
+
+/********************
+interaction
+********************/
+public int[] interact(){
+  int coords[] = new int[2];
+  
+  switch(dir){
+    //facing up
+    case 0:
+      coords[0] = (int) this.charX / sqw;
+      coords[1] = ((int) this.charY / sqh) - 1;
+      break;
+      
+    //facing right
+    case 1:
+      coords[0] = ((int) this.charX / sqw) + 1;
+      coords[1] = (int) this.charY / sqh;
+      break;
+      
+    //facing down
+    case 2:
+      coords[0] = (int) this.charX / sqw;
+      coords[1] = ((int) this.charY / sqh) + 1;
+      break;
+      
+    //facing left
+    case 3:
+      coords[0] = ((int) this.charX / sqw) - 1;
+      coords[1] = (int) this.charY / sqh;
+      break;
+    
+  }
+  
+  return coords;
+}
 	
 	/***********************
 	*test print

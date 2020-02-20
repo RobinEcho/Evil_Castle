@@ -5,8 +5,8 @@ class units to set some basic data about unit
 
 
 class Units{
-  protected int id;
-  public int level;
+  protected int id, type;
+  protected int level;
   protected boolean alive = true;
 	protected float patk, pdef, matk, mdef, max_hp, max_mp, cur_hp, cur_mp, spd;
 	protected float hp_dec = 0, mp_dec = 0;
@@ -119,6 +119,10 @@ class Units{
     this.charY = y;
   }
   
+  public void set_type(int x){
+    this.type = x;
+  }
+  
 	public void set_level(int x){
 		this.level = x;
 	}
@@ -154,6 +158,10 @@ class Units{
 	//Getter
   public boolean is_alive(){
     return this.alive;
+  }
+  
+  public int get_type(){
+    return this.type;
   }
   
 	public int get_level(){
@@ -195,4 +203,8 @@ class Units{
 	public float get_max_mp(){
 		return this.max_mp;
 	}
+
+  public float get_hp_dec(){
+    return this.hp_dec;
+  }
 }

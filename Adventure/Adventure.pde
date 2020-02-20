@@ -26,14 +26,14 @@ import library
   
   PImage bg, bag_img;
   PFont font;
-  int total_jobs = 6;
-   protected int steps = 0, encounter;
-   protected float side_margin, height_margin;
-   protected int boxwidth,boxheight;
-   protected int boxX,boxY;
-   protected int grid_width = 40, grid_height = 45;
-   protected int sqw = 40, sqh = 45;
-   protected int width = 1600, height = 900;  
+  int total_jobs = 6, floor = 1;
+  int steps = 0, encounter;
+  float side_margin, height_margin;
+  int boxwidth,boxheight;
+  int boxX,boxY;
+  int grid_width = 40, grid_height = 45;
+  int sqw = 40, sqh = 45;
+  int width = 1600, height = 900;  
    
    
   
@@ -51,7 +51,9 @@ import library
         init class object
   ********************************************/ 
     
+    
     Monster[] m = new Monster[4];
+    //Monster[] mob_list = new Monster[3];
     Player[] p = new Player[4];
     Bag bag = new Bag(8, 5);        //Bag(row,column)
   
@@ -81,7 +83,10 @@ import library
     colorMode(HSB, 100);
     
     loaditemimage();
-       
+    
+    for(int i = 0; i < 4; i++){
+      m[i] = new Monster();
+    }
   /************************************************
   try to check if save file can be loaded normally
   *************************************************/ 
@@ -132,7 +137,9 @@ import library
       case 2:
       
       background(bg);
+      map.draw_npc();
       structureline();
+      
       move();
       //isBoundary();
       fill(17, 64, 98, 75);
