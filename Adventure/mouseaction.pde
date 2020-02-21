@@ -6,12 +6,14 @@ float ogx, ogy;
 int bag_x, bag_y, temp_item_code;
 float skill_box_width, skill_box_height;
 boolean move_item = false, select_item = false;
+float x, y, distance;
+int command;
  
  public void mousePressed(){
     
-    float x = mouseX;
-    float y = mouseY;
-    float distance;
+    x = mouseX;
+    y = mouseY;
+    
     
     switch (room)
     {
@@ -36,9 +38,9 @@ boolean move_item = false, select_item = false;
 
         case 1:  //  drawroom
             for(int i = 0; i < total_jobs; i++){
-              if( (mouseX >= boxX && mouseX <= boxX + boxwidth) && (mouseY >= i*60+boxY+40-12.5 && mouseY < 0*60+boxY+40+12.5) ){
-                println("Reading job1 status");
-                  p_class = 1;
+              if( (mouseX >= boxX && mouseX <= boxX + boxwidth) && (mouseY >= i*60+boxY+40-12.5 && mouseY < i*60+boxY+40+12.5) ){
+                println("Reading job" + (i+1) + " status");
+                  p_class = i+1;
                   map.drawmap(1);
               }
             }
@@ -56,65 +58,47 @@ boolean move_item = false, select_item = false;
  /*******************************************
  */
        case 90:
-         
-             distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y - command_radius)) * (y - (command_y - command_radius)) ) ) );
-             if(distance <= command_radius / 2.0){
-               attack(0,0,0);
-               //println("pa: " + p[0].get_patk() + " md: " + m[0].get_pdef());
-               //println("dmg: " + (p[0].get_patk() -  m[0].get_pdef()));
-               println("attack! " + m[0].get_cur_hp() + " hp down: " + m[0].get_hp_dec());
-               mode = 1;
-               if(m[0].get_cur_hp() <= 0){
-                 println("dead!");
-               }
-             }
+         switch(battle_mode){
+           //player turn start
+           case 0:
+             battle_commands();
+           break;
+           
+           //select attack target
+           case 1:
+             select_enemy_target();
+             break;
              
-             distance = (float) ( Math.sqrt(( (x - (command_x + command_radius)) * (x - (command_x + command_radius)) + (y - command_y) * (y - command_y) ) ) );
-             if(distance <= command_radius / 2.0){
-               println("skill!");
-               mode = 2;
-             }
+           //use skill
+           case 2:
+             battle_commands();
+             skill_commands();
+             break;
              
-             distance = (float) ( Math.sqrt(( (x - (command_x - command_radius)) * (x - (command_x - command_radius)) + (y - command_y) * (y - command_y) ) ) );
-             if(distance <= command_radius / 2.0){
-               println("item!");
-               mode = 3;
-             }
+           //use item
+           case 3:
+             bag_select(2);
+
+             break;
              
-             distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y + command_radius)) * (y - (command_y + command_radius)) ) ) );
-             if(distance <= command_radius / 2.0){
-               escape();
-             }
-         
+           //select ally target
+           case 4:
+             select_ally_target();
+             break;
+             
+           //monster turn
+           default:
+             println("Monster Turn!");
+             break;
+         }
         
        break;
-       case 91:  //  item selct drop-down menu
-          ogx = x;
-          ogy = y;
-          float sqx, sqy;
-          
-          for(int i = 0; i < bag.row; i++){
-          for(int j = 0; j < bag.col; j++)
-          {
-            sqx = (j+1)*bag.hs + (j*bag.square_width) + (width + bag.UI_dis)/2;
-            sqy = (i+1)*bag.vs + (i * bag.square_height) + bag.vertical_margin;
-            
-             if(x >= sqx && x <= sqx + bag.square_width  && y >=  sqy && y <= sqy + bag.square_height)
-             {
-               if(bag.inv[i][j] > 0){
-                 bag_x = j;
-                 bag_y = i;
-                 temp_item_code = bag.inv[i][j];
-                 bag.inv[i][j] = 0;
-                 select_item = true;
-               }
-             }
-          }
-    }
-            
-            
        
-           break;
+       
+       case 91:  //  item selct drop-down menu
+         bag_select(1);
+            
+         break;
        
        
        case 98:
@@ -248,5 +232,162 @@ void mouseReleased(){
     }
   }
   break;
+  }
+}
+
+void battle_commands(){
+  distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y - command_radius)) * (y - (command_y - command_radius)) ) ) );
+             if(distance <= command_radius / 2.0){
+               //attack(0,0,0);
+               //println("pa: " + p[0].get_patk() + " md: " + m[0].get_pdef());
+               //println("dmg: " + (p[0].get_patk() -  m[0].get_pdef()));
+               //println("attack! " + m[0].get_cur_hp() + " hp down: " + m[0].get_hp_dec());
+               battle_mode = 1;
+               command = 6;
+               //if(m[0].get_cur_hp() <= 0){
+               //  println("dead!");
+               //}
+             }
+             
+             distance = (float) ( Math.sqrt(( (x - (command_x + command_radius)) * (x - (command_x + command_radius)) + (y - command_y) * (y - command_y) ) ) );
+             if(distance <= command_radius / 2.0){
+               println("skill!");
+               p[0].skills.skill[0].skilldamage();
+               println(p[0].skills.skill[0].damage);
+               battle_mode = 2;
+             }
+             
+             distance = (float) ( Math.sqrt(( (x - (command_x - command_radius)) * (x - (command_x - command_radius)) + (y - command_y) * (y - command_y) ) ) );
+             if(distance <= command_radius / 2.0){
+               println("item!");
+               battle_mode = 3;
+             }
+             
+             distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y + command_radius)) * (y - (command_y + command_radius)) ) ) );
+             if(distance <= command_radius / 2.0){
+               escape();
+             }
+}
+
+void skill_commands(){
+  for(int i = 0; i < 6; i++){
+                if(x >= command_x + command_radius * 1.5 + battle_UI_margin && x <= command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width 
+                  && y >= (command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5))) && y <= (command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5))) + skill_box_height){
+                    println("use skill " + (i+1));
+                    command = i;
+                    
+                    if(p[cur].skills.skill[i].type == 1){
+                      battle_mode = 1;
+                    }else{
+                      battle_mode = 4;
+                    }
+                }
+              }
+   
+  if(battle_mode != 1 && battle_mode != 4){
+    battle_mode = 0;
+  }
+}
+
+void bag_select(int bag_mode){
+   switch(bag_mode){
+     case 1:
+          ogx = x;
+          ogy = y;
+          float sqx, sqy;
+          
+          for(int i = 0; i < bag.row; i++){
+            for(int j = 0; j < bag.col; j++)
+            {
+              sqx = (j+1)*bag.hs + (j*bag.square_width) + (width + bag.UI_dis)/2;
+              sqy = (i+1)*bag.vs + (i * bag.square_height) + bag.vertical_margin;
+              
+               if(x >= sqx && x <= sqx + bag.square_width  && y >=  sqy && y <= sqy + bag.square_height)
+               {
+                 if(bag.inv[i][j] > 0){
+                   bag_x = j;
+                   bag_y = i;
+                   temp_item_code = bag.inv[i][j];
+                   bag.inv[i][j] = 0;
+                   select_item = true;
+                 }
+               }
+            }
+          }
+       break;
+     case 2:
+               for(int i = 0; i < bag.row; i++){
+                for(int j = 0; j < bag.col; j++)
+                {
+                  if(i > bag.row / 2 - ((bag.row + 1) % 2)){
+                    if(x >= ((j+1)*bag.hs + (j*bag.square_width) + width/2) && x <= ((j+1)*bag.hs + (j*bag.square_width) + width/2 + bag.square_width)
+                      && y >= ((i+1-(bag.row / 2 + bag.row % 2))*bag.vs + ((i-(bag.row / 2 + ((bag.row) % 2))) * bag.square_height))+ bag.vertical_margin 
+                      && y <= ((i+1-(bag.row / 2 + bag.row % 2))*bag.vs + ((i-(bag.row / 2 + ((bag.row) % 2))) * bag.square_height))+ bag.vertical_margin + bag.square_height){
+                        if(bag.inv[i][j] != 0){
+                          println("use item " + (i * bag.col + j));
+                        }
+                    }else{
+                      battle_mode = 0;
+                    }
+                  }else{
+                    if(x >= ((j+1)*bag.hs + (j*bag.square_width) + width/2 - bag.UI_width) && x <= ((j+1)*bag.hs + (j*bag.square_width) + width/2 - bag.UI_width + bag.square_width) 
+                      && y >= ( ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin ) && y <= ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin + bag.square_height){
+                        if(bag.inv[i][j] != 0){
+                          println("use item " + (i * bag.col + j));
+                        }
+                      }else{
+                        battle_mode = 0;
+                      }
+                  }
+                  
+                }    //for loop(j)
+              }    //for loop (i)
+       break;
+   }
+}
+
+void select_enemy_target(){
+  enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+        enemy_y = enemy_start_y;
+        target_diameter = (float)Math.sqrt( 2*(Math.pow((double)enemy_width,2.0)) );
+        strokeWeight(3);
+        stroke(0,100,100);
+        fill(0,100,100,0);
+        
+        for(int i = 0; i < enemy_count; i++){
+          if(i > 0){
+            if(i % 2 == 0){
+              enemy_x += enemy_width * m[i-1].get_mod();
+            }else{
+              enemy_x -= enemy_width * m[i-1].get_mod();
+            }
+          }
+            
+            if(x >= enemy_x + (enemy_width/2.0f * m[i].get_mod()) && x <= enemy_x + (enemy_width/2.0f * m[i].get_mod()) + enemy_width * m[i].get_mod()
+              && y >= enemy_y + enemy_height/2.0 * m[i].get_mod() && y <= enemy_y + enemy_height/2.0 * m[i].get_mod() + target_diameter * m[i].get_mod()){
+                if(command == 6){
+                  attack(pid, i, 0);
+                }else{
+                  p[pid].skills.skill[command].skilldamage();
+                  skill_attack(pid, i, 0, command);
+                }
+                cur++;
+                battle_mode = 0;
+            }else{
+              battle_mode = 0;
+            }
+          
+          
+          enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
+        }
+}
+
+void select_ally_target(){
+  for(int i = 0; i < c_pt; i++){
+    cx = c_width*i + (i+1)*battle_UI_margin;
+    if(x >= cx && x <= cx + c_width && y >= cy & y <= cy + c_height){
+      println("use on player " + (i+1));
+      cur++;
+    }
   }
 }

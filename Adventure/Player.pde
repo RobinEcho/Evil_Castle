@@ -12,12 +12,11 @@ class Player extends Units{
   Skill skills;
 	
 	public Player(){
-    type = 1;
 	}
 
 	public Player(int x){
     this.job_code = x;
-		job = new Job(x);
+    job = new Job(x);
     type = 1;
     init_stats();
     calc_stats();
@@ -40,19 +39,40 @@ class Player extends Units{
     switch(this.job_code){
       case 1:
         skills = new Knight_skill_list();
-        
         break;
+        
+      case 2:
+        skills = new Priest_skill_list();
+        break;
+        
+      case 3:
+        skills = new Mage_skill_list();
+        break;
+        
+      case 4:
+        skills = new Paladin_skill_list();
+        break;
+        
+      case 5:
+        skills = new Ranger_skill_list();
+        break;
+        
+      case 6:
+        skills = new Assassin_skill_list();
+        break;     
     }
   }
 
   public void init_stats(){
+    this.level = 1;
     this.str = job.stats[0];
-    this.con = job.stats[0];
-    this.intel = job.stats[0];
-    this.wis = job.stats[0];
-    this.agi = job.stats[0];
+    this.con = job.stats[1];
+    this.intel = job.stats[2];
+    this.wis = job.stats[3];
+    this.agi = job.stats[4];
   }
 	
+
 	//stats calculations
 	public void calc_stats(){
 		this.str = str + bonus_str;
@@ -61,16 +81,35 @@ class Player extends Units{
 		this.wis = wis + bonus_wis;
 		this.agi = agi + bonus_agi;
 
-		this.patk = str * job.amplifier[0] + level + bonus_patk;
-		this.pdef = con * job.amplifier[1]  + level * 3 + bonus_pdef;
-		this.matk = intel * job.amplifier[2]  + level * 2 + bonus_matk;
-		this.mdef = wis * job.amplifier[3] + level * 3 + bonus_mdef;
-		this.spd = agi * job.amplifier[4] + level + bonus_spd;
-		this.max_hp = con * job.amplifier[5]  + level * 2 + bonus_hp;
-		this.max_mp = wis * job.amplifier[6]  + bonus_mp;
-
+		this.patk = str * job.amplifier[0] + level * (2 + job.amplifier[0]) + bonus_patk;
+		this.pdef = con * job.amplifier[1]  + level * (5 + job.amplifier[1]) + bonus_pdef;
+		this.matk = intel * job.amplifier[2]  + level * (2 + job.amplifier[2]) + bonus_matk;
+		this.mdef = wis * job.amplifier[3] + level * (3.5 + job.amplifier[3]) + bonus_mdef;
+		this.spd = agi * job.amplifier[4] + level * (1 + job.amplifier[4]) + bonus_spd;
+		this.max_hp = con * (3 + job.amplifier[5]) * 2  + level * (8 + job.amplifier[5]) + bonus_hp;
+		this.max_mp = wis * (2 + job.amplifier[6])  + level * (3 + job.amplifier[6]) + bonus_mp;
 		this.cur_hp = max_hp - hp_dec + bonus_hp;
+    if(this.cur_hp <= 0){
+      dead();
+      cur_hp = 0;
+    }
+    if(this.cur_hp > max_hp){
+      cur_hp = max_hp;
+    }
+    
 		this.cur_mp = max_mp - mp_dec + bonus_mp;
+    if(this.cur_mp <= 0){
+      cur_mp = 0;
+    }
+    if(this.cur_mp > max_mp){
+      cur_mp = max_mp;
+    }
+
+    
+    println("lv: "+level+" patk= "+patk+" pdef = "+pdef+" matk = "+matk+" mdef = "+mdef+" spd = "+spd+" hp = "+max_hp+" mp = "+max_mp);
+    
+    
+    
 	}
 	
 	//temporary stats increments for equipments and buffs

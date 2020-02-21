@@ -1,14 +1,16 @@
 /*******************************************
 drawfunction, base on variable room to know where we are
 ********************************************/ 
-int mode = 0;
+int battle_mode = 0;
 String [] options = {"Main Menu", "Save", "Quit"};
 String[] job_list = {"Knight", "Priest", "Mage", "Paladin", "Ranger", "Assassin"};
 int mainY, saveY, exitY, text_height;
 float bagoptX, bagoptY;
 float pc_width, pc_height, pcx, pcy, hp_percent;
-  float enemy_width, enemy_height, enemy_x, enemy_y;
+  float enemy_width, enemy_height, enemy_start_x, enemy_start_y, enemy_x, enemy_y;
   float command_x, command_y, command_radius;
+  float target_diameter;
+  float tri_width, tri_height;
   
   
 
@@ -62,7 +64,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     
     fill(33,50);
     rect(boxX,boxY,boxwidth,boxheight,9);
-    textAlign(CENTER);
+    textAlign(CENTER, CENTER);
     textSize(text_height);
     for(int i =0; i<total_jobs;i++)
     {
@@ -128,8 +130,10 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   
   enemy_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt+1);
   enemy_height = (height*2/3.0f - 3.0f * battle_UI_margin)/ (float)(max_pt+2);
-  enemy_x = battle_UI_margin + (float)(enemy_count-1) * enemy_width;
-  enemy_y = battle_UI_margin + enemy_height/2.0f;
+  enemy_start_x = battle_UI_margin + (float)enemy_width;
+  enemy_start_y = battle_UI_margin + enemy_height/2.0f;
+  enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+  enemy_y = enemy_start_y;
   
   command_radius = (width/3.0f - 4.0f * battle_UI_margin)/ 4.0;
   command_x = width/2.0f;
@@ -146,16 +150,27 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   */
   
   //Draw enemies
+  noStroke();
   for(int i = 0; i < enemy_count; i++){
-    image(m[i].img, enemy_x - i*enemy_width/2.0f, enemy_y + i*enemy_height*1.5f, enemy_width, enemy_height);
+    if(i == 0){
+      image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+    }else{
+      
+      if(i % 2 == 0){
+        enemy_x += enemy_width * m[i-1].get_mod();
+      }else{
+        enemy_x -= enemy_width * m[i-1].get_mod();
+      }
+      
+      image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+    }
+    
+    enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
     //println("mob lv: " + m[i].get_level() + " patk: " + m[i].get_patk());
   }
   
   //Draw player status boxes
-  for(int i = 0; i < max_pt; i++){
-    cx = c_width*i + (i+1)*battle_UI_margin;
-    p_box();
-  }
+  p_box();
   
   //Draw player images and player status
   for(int i = 0; i < c_pt; i++){
@@ -178,12 +193,58 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     
     
     
-    //player stats
-    cx = c_width*i + (i+1)*battle_UI_margin;
-    p_stats(i);
-  }
+      //player stats
+      cx = c_width*i + (i+1)*battle_UI_margin;
+      p_stats(i);
+    }
   
-  //if(mode == 1){
+    switch(battle_mode){
+      //player turn start draw commands
+      case 0:
+        battle_command_UI();
+        break;
+        
+      //player chooses attack target
+      //image(m[i].img, enemy_x - i*enemy_width/2.0f, enemy_y + i*enemy_height*1.5f, enemy_width, enemy_height);
+      case 1:
+        enemy_selection();
+        break;
+      
+      //player uses skill
+      case 2:
+        battle_command_UI();
+        skill_box_width = command_radius * 1.5;
+        skill_box_height = height * 2 / (command_radius/4.0);
+        for(int i = 0; i < 6; i++){
+           fill(65, 100, 100);
+           rect(command_x + command_radius * 1.5 + battle_UI_margin, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)), skill_box_width, skill_box_height);
+           fill(0,0,100);
+           textSize(skill_box_height/2);
+           textAlign(CENTER, CENTER);
+           text(p[0].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
+        }
+      break;
+      
+      //player uses item
+      case 3:
+        bag.BagSquare(2);
+        break;
+      
+      //player selects target
+      case 4:
+        ally_selection();
+        
+        break;
+        
+      
+    }
+  //}
+}
+
+/*************************************************
+*  Draw Battle Command UI
+**************************************************/
+void battle_command_UI(){
     strokeWeight(battle_UI_margin);
     stroke(24, 100, 100);
     fill(12, 50,100,20);
@@ -226,46 +287,65 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
           break;
       }
     }
-    
-    switch(mode){
-      case 2:
-        skill_box_width = command_radius * 1.5;
-        skill_box_height = height * 2 / (command_radius/4.0);
-        for(int i = 0; i < 6; i++){
-           fill(65, 100, 100);
-           rect(command_x + command_radius * 1.5 + battle_UI_margin, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)), skill_box_width, skill_box_height);
-           fill(0,0,100);
-           textSize(skill_box_height/2);
-           textAlign(CENTER, CENTER);
-           //text(p[0].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
-        }
-      break;
-      
-      case 3:
-        bag.BagSquare(2);
-        if(move_item){
-          image(item_pic[temp_item_code], mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
-        }
-        break;
-    }
-  //}
 }
-
-
-
       /*******************************************
              alies and player status pannel
       ********************************************/
   
-  void p_box(){
+void p_box(){
   fill(80, 80, 100);
-  rect(cx, cy, c_width, c_height);
+  
+  for(int i = 0; i < max_pt; i++){
+    cx = c_width*i + (i+1)*battle_UI_margin;
+    rect(cx, cy, c_width, c_height);
+  }
 }
 
   void p_stats(int c){
     fill(0,0,100);
     textAlign(CENTER);
     text(p[c].job.name, cx + c_width/2, cy + c_height/4);
-    text("HP: " + p[c].cur_hp + " / " + p[0].max_hp, cx + c_width/2, cy + c_height/2);
-    text("MP: " + p[c].cur_mp + " / " + p[0].max_mp, cx + c_width/2, cy + c_height*3/4);
+    text("HP: " + (int)p[c].cur_hp + " / " + (int)p[0].max_hp, cx + c_width/2, cy + c_height/2);
+    text("MP: " + (int)p[c].cur_mp + " / " + (int)p[0].max_mp, cx + c_width/2, cy + c_height*3/4);
   }
+  
+  /*****************************************************
+  *  select enemy circle
+  *****************************************************/
+void enemy_selection(){
+  enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+        enemy_y = enemy_start_y;
+        target_diameter = (float)Math.sqrt( 2*(Math.pow((double)enemy_width,2.0)) );
+        strokeWeight(3);
+        stroke(0,100,100);
+        fill(0,100,100,0);
+        
+        for(int i = 0; i < enemy_count; i++){
+          if(i > 0){
+            if(i % 2 == 0){
+              enemy_x += enemy_width * m[i-1].get_mod();
+            }else{
+              enemy_x -= enemy_width * m[i-1].get_mod();
+            }
+          }
+            
+          ellipse(enemy_x + (enemy_width/2.0f * m[i].get_mod()), enemy_y + enemy_height/2.0 * m[i].get_mod(), target_diameter * m[i].get_mod(), target_diameter * m[i].get_mod());
+          
+          enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
+        }
+}
+
+    /*****************************************************
+  *  select ally triangle
+  *****************************************************/
+void ally_selection(){
+  noStroke();
+        fill(32, 80, 100);
+        tri_width = c_width * 0.1;
+        tri_height = tri_width * 1.5;
+        
+        for(int i = 0; i < c_pt; i++){
+          cx = c_width*i + (i+1)*battle_UI_margin;
+          triangle(cx + c_width/2 - tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2 + tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2, cy - battle_UI_margin);
+        }
+}

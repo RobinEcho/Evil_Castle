@@ -62,6 +62,8 @@ class Monster extends Units{
     this.max_mp = (level * 10) * mod;
     this.cur_hp = (level * 10) * mod;
     this.cur_mp = (level * 10) * mod;
+    this.hp_dec = 0;
+    this.mp_dec = 0;
     
     
   }
@@ -74,8 +76,26 @@ class Monster extends Units{
 		this.spd = spd + bonus_spd;
 		this.max_hp = max_hp + bonus_hp;
 		this.max_mp = max_mp + bonus_mp;
-		this.cur_hp = max_hp - hp_dec + bonus_hp;
-		this.cur_mp = max_mp - mp_dec + bonus_mp;
+    this.cur_hp = max_hp - hp_dec + bonus_hp;
+    if(this.cur_hp <= 0){
+      dead();
+      hp_dec = max_hp;
+      cur_hp = 0;
+    }
+    if(this.cur_hp > max_hp){
+      cur_hp = max_hp;
+      hp_dec = 0;
+    }
+    
+    this.cur_mp = max_mp - mp_dec + bonus_mp;
+    if(this.cur_mp <= 0){
+      mp_dec = max_mp;
+      cur_mp = 0;
+    }
+    if(this.cur_mp > max_mp){
+      cur_mp = max_mp;
+      mp_dec = 0;
+    }
 	}
 
   public void setMType(int x){
@@ -100,6 +120,10 @@ class Monster extends Units{
   
   public String getMonsterType(){
     return this.monster_type;
+  }
+  
+  public float get_mod(){
+    return this.mod;
   }
 	
 	/***********************

@@ -2,9 +2,9 @@
 key system inside game
 ********************************************/ 
   Random r = new Random();
-  
-  
-  int enemy_count;
+  boolean battle_end = false;
+  int round = 1, pid = 0, mid = 0, cur = 0;
+  int enemy_count, elite_count;
 
 
 /*******************************************
@@ -48,12 +48,25 @@ void monsterappear() {
       encounter   = steps + r.nextInt(20);
       
       if(encounter >= 60){
+        cur = 0;
+        round = 1;
+        battle_end = false;
         Units[] order;
         
-        if(floor > 4){
-          enemy_count =  r.nextInt(100) % 4 + 1;
+        elite_count = r.nextInt(100) % floor;
+        
+        if(elite_count > 0){
+          if(floor > 3){
+            enemy_count =  r.nextInt(100) % 3 + 1;
+          }else{
+            enemy_count =  r.nextInt(100) % floor + 1;
+          }
         }else{
-          enemy_count =  r.nextInt(100) % floor + 1;
+          if(floor > 4){
+            enemy_count =  r.nextInt(100) % 4 + 1;
+          }else{
+            enemy_count =  r.nextInt(100) % floor + 1;
+          }
         }
         
         enemy_setup();
@@ -65,6 +78,18 @@ void monsterappear() {
         encounter = 0;
         
         order = round_order();
-      }
+        
+        pid = 0;
+        battle_mode = 0;
+        //  if(order[cur].get_type() == 1){
+        //    pid = order[cur].get_id();
+            
+        //    battle_mode = 0;
+        //  }else{
+        //    mid = order[cur].get_id();
+            
+        //    battle_mode = -1;
+        //  }
+    }
   }  
 }                    //close monsterappear()

@@ -13,6 +13,22 @@ quick key and movement
 void keyPressed(){
     if(room > 1){
       switch(keyCode){
+        case 'o':
+        case 'O':
+          if(!opt){
+            opt = true;
+            temp_room = room;
+            room = 99;
+          }else{
+            opt = false;
+            room = temp_room;
+          }
+            break;
+      }
+    }
+    
+    if(room > 1 && room < 90){
+      switch(keyCode){
         case 'a':
         case 'A':
           if(!up && !down && !right){
@@ -60,30 +76,9 @@ void keyPressed(){
               println("HI!");
             }
             break;
-          
-          case 'o':
-          case 'O':
-            
-                      
-            if(!opt){
-              opt = true;
-              temp_room = room;
-              room = 99;
-             
-              
-            }else{
-              opt = false;
-
-              room = temp_room;
-              
-            }
-              break;
               
           case 'b':
           case 'B':
-          
-          
-          if(room != 90){            
             if(!inBag){
               inBag = true;
               room = 91;
@@ -92,7 +87,7 @@ void keyPressed(){
 
               room = map.get_map_room();
             }
-          }
+          
           break;
             
               

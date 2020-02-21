@@ -20,6 +20,8 @@ void dmg(float x, int rec, int rec_type){
   }else{
     m[rec].dec_hp(x);
     m[rec].calc_stats();
+    
+    println("dmg: " + m[rec].get_hp_dec());
   }
 }
 
@@ -30,16 +32,15 @@ void attack(int attacker, int defender, int def_type){
   
   if(def_type == 0){
     damage = p[attacker].get_patk() - m[defender].get_pdef();
+    //println("a patk: " + p[attacker].get_patk() + " m pdef: " + m[defender].get_pdef());
   }else{
     damage = m[attacker].get_patk() - p[defender].get_pdef();
   }
   
-  if(damage <= 0){
+  if(damage < 1){
     damage = 1;
   }
   
-  println("a patk: " + m[attacker].get_patk() + " m pdef: " + p[defender].get_pdef());
-  println("fn dmg: " + damage);
     dodge = false;
   
    //if_dodge(attacker,defender, (def_type + 1)% 2);
@@ -68,7 +69,24 @@ void attack(int attacker, int defender, int def_type){
 
 
 void skill_attack(int attacker, int defender, int def_type, int skill_id){
-  float damage = p[attacker].get_patk() - p[defender].get_pdef();
+  float damage;
+  
+  if(def_type == 0){
+    p[attacker].skills.skill[skill_id].skilldamage();
+    
+    if(p[attacker].skills.skill[skill_id].dmg_type == 1){
+      damage = p[attacker].skills.skill[skill_id].damage - m[defender].get_pdef();
+    }else{
+      damage = p[attacker].skills.skill[skill_id].damage - m[defender].get_mdef();
+    }
+    //println("a patk: " + p[attacker].get_patk() + " m pdef: " + m[defender].get_pdef());
+  }else{
+    damage = m[attacker].get_patk() - p[defender].get_pdef();
+  }
+  
+  if(damage < 1){
+    damage = 1;
+  }
   
   dmg(damage, defender, def_type);
 }
@@ -127,18 +145,18 @@ void if_dodge(int attacker,int defender, int attacker_type){
 }
 
 void enemy_setup(){
-  int types;
-  
-  if(floor < 3){
-    types = floor;
-  }else{
-    types = 1;
-  }
-  
   for(int i = 0; i < enemy_count; i++){
-    m[i].setMType(r.nextInt(100) % types + 1);
-    m[i].set_level(r.nextInt(100) % floor*5 + 1);
-    m[i].init_stats();
+    m[i].set_id(i);
+    
+    if(elite_count - i > 0){
+      m[i].setMType(2);
+      m[i].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[i].init_stats();
+    }else{
+      m[i].setMType(1);
+      m[i].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[i].init_stats();
+    }
   }
 }
 

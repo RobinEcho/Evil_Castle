@@ -81,30 +81,45 @@ class Job{
         this.name = "Priest";
         Priest priest = new Priest();
         init_Priest(priest);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = priest.get_base_stats()[i];
+        }
         break;
         
       case 3:
         this.name = "Mage";
         Mage mage = new Mage();
         init_Mage(mage);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = mage.get_base_stats()[i];
+        }
         break;
         
       case 4:
         this.name = "Paladin";
         Paladin paladin = new Paladin();
         init_Paladin(paladin);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = paladin.get_base_stats()[i];
+        }
         break;
         
       case 5:
         this.name = "Ranger";
         Ranger ranger = new Ranger();
         init_Ranger(ranger);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = ranger.get_base_stats()[i];
+        }
         break;
         
       case 6:
         this.name = "Assassin";
         Assassin assassin = new Assassin();
         init_Assassin(assassin);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = assassin.get_base_stats()[i];
+        }
         break;
     }
   }
@@ -192,7 +207,7 @@ public class Knight extends Jobs{
     matkAmp = 0.5;
     mdefAmp = 1.5;
     spdAmp = 1.0;
-    hpAmp = 2.5;
+    hpAmp = 5;
     mpAmp = 1.5;
   }
 }
@@ -218,7 +233,7 @@ class Paladin extends Jobs{
     matkAmp = 1.5;
     mdefAmp = 2.0;
     spdAmp = 0.8;
-    hpAmp = 2.5;
+    hpAmp = 5;
     mpAmp = 2.0;
   }
 }
@@ -236,15 +251,15 @@ class Ranger extends Jobs{
     stats_inc[0] = 1.0;
     stats_inc[1] = 1.0;
     stats_inc[2] = 1.0;
-    stats_inc[3] = 2.0;
-    stats_inc[4] = 0.0;
+    stats_inc[3] = 0.6;
+    stats_inc[4] = 2.0;
     
     patkAmp = 2.0;
     pdefAmp = 1.0;
     matkAmp = 2.0;
     mdefAmp = 1.6;
     spdAmp = 2.2;
-    hpAmp = 1.8;
+    hpAmp = 3.6;
     mpAmp = 1.6;
   }
 }
@@ -270,7 +285,7 @@ class Assassin extends Jobs{
     matkAmp = 0.5;
     mdefAmp = 1.6;
     spdAmp = 2.5;
-    hpAmp = 1.5;
+    hpAmp = 4.5;
     mpAmp = 1.2;
   }
 }
@@ -296,7 +311,7 @@ public class Mage extends Jobs{
     matkAmp = 2.8;
     mdefAmp = 2;
     spdAmp = 1.0;
-    hpAmp = 1.0;
+    hpAmp = 3.5;
     mpAmp = 2.2;
   }
 }
@@ -322,7 +337,7 @@ class Priest extends Jobs{
     matkAmp = 1.0;
     mdefAmp = 1.8;
     spdAmp = 1.2;
-    hpAmp = 1.1;
+    hpAmp = 2.2;
     mpAmp = 2.3;
   }
 }

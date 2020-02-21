@@ -26,9 +26,10 @@ import library
   
   PImage bg, bag_img;
   PFont font;
-  int total_jobs = 6, floor = 1;
+  int total_jobs = 6, floor = 5;
   int steps = 0, encounter;
   float side_margin, height_margin;
+  float rate = 30;
   int boxwidth,boxheight;
   int boxX,boxY;
   int grid_width = 40, grid_height = 45;
@@ -78,7 +79,7 @@ import library
   
   public void setup(){
         
-    frameRate(30);
+    frameRate(rate);
     
     colorMode(HSB, 100);
     
@@ -151,7 +152,7 @@ import library
       case 90:
                
         battle_UI(enemy_count);
-              
+        
         break;
             
       case 91:

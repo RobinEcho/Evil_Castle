@@ -89,7 +89,7 @@ class Units{
 	
 	//Setter
   
-    public void set_img(String s, int type){
+  public void set_img(String s, int type){
     switch(type){
       case 1:  
         img = loadImage("src/player/" + s + ".png");
@@ -104,6 +104,10 @@ class Units{
         img = loadImage("src/mobs/" + s + ".png");
         break;
     }
+  }
+  
+  public void set_id(int x){
+    this.id = x;
   }
 
   public void set_x(int x){
@@ -158,6 +162,10 @@ class Units{
 	//Getter
   public boolean is_alive(){
     return this.alive;
+  }
+  
+  public int get_id(){
+    return this.id;
   }
   
   public int get_type(){

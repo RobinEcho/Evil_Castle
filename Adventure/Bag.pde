@@ -81,7 +81,7 @@ class Bag{
   BagSquare base on rows and column
   ********************************************/ 
 
-  public void BagSquare(int mode){
+  public void BagSquare(int bag_mode){
     
     square_width = (float)UI_width / (float)(col+((col+1)/2.0));
     square_height = (float)UI_height / (float)(row+((row+1)/2.0));
@@ -91,7 +91,7 @@ class Bag{
     noStroke();
     fill(60, 100, 100);
     
-    switch(mode){
+    switch(bag_mode){
       case 1:
         rect((width + UI_dis)/2, vertical_margin, UI_width, UI_height);
         
