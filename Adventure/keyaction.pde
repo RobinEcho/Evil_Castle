@@ -23,7 +23,54 @@ void keyPressed(){
             opt = false;
             room = temp_room;
           }
+        break;
+        case ' ':
+          switch(floor){
+            case 1:
+              if(floor_room < floor_1.length){
+                floor_room++;
+              }else{
+                floor_room = 1;
+                floor++;
+              }
             break;
+            
+            case 2:
+              if(floor_room < floor_2.length){
+                floor_room++;
+              }else{
+                floor_room = 1;
+                floor++;
+              }
+            break;
+            
+            case 3:
+              if(floor_room < floor_3.length){
+                floor_room++;
+              }else{
+                floor_room = 1;
+                floor++;
+              }
+            break;
+            
+            case 4:
+              if(floor_room < floor_4.length){
+                floor_room++;
+              }else{
+                floor_room = 1;
+                floor++;
+              }
+            break;
+            
+            case 5:
+              if(floor_room < floor_5.length){
+                floor_room++;
+              }else{
+                floor_room = 1;
+              }
+            break;
+          }
+          break;
       }
     }
     
@@ -31,7 +78,8 @@ void keyPressed(){
       switch(keyCode){
         case 'a':
         case 'A':
-          if(!up && !down && !right){
+          if(!up && !down && !left && !right){
+            move_count = 0;
             left = true;
             p[0].dir = 3;
             monsterappear();
@@ -41,7 +89,8 @@ void keyPressed(){
           break;
         case 'd':
         case 'D':
-          if(!up && !down && !left){
+          if(!up && !down && !left && !right){
+            move_count = 0;
             right = true;
             p[0].dir = 1;
             monsterappear();
@@ -50,7 +99,8 @@ void keyPressed(){
           break;
         case 'w':
         case 'W':
-          if(!down && !left && !right){
+          if(!up && !down && !left && !right){
+            move_count = 0;
             up = true;
             p[0].dir = 0;
             monsterappear();
@@ -59,7 +109,8 @@ void keyPressed(){
           break;
         case 's':
         case 'S':
-          if(!up && !left && !right){
+          if(!up && !down && !left && !right){
+            move_count = 0;
             down = true;
             p[0].dir = 2;
             monsterappear();
@@ -76,26 +127,18 @@ void keyPressed(){
               println("HI!");
             }
             break;
-              
-          case 'b':
-          case 'B':
+            
+        case 'b':
+        case 'B':
             if(!inBag){
               inBag = true;
-              room = 91;
+              room = 80;
             }else{
               inBag = false;
-
+    
               room = map.get_map_room();
             }
-          
-          break;
-            
-              
-            case 'x':
-            case 'X':
-              dmg(10,0,0);
-              break;
-
+        break;
       }
     }
   }
@@ -104,23 +147,25 @@ void keyPressed(){
 movement part
 ********************************************/ 
   
-  void keyReleased(){
-    switch(keyCode){
-      case 'a':
-      case 'A':
-          left = false;
-          break;
-        case 'd':
-        case 'D':
-          right = false;
-          break;
-        case 'w':
-        case 'W':
-          up = false;
-          break;
-        case 's':
-        case 'S':
-          down = false;
-          break;
-    }
-  }
+  //void keyReleased(){
+  //  switch(keyCode){
+  //    case 'a':
+  //    case 'A':
+  //        left = false;
+  //        break;
+  //      case 'd':
+  //      case 'D':
+  //        right = false;
+  //        break;
+  //      case 'w':
+  //      case 'W':
+  //        if(move_count == 5){
+  //          up = false;
+  //        }
+  //        break;
+  //      case 's':
+  //      case 'S':
+  //        down = false;
+  //        break;
+  //  }
+  //}

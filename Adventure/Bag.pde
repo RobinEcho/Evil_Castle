@@ -1,24 +1,5 @@
-  /*******************************************
-   set item count and reading object
-  ********************************************/ 
-   
-   
-   protected int item_count = 3;
-   PImage item_pic[] = new PImage[item_count];
-   PImage arrow[] = new PImage[2];
-
-
-
-  /*******************************************
-  key variable set here about bag
-  ********************************************/ 
-
-
-
 boolean inBag = false;
 boolean  bagopt = false;
-
-
 
   /*******************************************
   Class Bag
@@ -46,8 +27,8 @@ class Bag{
     for(int i = 0; i < row; i++){
       for(int j = 0; j < col; j++)
       {
-        //image(item_pic[j%3], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
-        inv[i][j] = j%3;
+        //image(item_list[j%3], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
+        inv[i][j] = r.nextInt(item_count);
       }    //for loop(j)
     }    //for loop (i)
     
@@ -62,7 +43,7 @@ class Bag{
     PropertyPanel();
     BagSquare(1);
     if(move_item){
-      image(item_pic[temp_item_code], mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
+      image(item_list[temp_item_code].img, mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
     }
   }                    //close display_bag()
   
@@ -100,7 +81,7 @@ class Bag{
         for(int i = 0; i < row; i++){
           for(int j = 0; j < col; j++)
           {
-            image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
+            image(item_list[inv[i][j]].img, (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
             
           }    //for loop(j)
         }    //for loop (i)
@@ -114,9 +95,9 @@ class Bag{
           for(int j = 0; j < col; j++)
           {
             if(i > row / 2 - ((row + 1) % 2)){
-              image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + width/2, ((i+1-(row / 2 + row % 2))*vs + ((i-(row / 2 + ((row) % 2))) * square_height))+ vertical_margin, square_width, square_height);
+              image(item_list[inv[i][j]].img, (j+1)*hs + (j*square_width) + width/2, ((i+1-(row / 2 + row % 2))*vs + ((i-(row / 2 + ((row) % 2))) * square_height))+ vertical_margin, square_width, square_height);
             }else{
-              image(item_pic[inv[i][j]], (j+1)*hs + (j*square_width) + width/2 - UI_width, ((i+1)*vs + (i * square_height))+ vertical_margin, square_width, square_height);
+              image(item_list[inv[i][j]].img, (j+1)*hs + (j*square_width) + width/2 - UI_width, ((i+1)*vs + (i * square_height))+ vertical_margin, square_width, square_height);
             }
             
           }    //for loop(j)
@@ -127,15 +108,3 @@ class Bag{
     }                    //close BagSquare()
    
 }                    //cloase class Bag
-
-
-
-public void loaditemimage(){
-
-for(int i = 0; i < item_count; i++)
-    {
-      item_pic[i] = loadImage("src/item/map" + i + ".jpg");
-    }
-
-
-}

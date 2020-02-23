@@ -58,7 +58,6 @@ knight skill 1 unlock at lv1
          this.name = "Half moon slash";
          
          this.type = 1;
-        
          this.dmg_type = 1;
          
          this.mp_dec = 13;        
@@ -162,7 +161,6 @@ knight skill 5 unlock at lv20
     class k_skill_5 extends Skill{
       
       public  k_skill_5(){
-      
       this.name = "Combat focus";
       
       this.mp_dec = 68;
@@ -176,9 +174,6 @@ knight skill 6 unlock at lv25
     class k_skill_6 extends Skill{
         
      public k_skill_6(){
-
-       this.type = 1;
-       
        this.name = "Frey's Crest";
        
        this.mp_dec = 80;
@@ -187,7 +182,7 @@ knight skill 6 unlock at lv25
       
       public void skillUsed(int round){
         
-
+        this.type = 1;
       
       this.left_round = round;
           
@@ -1195,6 +1190,7 @@ class pri_skill_6 extends Skill{
       p[0].cur_mp = p[0].get_max_mp();
       
        
-      this.mp_dec = p[0].get_max_mp() * 0.4;    
+      this.mp_dec = p[0].get_max_mp() * 0.4;
+    
   }
 }

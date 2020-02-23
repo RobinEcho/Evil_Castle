@@ -3,7 +3,7 @@ drawfunction, base on variable room to know where we are
 ********************************************/ 
 int battle_mode = 0;
 String [] options = {"Main Menu", "Save", "Quit"};
-String[] job_list = {"Knight", "Priest", "Mage", "Paladin", "Ranger", "Assassin"};
+String[] job_list = {"Knight", "Paladin", "Ranger", "Assassin", "Mage", "Priest"};
 int mainY, saveY, exitY, text_height;
 float bagoptX, bagoptY;
 float pc_width, pc_height, pcx, pcy, hp_percent;
@@ -98,7 +98,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   
   
   void bag_option(){
-    
+    strokeWeight(1);
     fill(12,100,100);
     rect(bagoptX,bagoptY,bag.square_width*3,bag.square_height*3);
     
@@ -191,10 +191,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     
     //}
     
-    
-    
       //player stats
-      cx = c_width*i + (i+1)*battle_UI_margin;
       p_stats(i);
     }
   
@@ -302,6 +299,7 @@ void p_box(){
 }
 
   void p_stats(int c){
+    cx = c_width*c + (c+1)*battle_UI_margin;
     fill(0,0,100);
     textAlign(CENTER);
     text(p[c].job.name, cx + c_width/2, cy + c_height/4);

@@ -26,12 +26,14 @@ import library
   
   PImage bg, bag_img;
   PFont font;
-  int total_jobs = 6, floor = 5;
+  int boss_defeated = 0;
+  int total_jobs = 6, floor = 1, floor_room = 1;
   int steps = 0, encounter;
   float side_margin, height_margin;
-  float rate = 30;
+  float rate = 60;
   int boxwidth,boxheight;
   int boxX,boxY;
+  int item_count = 102;
   int grid_width = 40, grid_height = 45;
   int sqw = 40, sqh = 45;
   int width = 1600, height = 900;  
@@ -51,13 +53,19 @@ import library
   /*******************************************
         init class object
   ********************************************/ 
+    Random r = new Random();
     
-    
+    Item[] item_list = new Item[item_count];
     Monster[] m = new Monster[4];
-    //Monster[] mob_list = new Monster[3];
+    
+    Map[] floor_1 = new Map[5];
+    Map[] floor_2 = new Map[6];
+    Map[] floor_3 = new Map[9];
+    Map[] floor_4 = new Map[8];
+    Map[] floor_5 = new Map[7];
+    
     Player[] p = new Player[4];
     Bag bag = new Bag(8, 5);        //Bag(row,column)
-  
   
   /*******************************************
     key variable to draw or action
@@ -80,13 +88,39 @@ import library
   public void setup(){
         
     frameRate(rate);
-    
+    background(0,0,100);
+     text("Loading", 400, 400);
     colorMode(HSB, 100);
     
-    loaditemimage();
+    load_items();
     
     for(int i = 0; i < 4; i++){
       m[i] = new Monster();
+    }
+    
+    for(int i = 0; i < floor_1.length; i++){
+      floor_1[i] = new Map();
+      floor_1[i].init_exit(1, (i+1));
+    }
+    
+    for(int i = 0; i < floor_2.length; i++){
+      floor_2[i] = new Map();
+      floor_2[i].init_exit(2, (i+1));
+    }
+    
+    for(int i = 0; i < floor_3.length; i++){
+      floor_3[i] = new Map();
+      floor_3[i].init_exit(3, (i+1));
+    }
+    
+    for(int i = 0; i < floor_4.length; i++){
+      floor_4[i] = new Map();
+      floor_4[i].init_exit(4, (i+1));
+    }
+    
+    for(int i = 0; i < floor_5.length; i++){
+      floor_5[i] = new Map();
+      floor_5[i].init_exit(5, (i+1));
     }
   /************************************************
   try to check if save file can be loaded normally
@@ -137,11 +171,13 @@ import library
       
       case 2:
       
+      map.drawmap(floor, floor_room);
       background(bg);
-      map.draw_npc();
+      //cur_room_npc();
       structureline();
-      
+      change_room();
       move();
+      
       //isBoundary();
       fill(17, 64, 98, 75);
       //rect(0,0,500, 900);
@@ -155,7 +191,7 @@ import library
         
         break;
             
-      case 91:
+      case 80:
         
         background(0,0,100);
         
@@ -165,7 +201,7 @@ import library
         break;
         
       
-      case 98:
+      case 81:
       
         background(0,0,100);
         
@@ -199,10 +235,14 @@ import library
     int x,y;
     
     y=0;
-    
+    strokeWeight(1);
+    stroke(0,100,100);
+    textAlign(CENTER, CENTER);
     for (x=0;x<1600;x+=sqw)
     {
       line(x,y,x,y+900);
+       stroke(0,0,100);
+      text(x/40, x+20, y+10);
     }
     
     x=0;
@@ -210,6 +250,8 @@ import library
     for (y =0;y<900;y+=sqh)
     {
       line (x,y,x+1600,y);
+       stroke(0,0,100);
+      text(y/45, x+20, y+10);
     }
     fill(255,100,100);
   }                    // close structureline() for showing pixel line
