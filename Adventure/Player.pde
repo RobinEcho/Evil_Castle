@@ -7,7 +7,7 @@
 class Player extends Units{
 	protected float str = 1, con = 1, intel = 1, wis = 1, agi = 1;
   protected int exp = 0, job_code;
-  public int dir = 1;
+  public int dir = 2;
 	Job job;
   Skill skills;
 	
@@ -72,6 +72,13 @@ class Player extends Units{
     this.agi = job.stats[4];
   }
 	
+  public void change_map_img(){
+    if(move_count == 0){
+      this.img = loadImage("src/test/player_" + this.dir + ".png");
+    }else{
+      this.img = loadImage("src/test/player_" + this.dir + "_" + (move_count % 2) + ".png");
+    }
+  }
 
 	//stats calculations
 	public void calc_stats(){

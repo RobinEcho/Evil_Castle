@@ -19,6 +19,10 @@ class Units{
   public Units(){
 
 	}
+
+  public void display(){
+    image(this.img, this.charX, this.charY, sqw, sqh);
+  }
 	
 	//temporary stats increments for equipments and buffs
 	public void inc_patk(float a){

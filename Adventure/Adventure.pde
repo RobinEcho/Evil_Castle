@@ -27,7 +27,7 @@ import library
   PImage bg, bag_img;
   PFont font;
   int boss_defeated = 0;
-  int total_jobs = 6, floor = 1, floor_room = 1;
+  int total_jobs = 6, floor = 3, floor_room = 8;
   int steps = 0, encounter;
   float side_margin, height_margin;
   float rate = 60;
@@ -36,8 +36,7 @@ import library
   int item_count = 102;
   int grid_width = 40, grid_height = 45;
   int sqw = 40, sqh = 45;
-  int width = 1600, height = 900;  
-   
+  int width = 1600, height = 900;
    
   
 /*******************************************
@@ -86,8 +85,8 @@ import library
   ********************************************/ 
   
   public void setup(){
-        
-    frameRate(rate);
+    
+    frameRate(60);
     background(0,0,100);
      text("Loading", 400, 400);
     colorMode(HSB, 100);
@@ -122,6 +121,9 @@ import library
       floor_5[i] = new Map();
       floor_5[i].init_exit(5, (i+1));
     }
+    
+    wall_set();
+    map = floor_3[floor_room - 1];
   /************************************************
   try to check if save file can be loaded normally
   *************************************************/ 
@@ -170,18 +172,21 @@ import library
       
       
       case 2:
-      
+      println(frameRate);
       map.drawmap(floor, floor_room);
       background(bg);
       //cur_room_npc();
       structureline();
-      change_room();
+      change_room(floor_room);
       move();
       
-      //isBoundary();
-      fill(17, 64, 98, 75);
+      map.isBoundary();
+      
+      
+      //fill(17, 64, 98, 75);
       //rect(0,0,500, 900);
-      rect(p[0].charX, p[0].charY, 40, 45);
+      //rect(p[0].charX, p[0].charY, sqw, sqh);
+      p[0].display();
         break;
       
       
@@ -255,3 +260,4 @@ import library
     }
     fill(255,100,100);
   }                    // close structureline() for showing pixel line
+  

@@ -76,26 +76,8 @@ class Job{
           this.stats[i] = knight.get_base_stats()[i];
         }
         break;
-      
+        
       case 2:
-        this.name = "Priest";
-        Priest priest = new Priest();
-        init_Priest(priest);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = priest.get_base_stats()[i];
-        }
-        break;
-        
-      case 3:
-        this.name = "Mage";
-        Mage mage = new Mage();
-        init_Mage(mage);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = mage.get_base_stats()[i];
-        }
-        break;
-        
-      case 4:
         this.name = "Paladin";
         Paladin paladin = new Paladin();
         init_Paladin(paladin);
@@ -103,8 +85,8 @@ class Job{
           this.stats[i] = paladin.get_base_stats()[i];
         }
         break;
-        
-      case 5:
+      
+      case 3:
         this.name = "Ranger";
         Ranger ranger = new Ranger();
         init_Ranger(ranger);
@@ -113,12 +95,30 @@ class Job{
         }
         break;
         
-      case 6:
+      case 4:
         this.name = "Assassin";
         Assassin assassin = new Assassin();
         init_Assassin(assassin);
         for(int i = 0; i < stats_count; i++){
           this.stats[i] = assassin.get_base_stats()[i];
+        }
+        break;
+        
+      case 5:
+        this.name = "Mage";
+        Mage mage = new Mage();
+        init_Mage(mage);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = mage.get_base_stats()[i];
+        }
+        break;
+        
+      case 6:
+        this.name = "Priest";
+        Priest priest = new Priest();
+        init_Priest(priest);
+        for(int i = 0; i < stats_count; i++){
+          this.stats[i] = priest.get_base_stats()[i];
         }
         break;
     }

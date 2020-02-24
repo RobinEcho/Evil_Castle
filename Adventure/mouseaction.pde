@@ -48,7 +48,7 @@ int command;
               if(p_class != 0){
                 p[0] = new Player(p_class);
                 p[0].set_img(p[0].job.name,1);
-                p[0].set_loc(400,450);
+                p[0].set_loc(800,450);
               }
                 
         
