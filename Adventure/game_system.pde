@@ -71,9 +71,9 @@ void move() {
         }
         
         if(can_move){
-          p[0].set_x(p[0].charX + sqw/5);
+          p[0].set_x(p[0].charX + sqw/4);
           move_count++;
-          if(move_count == 5){
+          if(move_count == 4){
             move_count = 0;
             steps++;
             right = false;
@@ -92,9 +92,9 @@ void move() {
         }
         
         if(can_move){
-          p[0].set_x(p[0].charX - sqw/5);
+          p[0].set_x(p[0].charX - sqw/4);
           move_count++;
-          if(move_count == 5){
+          if(move_count == 4){
             move_count = 0;
             steps++;
             left = false;

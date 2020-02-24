@@ -27,7 +27,7 @@ import library
   PImage bg, bag_img;
   PFont font;
   int boss_defeated = 0;
-  int total_jobs = 6, floor = 3, floor_room = 8;
+  int total_jobs = 6, floor = 1, floor_room = 1;
   int steps = 0, encounter;
   float side_margin, height_margin;
   float rate = 60;
@@ -123,7 +123,7 @@ import library
     }
     
     wall_set();
-    map = floor_3[floor_room - 1];
+    map = floor_1[floor_room - 1];
   /************************************************
   try to check if save file can be loaded normally
   *************************************************/ 
@@ -172,11 +172,11 @@ import library
       
       
       case 2:
-      println(frameRate);
+      //println(frameRate);
       map.drawmap(floor, floor_room);
       background(bg);
       //cur_room_npc();
-      structureline();
+      //structureline();
       change_room(floor_room);
       move();
       

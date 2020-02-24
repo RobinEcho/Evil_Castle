@@ -21,7 +21,7 @@ class Units{
 	}
 
   public void display(){
-    image(this.img, this.charX, this.charY, sqw, sqh);
+    image(this.img, this.charX - sqw/4, this.charY - sqh/3, sqw + sqw/4, sqh + sqh/3);
   }
 	
 	//temporary stats increments for equipments and buffs
