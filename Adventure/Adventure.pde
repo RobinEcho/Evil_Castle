@@ -150,7 +150,7 @@ import library
   *************************************************************************/ 
   
   public void draw(){
-    structureline();
+    //structureline();
     switch(room)
     {
           

@@ -74,9 +74,9 @@ class Player extends Units{
 	
   public void change_map_img(){
     if(move_count == 0){
-      this.img = loadImage("src/test/player_" + this.dir + ".png");
+      this.img = loadImage("src/player/player_" + this.dir + ".png");
     }else{
-      this.img = loadImage("src/test/player_" + this.dir + "_" + (move_count % 2) + ".png");
+      this.img = loadImage("src/player/player_" + this.dir + "_" + (move_count % 2) + ".png");
     }
   }
 
