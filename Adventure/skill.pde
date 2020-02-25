@@ -17,17 +17,7 @@ class Skill{
 }
 
 
-/*
-    type:
-      1: patk
-      2: matk
-      3: atk buff
-      4: def buff 
-      5: status buff
-      6: heal
-      
 
-*/
 
 /*******************************************
  class array to store all the knight skill data
@@ -57,7 +47,8 @@ knight skill 1 unlock at lv1
      public  k_skill_1(){
          this.name = "Half moon slash";
          
-         this.type = 1;
+         this.type = 2;
+         
          this.dmg_type = 1;
          
          this.mp_dec = 13;        
@@ -68,8 +59,7 @@ knight skill 1 unlock at lv1
          
          this.mod = 1.25;
            
-         this.damage = p[0].get_patk() * this.mod;
-         
+         this.damage = p[0].get_patk() * this.mod;         
   }
     
   }
@@ -86,7 +76,7 @@ knight skill 2 unlock at lv5
       
       this.name = "Honor guard";
       
-      this.type = 4;
+      this.type = 0;
       
       this.mp_dec = 20;
     }
@@ -109,9 +99,7 @@ knight skill 2 unlock at lv5
           p[0].pdef = p[0].bonus_pdef * this.mod;
           
           p[0].mdef = p[0].bonus_mdef * this.mod;
-          
-          
-           
+                    
   }
     
 }
@@ -125,7 +113,9 @@ knight skill 3 unlock at lv10
     public  k_skill_3(){
       this.name = "War stomp";
       
-      this.type = 1;
+      this.type = 2;
+      
+      this.dmg_type = 1;
       
       this.mp_dec = 36;
 
@@ -148,6 +138,7 @@ knight skill 4 unlock at lv15
     class k_skill_4 extends Skill{
       
       public  k_skill_4(){
+       //tiaoxin
       this.name = "Cross impact";
       
       this.mp_dec = 51;
@@ -161,10 +152,31 @@ knight skill 5 unlock at lv20
     class k_skill_5 extends Skill{
       
       public  k_skill_5(){
+      
       this.name = "Combat focus";
       
+      this.type = 0;
+            
       this.mp_dec = 68;
-      }    
+      }
+      
+       public void skillUsed(int round){
+               
+          this.mod = 2.2;
+          
+          this.left_round = round;
+          
+          if(this.left_round > 0){
+            this.mod = 2.2;
+          }
+          
+          else if(this.left_round == 0){
+            this.mod = 1.0;          
+          }
+          
+          p[0].patk = p[0].get_patk() * this.mod;
+                                         
+  }
     }
     
 /*******************************************
@@ -176,14 +188,16 @@ knight skill 6 unlock at lv25
      public k_skill_6(){
        this.name = "Frey's Crest";
        
+       this.type = 2;
+        
+       this.dmg_type = 1;
+       
        this.mp_dec = 80;
      }
       
       
       public void skillUsed(int round){
-        
-        this.type = 1;
-      
+           
       this.left_round = round;
           
       if(this.left_round > 0){
@@ -232,9 +246,10 @@ class pal_skill_1 extends Skill {
       
       this.type = 2;
       
-      this.mp_dec = 21;
+      this.dmg_type = 2;
       
-           
+      this.mp_dec = 21;
+                
   }
   
   @Override
@@ -257,7 +272,9 @@ class pal_skill_2 extends Skill {
       
       this.name = "Buffalo bump";   
     
-      this.type = 1;
+      this.type = 2;
+      
+      this.dmg_type = 1;
       
       this.mp_dec = 39;
           
@@ -284,7 +301,7 @@ class pal_skill_3 extends Skill {
       
       this.name = "kiss of Hel";  
     
-      this.type = 4;
+      this.type = 1;
       
       //death = false;
   }
@@ -305,6 +322,8 @@ class pal_skill_4 extends Skill {
     this.name = "Holy light"; 
     
     this.type = 2;
+      
+    this.dmg_type = 2;  
       
     this.mp_dec = 73;
            

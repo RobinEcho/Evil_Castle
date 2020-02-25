@@ -1,3 +1,14 @@
+/*
+    skill type:
+      0: self as target
+      1: ally as target
+      2: enemy as target
+    damage type:
+      1: physical damage
+      2: magic damage 
+*/
+
+
 /********************************************
 room functions:
 
