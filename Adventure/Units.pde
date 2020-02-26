@@ -16,7 +16,7 @@ class Units{
 	protected float bonus_patk = 0, bonus_pdef = 0, bonus_matk = 0, bonus_mdef = 0, bonus_hp = 0, bonus_mp = 0, bonus_spd = 0;
 
   protected int charX, charY;
-  PImage img;
+  PImage img, battle_img;
 	
   public Units(){
 

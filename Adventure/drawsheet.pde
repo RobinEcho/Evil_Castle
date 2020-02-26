@@ -2,7 +2,7 @@
 drawfunction, base on variable room to know where we are
 ********************************************/ 
 int battle_mode = 0;
-String [] options = {"Main Menu", "Save", "Quit"};
+String [] options = {"Main Menu", "Load", "Quit"};
 String[] job_list = {"Knight", "Paladin", "Ranger", "Assassin", "Mage", "Priest"};
 int mainY, saveY, exitY, text_height;
 float bagoptX, bagoptY;
@@ -23,6 +23,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   
     font = loadFont("menu_font.vlw");
     
+    textAlign(CENTER,CENTER);
     textFont(font);
     
   //should be replaced by image
@@ -30,16 +31,16 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   //
   
     textSize(60);
-    text("Castle Adventrue",side_margin,height_margin/2);
+    text("Castle Adventure ",side_margin,height_margin/2);
                                   
     textSize(30);
     text("New Game", side_margin, height_margin);
                                   
     textSize(30);
-    text("Load Game", side_margin, height_margin+200);
+    text("Load Game", side_margin, height_margin+150);
                                   
     textSize(30);
-    text("Exit", side_margin, height_margin+400);
+    text("Exit", side_margin, height_margin+300);
  
     
   }                    //close menu()
@@ -174,7 +175,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   
   //Draw player images and player status
   for(int i = 0; i < c_pt; i++){
-    image(p[i].img, i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy, pc_width, pc_height);
+    image(p[i].battle_img, i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy, pc_width, pc_height);
     
     //over head hp bar
     hp_percent = (float)p[i].get_cur_hp() / (float)p[i].get_max_hp();

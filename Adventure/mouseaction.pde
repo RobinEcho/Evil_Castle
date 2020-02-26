@@ -20,15 +20,15 @@ int command;
         case 0:  //  main menu
           
         
-                if( (x >= side_margin && x <= side_margin+200) && (y >= height_margin-60 && y <= height_margin) ){
+                if( (x >= side_margin - 100 && x <= side_margin+100) && (y >= height_margin-15 && y <= height_margin+15) ){
                   newGame();
                 }
                 
-                if( (x >= side_margin && x <= side_margin+200) && (y >= height_margin+140 && y <= height_margin+200) ){
+                if( (x >= side_margin - 100 && x <= side_margin+100) && (y >= height_margin+135 && y <= height_margin+165) ){
                   load();
                 }
                 
-                if( (x >= side_margin && x <= side_margin+200) && (y >= height_margin+340 && y <= height_margin+400) ){
+                if( (x >= side_margin - 50 && x <= side_margin+50) && (y >= height_margin+285 && y <= height_margin+315) ){
                   exit();
                 }
                     
@@ -50,7 +50,11 @@ int command;
                 p[0].set_img(p[0].job.name,1);
                 p[0].name = "Adam";
                 p[0].set_loc(800,450);
-              }               
+              }   
+              
+                p[1] = new Player(3);
+                p[1].set_img(p[1].job.name,1);
+                p[1].name = "Tester";
         
         break;
         
@@ -345,6 +349,16 @@ void bag_select(int bag_mode){
             
           }
         }
+        
+       //change player stats on display
+       for(int n = 1; n <= p[0].Avatarsq_num; n++){
+         if(mouseX >= (p[0].horizontal_margin + n*p[0].sq_distance + (n-1)*p[0].Avatarsq_sl)
+           && mouseX <= (p[0].horizontal_margin + n*p[0].sq_distance + (n-1)*p[0].Avatarsq_sl) + p[0].Avatarsq_sl
+           && mouseY >= (p[0].vertical_margin + p[0].strip_distance) && mouseY < (p[0].vertical_margin + p[0].strip_distance) + p[0].Avatarsq_sl){
+         
+             pid = n-1;
+         }
+        } 
        break;
      case 2:
                for(int i = 0; i < bag.row; i++){

@@ -8,6 +8,8 @@
      font = loadFont("main_font.vlw");
      textFont(font);
     
+    saved = false;
+    
     room = 1;
     jobchoicestyle();   
   }                    //close newGame()

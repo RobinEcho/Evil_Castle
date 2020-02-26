@@ -175,7 +175,8 @@ import library
                   menu();
               
                   if(saved){
-                    text("No character detected, please start new game.", 220, 150);
+                    textAlign(CENTER);
+                    text("No character detected, please start new game.", width/2, 150);
                   }
       
         break; 

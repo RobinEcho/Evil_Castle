@@ -59,6 +59,7 @@ class Player extends Units{
 	public Player(int x){
     this.job_code = x;
     job = new Job(x);
+    this.battle_img = loadImage("src/player/" + this.job.name + ".png");
     type = 1;
     init_stats();
     calc_stats();
