@@ -3,12 +3,20 @@
       0: self as target
       1: ally as target
       2: enemy as target
+    
     damage type:
+      0: true damage
       1: physical damage
-      2: magic damage 
+      2: magic damage
+      3: recovery hp,mp
+      4: buff
 */
 
-
+/*
+  command 0 - 5 : skills 1 - 6
+  command 6 : normal attack
+  command 7 : item usage
+*/
 /********************************************
 room functions:
 

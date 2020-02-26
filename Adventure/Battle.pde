@@ -4,8 +4,8 @@
 
 boolean dodge = false;
 boolean inBattle = false;
+boolean show_damage = false;
 int battle_UI_margin = 10;
-int max_pt = 4, c_pt = 1;
 float c_width = (width - battle_UI_margin * 5)/4, c_height = height/3 - 2 * battle_UI_margin;
 float cx, cy = height*2/3 + battle_UI_margin;
 
@@ -14,15 +14,46 @@ float cx, cy = height*2/3 + battle_UI_margin;
 ********************************************/
 
 void dmg(float x, int rec, int rec_type){
+  show_damage = true;
+  start_frame = frameCount;
+  
   if(rec_type == 1){
     p[rec].dec_hp(x);
     p[rec].calc_stats();
+    
+    dmg_x = rec * pc_width/2.0f + pcx + pc_width/2;
+    dmg_y = rec*pc_height*1.5f + pcy + pc_height;
+    display_dmg = (int)x;
   }else{
     m[rec].dec_hp(x);
     m[rec].calc_stats();
     
-    println("dmg: " + m[rec].get_hp_dec());
+    enemy_start_x = battle_UI_margin + (float)enemy_width;
+    enemy_start_y = battle_UI_margin + enemy_height/2.0f;
+    enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+    enemy_y = enemy_start_y;
+    for(int i = 0; i < enemy_count; i++){
+      if(i != 0){
+        if(i % 2 == 0){
+          enemy_x += enemy_width * m[i-1].get_mod();
+        }else{
+          enemy_x -= enemy_width * m[i-1].get_mod();
+        }
+      }
+      
+      if(rec == i){
+          dmg_x = enemy_x + enemy_width * m[rec].get_mod();
+          dmg_y = enemy_y + enemy_height * m[rec].get_mod();
+      }
+    
+      enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
+    }
+    display_dmg = (int)x;
+    println((int)x);
+    //println("dmg: " + m[rec].get_hp_dec());
   }
+  
+  
 }
 
 //def_type 1 = player, 0 = monster
@@ -67,29 +98,100 @@ void attack(int attacker, int defender, int def_type){
 }
 
 
-
-void skill_attack(int attacker, int defender, int def_type, int skill_id){
+void skill(int releaser, int reciever, int def_type, int skill_id){
   float damage;
-  
   if(def_type == 0){
-    p[attacker].skills.skill[skill_id].skilldamage();
+    p[releaser].skills.skill[skill_id].skilldamage();
     
-    if(p[attacker].skills.skill[skill_id].dmg_type == 1){
-      damage = p[attacker].skills.skill[skill_id].damage - m[defender].get_pdef();
-    }else{
-      damage = p[attacker].skills.skill[skill_id].damage - m[defender].get_mdef();
+    switch(p[releaser].skills.skill[skill_id].dmg_type){
+        // cause true damage
+        case 0:              
+              if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
+                
+                damage = p[releaser].skills.skill[skill_id].damage;
+                
+                if(damage < 1){
+                        damage = 1;
+                      }
+                
+                p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
+                dmg(damage,reciever,def_type);
+                p[releaser].calc_stats();            
+          }
+              else{
+                print("low mp");
+              }
+
+         break;
+              // cause physical damage
+        case 1:
+              if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
+                
+                damage = p[releaser].skills.skill[skill_id].damage-m[reciever].get_pdef();
+                
+                if(damage < 1){
+                        damage = 1;
+                      }
+                
+                p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
+                dmg(damage,reciever,def_type);
+                p[releaser].calc_stats();          
+          }
+              else{
+                print("low mp");
+              }
+          break;
+                // cause magical damage
+        case 2:
+              if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
+                
+                damage = p[releaser].skills.skill[skill_id].damage - m[reciever].get_mdef();
+                
+                if(damage < 1){
+                        damage = 1;
+                      }
+                
+                p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
+                dmg(damage,reciever,def_type);
+                p[releaser].calc_stats();
+            
+          }
+              else{
+                print("low mp");
+              }
+              
+          break;
+                  // recovery mp or hp
+       case 3:
+             if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
+                       if(p[releaser].skills.skill[skill_id].healing){
+                         println("healing!");
+                         p[releaser].rec_hp( p[releaser].skills.skill[skill_id].heal);
+                         p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);
+                         p[releaser].calc_stats();
+                     }
+                     else{
+                         p[releaser].rec_mp(p[releaser].skills.skill[skill_id].heal);
+                         p[releaser].dec_mp(p[releaser].skills.skill[skill_id].mp_dec);
+                         p[releaser].calc_stats();
+                     }          
+             }
+             else{
+               println("low mp");
+             }
+           break;
+                     // buff set
+      case 4:
+           break;
     }
-    //println("a patk: " + p[attacker].get_patk() + " m pdef: " + m[defender].get_pdef());
-  }else{
-    damage = m[attacker].get_patk() - p[defender].get_pdef();
   }
   
-  if(damage < 1){
-    damage = 1;
+  else{
+    //m[attacker].skills.skill[skill_id].skilldamage();
+     println("monster use skill");
   }
-  
-  dmg(damage, defender, def_type);
 }
+
 
 void attackanimation(int attacker, int defender){
   //int attacker_X = p[attacker].;
@@ -183,4 +285,39 @@ Units[] round_order(){
   }
   
   return u;
+}
+
+void battle_end(){
+  int player_dead_count = 0, monster_dead_count = 0;
+  
+  for(int i = 0; i < c_pt; i++){
+    if(!p[i].is_alive()){
+      player_dead_count++;
+    }
+  }
+  
+  for(int i = 0; i < enemy_count; i++){
+    if(!m[i].is_alive()){
+      monster_dead_count++;
+    }
+  }
+  
+  if(player_dead_count == c_pt){
+    println("GAME OVER!");
+    inBattle = false;
+    room = 2;
+  }else if(monster_dead_count == enemy_count){
+    println("Victory!");
+    inBattle = false;
+    room = 2;
+  }
+    //victory or defeted
+}
+
+void display_damage(){
+  stroke(0,100,100);
+  strokeWeight(2);
+  textSize(30);
+  fill(0,100,100);
+  text(display_dmg, dmg_x, dmg_y);
 }

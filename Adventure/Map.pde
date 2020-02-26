@@ -153,7 +153,7 @@ Map map = new Map();
               floor_1[floor_room_id-1].exit[15][3] = 3;
               floor_1[floor_room_id-1].exit[16][3] = 3;
               
-              floor_1[floor_room_id-1].exit[5][33] = 5;
+              floor_1[floor_room_id-1].exit[4][33] = 5;
               break;
               
             case 5:
@@ -504,7 +504,7 @@ void init_1F(){
         case 0:
               for(int j = 5;j <= 15; j++)
               {
-                for(int k = 11;k <= 25; k ++)
+                for(int k = 12;k <= 25; k ++)
                 {
                   floor_1[i].wall[j][k] = false;
                 }
@@ -569,6 +569,8 @@ void init_1F(){
               break;
         
         case 3:
+                  floor_1[i].wall[4][33] = false;
+              
               for(int j = 12;j<= 16;j++)
               {
                 for(int k = 3;k<= 36;k++){
@@ -585,6 +587,8 @@ void init_1F(){
           break;
        
         case 4:
+                  
+              
               for(int j = 7;j<= 12;j++)
               {
                 for(int k = 6;k<= 36;k++){
@@ -630,6 +634,7 @@ void init_2F(){
                   
                   floor_2[i].wall[5][19] = false;
                   
+
               for(int j = 6;j<= 8;j++)
               {
                 for(int k = 9;k<= 30;k++){
@@ -707,7 +712,7 @@ void init_2F(){
               
               for(int j = 6;j<= 14;j++)
               {
-                for(int k = 14;k<= 16;k++){
+                for(int k = 15;k<= 16;k++){
                   floor_2[i].wall[j][k] = false;
                 }
               }
@@ -720,13 +725,13 @@ void init_2F(){
               }
              
 
-                for(int k = 14;k<= 27;k++){
+                for(int k = 15;k<= 27;k++){
                   floor_2[i].wall[6][k] = false;
                 }
               
               for(int j = 13;j<= 14;j++)
               {
-                for(int k = 14;k<= 27;k++){
+                for(int k = 15;k<= 27;k++){
                   floor_2[i].wall[j][k] = false;
                 }
               }
@@ -817,6 +822,13 @@ void init_3F(){
     switch(i){
     
         case 0:
+                  floor_3[i].wall[18][21] = false;
+              
+              for(int k = 16;k<= 26;k++)
+              {
+                  floor_3[i].wall[5][k] = false;
+              }
+        
               for(int j = 9;j<= 10;j++)
               {
                 for(int k = 11;k<= 17;k++){
@@ -861,7 +873,7 @@ void init_3F(){
               
               for(int j = 6;j<= 12;j++)
               {
-                for(int k = 25;k<= 27;k++){
+                for(int k = 25;k<= 28;k++){
                   floor_3[i].wall[j][k] = false;
                 }
               }
@@ -964,7 +976,7 @@ void init_3F(){
               
               for(int j = 12;j<= 13;j++)
               {
-                for(int k = 13;k<= 26;k++){
+                for(int k = 14;k<= 26;k++){
                   floor_3[i].wall[j][k] = false;
                 }
               }
@@ -984,7 +996,7 @@ void init_3F(){
           break;
         
         case 5:
-              for(int j = 6; j <= 15; j++){
+              for(int j = 5; j <= 15; j++){
                 for(int k = 13; k <= 26; k++){
                   floor_3[i].wall[j][k] = false;
                 }
@@ -1025,7 +1037,7 @@ void init_3F(){
           break;
         
         case 6:
-              for(int j = 6; j <= 12; j++){
+              for(int j = 5; j <= 12; j++){
                 for(int k = 13; k <= 26; k++){
                   floor_3[i].wall[j][k] = false;
                 }

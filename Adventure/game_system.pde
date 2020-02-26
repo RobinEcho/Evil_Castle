@@ -71,9 +71,9 @@ void move() {
         }
         
         if(can_move){
-          p[0].set_x(p[0].charX + sqw/4);
+          p[0].set_x(p[0].charX + sqw/5);
           move_count++;
-          if(move_count == 4){
+          if(move_count == 5){
             move_count = 0;
             steps++;
             right = false;
@@ -92,9 +92,9 @@ void move() {
         }
         
         if(can_move){
-          p[0].set_x(p[0].charX - sqw/4);
+          p[0].set_x(p[0].charX - sqw/5);
           move_count++;
-          if(move_count == 4){
+          if(move_count == 5){
             move_count = 0;
             steps++;
             left = false;
@@ -123,6 +123,7 @@ void monsterappear() {
       if(encounter >= 60){
         cur = 0;
         round = 1;
+        inBattle = true;
         battle_end = false;
         Units[] order;
         
@@ -151,6 +152,10 @@ void monsterappear() {
         encounter = 0;
         
         order = round_order();
+        
+        for(int i = 0; i < order.length; i++){
+          battle_list[i] = order[i];
+        }
         
         pid = 0;
         battle_mode = 0;

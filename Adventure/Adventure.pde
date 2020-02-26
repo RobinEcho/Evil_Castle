@@ -26,18 +26,26 @@ import library
   
   PImage bg, bag_img;
   PFont font;
+  
   int boss_defeated = 0;
+  
   int total_jobs = 6, floor = 1, floor_room = 1;
+  
   int steps = 0, encounter;
   float side_margin, height_margin;
   float rate = 60;
+  
+  float dmg_x, dmg_y;
+  int display_dmg, start_frame;
   int boxwidth,boxheight;
   int boxX,boxY;
-  int item_count = 102;
+  
   int grid_width = 40, grid_height = 45;
   int sqw = 40, sqh = 45;
   int width = 1600, height = 900;
-   
+  
+  int max_pt = 4, c_pt = 1;
+  int item_count = 102;
   
 /*******************************************
   key variable to draw or action
@@ -55,6 +63,7 @@ import library
     Random r = new Random();
     
     Item[] item_list = new Item[item_count];
+    Units[] battle_list = new Units[max_pt*2];
     Monster[] m = new Monster[4];
     
     Map[] floor_1 = new Map[5];
@@ -150,7 +159,11 @@ import library
   *************************************************************************/ 
   
   public void draw(){
-    //structureline();
+    stroke(0);
+    fill(0,100,100);
+    
+    //strokeWeight(1);
+    //stroke(0,100,100);
     switch(room)
     {
           
@@ -176,7 +189,7 @@ import library
       map.drawmap(floor, floor_room);
       background(bg);
       //cur_room_npc();
-      //structureline();
+      structureline();
       change_room(floor_room);
       move();
       
@@ -189,12 +202,6 @@ import library
       p[0].display();
         break;
       
-      
-      case 90:
-               
-        battle_UI(enemy_count);
-        
-        break;
             
       case 80:
         
@@ -202,6 +209,9 @@ import library
         
         bag.display_bag();
         
+        if(!select_item){
+          item_desc(1);
+        }
         
         break;
         
@@ -215,7 +225,12 @@ import library
         bag_option();
         
         break;
-
+      
+      case 90:
+               
+        battle_UI(enemy_count);
+        
+        break;
         
       case 99:
         

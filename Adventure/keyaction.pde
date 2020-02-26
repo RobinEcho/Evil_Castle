@@ -138,7 +138,15 @@ void keyPressed(){
     
               room = map.get_map_room();
             }
+            
+         
         break;
+        
+        case 'x':
+         case'X':
+             dmg(10,0,1);
+             p[0].calc_stats();
+           break;
       }
     }
   }

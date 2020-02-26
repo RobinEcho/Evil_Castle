@@ -63,14 +63,15 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     text("Please choose your job",boxX+boxwidth/2,50);
     
     fill(33,50);
+    noStroke();
     rect(boxX,boxY,boxwidth,boxheight,9);
+    stroke(0);
     textAlign(CENTER, CENTER);
     textSize(text_height);
     for(int i =0; i<total_jobs;i++)
     {
       fill(40,100);
-      text(job_list[i],boxX+boxwidth/2,i*60+boxY+40);
-      
+      text(job_list[i],boxX+boxwidth/2,i*60+boxY+40);     
     }
               
   }                  //close jobchoicestyle()
@@ -81,6 +82,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     text_height = 40;
     
     fill(60, 100, 100, 60);
+    noStroke();
     rect(boxX,boxY,boxwidth,boxheight,30);
     
     fill(90, 80, 80, 80);
@@ -119,9 +121,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   ********************************************/
       
   void battle_UI(int enemy_count){
-   
-  PImage test = loadImage("src/player/Mage.png");
-  
+  battle_end();
   
   pc_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt + 1);
   pc_height = (height*2/3 - 3.0f * battle_UI_margin)/ (float)(max_pt + 2);
@@ -216,15 +216,24 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
            fill(65, 100, 100);
            rect(command_x + command_radius * 1.5 + battle_UI_margin, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)), skill_box_width, skill_box_height);
            fill(0,0,100);
-           textSize(skill_box_height/2);
+           textSize(skill_box_height/3);
            textAlign(CENTER, CENTER);
-           text(p[0].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
+           text(p[cur].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
         }
       break;
       
       //player uses item
       case 3:
+        select_item = false;
         bag.BagSquare(2);
+        if(!usable){
+          not_usable();
+        }
+        
+        if(!select_item)
+        {
+           item_desc(2);
+        }
         break;
       
       //player selects target
@@ -235,7 +244,11 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         
       
     }
-  //}
+  
+  if(show_damage){
+    if(frameCount - start_frame < 100)
+      display_damage();
+  }
 }
 
 /*************************************************

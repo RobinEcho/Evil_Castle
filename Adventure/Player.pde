@@ -42,28 +42,29 @@ class Player extends Units{
         break;
         
       case 2:
-        skills = new Priest_skill_list();
-        break;
-        
-      case 3:
-        skills = new Mage_skill_list();
-        break;
-        
-      case 4:
         skills = new Paladin_skill_list();
         break;
         
-      case 5:
+      case 3:
         skills = new Ranger_skill_list();
         break;
         
-      case 6:
+      case 4:
         skills = new Assassin_skill_list();
+        break;
+        
+      case 5:
+        skills = new Mage_skill_list();
+        break;
+        
+      case 6:
+        skills = new Priest_skill_list();
         break;     
     }
   }
 
   public void init_stats(){
+    this.alive = true;
     this.level = 1;
     this.str = job.stats[0];
     this.con = job.stats[1];
@@ -82,6 +83,8 @@ class Player extends Units{
 
 	//stats calculations
 	public void calc_stats(){
+    this.alive = true;
+    
 		this.str = str + bonus_str;
 		this.con = con + bonus_con;
 		this.intel = intel + bonus_intel;
@@ -113,7 +116,7 @@ class Player extends Units{
     }
 
     
-    println("lv: "+level+" patk= "+patk+" pdef = "+pdef+" matk = "+matk+" mdef = "+mdef+" spd = "+spd+" hp = "+max_hp+" mp = "+max_mp);
+    //println("lv: "+level+" patk= "+patk+" pdef = "+pdef+" matk = "+matk+" mdef = "+mdef+" spd = "+spd+" hp = "+max_hp+" mp = "+max_mp);
     
     
     

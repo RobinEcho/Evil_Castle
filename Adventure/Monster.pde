@@ -32,6 +32,8 @@ class Monster extends Units{
 
   
   public void init_stats(){
+    this.alive = true;
+    
     switch(m_type){
       case 1:
         this.monster_type = "Normal";
@@ -58,10 +60,10 @@ class Monster extends Units{
     this.matk = (level * 10) * mod;
     this.mdef = (level * 10) * mod;
     this.spd = (level * 10) * mod;
-    this.max_hp = (level * 10) * mod;
-    this.max_mp = (level * 10) * mod;
-    this.cur_hp = (level * 10) * mod;
-    this.cur_mp = (level * 10) * mod;
+    this.max_hp = (level * 2) * mod;
+    this.max_mp = (level * 2) * mod;
+    this.cur_hp = (level * 2) * mod;
+    this.cur_mp = (level * 2) * mod;
     this.hp_dec = 0;
     this.mp_dec = 0;
     
@@ -69,6 +71,7 @@ class Monster extends Units{
   }
 	
 	public void calc_stats(){
+    this.alive = true;
 		this.patk = patk + bonus_patk;
 		this.pdef = pdef + bonus_pdef;
 		this.matk = matk + bonus_matk;

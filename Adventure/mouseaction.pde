@@ -1,11 +1,11 @@
 /*******************************************************************
 function about mouse, set variable first, all action base on room 
 *********************************************************************/
-int trial = 0;
+int bag_selected_x, bag_selected_y, selected_item_code;
 float ogx, ogy;
 int bag_x, bag_y, temp_item_code;
 float skill_box_width, skill_box_height;
-boolean move_item = false, select_item = false;
+boolean move_item = false, select_item = false, select_target = false, usable = true;
 float x, y, distance;
 int command;
  
@@ -49,8 +49,7 @@ int command;
                 p[0] = new Player(p_class);
                 p[0].set_img(p[0].job.name,1);
                 p[0].set_loc(800,450);
-              }
-                
+              }               
         
         break;
         
@@ -193,6 +192,7 @@ void mouseReleased(){
                  }
                  
                  move_item = false;
+                 select_item = false;
                  
                }
                else{
@@ -234,6 +234,7 @@ void mouseReleased(){
 }
 
 void battle_commands(){
+  //attack
   distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y - command_radius)) * (y - (command_y - command_radius)) ) ) );
              if(distance <= command_radius / 2.0){
                //attack(0,0,0);
@@ -247,20 +248,21 @@ void battle_commands(){
                //}
              }
              
+             //skill
              distance = (float) ( Math.sqrt(( (x - (command_x + command_radius)) * (x - (command_x + command_radius)) + (y - command_y) * (y - command_y) ) ) );
              if(distance <= command_radius / 2.0){
                println("skill!");
-               p[0].skills.skill[0].skilldamage();
-               println(p[0].skills.skill[0].damage);
                battle_mode = 2;
              }
              
+             //item
              distance = (float) ( Math.sqrt(( (x - (command_x - command_radius)) * (x - (command_x - command_radius)) + (y - command_y) * (y - command_y) ) ) );
              if(distance <= command_radius / 2.0){
                println("item!");
                battle_mode = 3;
              }
              
+             //flee
              distance = (float) ( Math.sqrt(( (x - command_x) * (x - command_x) + (y - (command_y + command_radius)) * (y - (command_y + command_radius)) ) ) );
              if(distance <= command_radius / 2.0){
                escape();
@@ -274,7 +276,7 @@ void skill_commands(){
                     println("use skill " + (i+1));
                     command = i;
                     
-                    if(p[cur].skills.skill[i].type == 1){
+                    if(p[cur].skills.skill[i].type == 2){
                       battle_mode = 1;
                     }else{
                       battle_mode = 4;
@@ -288,6 +290,9 @@ void skill_commands(){
 }
 
 void bag_select(int bag_mode){
+   select_item = false;
+   usable = true;
+   
    switch(bag_mode){
      case 1:
           ogx = x;
@@ -322,30 +327,62 @@ void bag_select(int bag_mode){
                       && y >= ((i+1-(bag.row / 2 + bag.row % 2))*bag.vs + ((i-(bag.row / 2 + ((bag.row) % 2))) * bag.square_height))+ bag.vertical_margin 
                       && y <= ((i+1-(bag.row / 2 + bag.row % 2))*bag.vs + ((i-(bag.row / 2 + ((bag.row) % 2))) * bag.square_height))+ bag.vertical_margin + bag.square_height){
                         if(bag.inv[i][j] != item_count - 1){
-                          println("use item " + (i * bag.col + j));
+                          if(item_list[bag.inv[i][j]].id < 40){
+                            println("usable");
+                            bag_selected_x = j;
+                            bag_selected_y = i;
+                            selected_item_code = bag.inv[i][j];
+                            
+                            usable = true;
+                            select_item = true;
+                            battle_mode = 4;
+                            command = 7;
+                          }else{
+                            select_item = true;
+                            usable = false;
+                            battle_mode = 3;
+                          }
+                          //println("right side item: " + bag.inv[i][j]);
                         }
-                    }else{
-                      battle_mode = 0;
                     }
                   }else{
                     if(x >= ((j+1)*bag.hs + (j*bag.square_width) + width/2 - bag.UI_width) && x <= ((j+1)*bag.hs + (j*bag.square_width) + width/2 - bag.UI_width + bag.square_width) 
                       && y >= ( ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin ) && y <= ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin + bag.square_height){
                         if(bag.inv[i][j] != item_count - 1){
-                          println("use item " + (i * bag.col + j));
+                          if(item_list[bag.inv[i][j]].id < 40){
+                            println("usable");
+                            bag_selected_x = j;
+                            bag_selected_y = i;
+                            selected_item_code = bag.inv[i][j];
+                            
+                            usable = true;
+                            select_item = true;
+                            battle_mode = 4;
+                            command = 7;
+                          }else{
+                            select_item = true;
+                            usable = false;
+                            battle_mode = 3;
+                          }
+                          //println("left side item: " + bag.inv[i][j]);
                         }
-                      }else{
-                        battle_mode = 0;
                       }
                   }
                   
                 }    //for loop(j)
               }    //for loop (i)
+              
+              if(!select_item){
+                battle_mode = 0;
+              }
        break;
    }
 }
 
 void select_enemy_target(){
-  enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+  select_target = false;
+  float x_dis, y_dis;
+  enemy_x = enemy_start_x + enemy_width * m[mid].get_mod();
         enemy_y = enemy_start_y;
         target_diameter = (float)Math.sqrt( 2*(Math.pow((double)enemy_width,2.0)) );
         strokeWeight(3);
@@ -360,35 +397,69 @@ void select_enemy_target(){
               enemy_x -= enemy_width * m[i-1].get_mod();
             }
           }
-            
-            if(x >= enemy_x + (enemy_width/2.0f * m[i].get_mod()) && x <= enemy_x + (enemy_width/2.0f * m[i].get_mod()) + enemy_width * m[i].get_mod()
-              && y >= enemy_y + enemy_height/2.0 * m[i].get_mod() && y <= enemy_y + enemy_height/2.0 * m[i].get_mod() + target_diameter * m[i].get_mod()){
+          x_dis = x - (enemy_x + enemy_width/2.0f * m[i].get_mod());
+          y_dis = y - (enemy_y + enemy_height/2.0 * m[i].get_mod());
+          
+            distance = (float)Math.sqrt(x_dis * x_dis + y_dis * y_dis);
+            if(distance <= target_diameter * m[i].get_mod() / 2){
                 if(command == 6){
                   attack(pid, i, 0);
                 }else{
                   p[pid].skills.skill[command].skilldamage();
-                  skill_attack(pid, i, 0, command);
+                  skill(pid, i, 0, command);
                 }
                 
                 //change c_pt to c_pt + enemy_count
                 cur = (cur + 1) % c_pt;
+                select_target = true;
                 battle_mode = 0;
-            }else{
-              battle_mode = 0;
             }
           
           
           enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
         }
+        
+  if(!select_target){
+    battle_mode = 0;
+  }
 }
 
 void select_ally_target(){
+  select_target = false;
   for(int i = 0; i < c_pt; i++){
     cx = c_width*i + (i+1)*battle_UI_margin;
     if(x >= cx && x <= cx + c_width && y >= cy & y <= cy + c_height){
-      println("use on player " + (i+1));
+      //println("use on player " + (i+1));
+      if(command == 7){
+        p[i].rec_hp(item_list[selected_item_code].get_rec_hp());
+        p[i].rec_mp(item_list[selected_item_code].get_rec_mp());
+        p[i].calc_stats();
+        
+        select_item = false;
+        
+        bag.inv[bag_selected_y][bag_selected_x] = item_count - 1;
+      }else{
+        skill(pid, i, 0, command);
+      }
       //change c_pt to c_pt + enemy_count
       cur = (cur + 1) % c_pt;
+      select_target = true;
+      battle_mode = 0;
+      
     }
   }
+  
+  if(!select_target){
+    select_item = false;
+    battle_mode = 0;
+  }
+}
+
+void not_usable(){
+  //println("NOT usable");
+  fill(8, 100, 100);
+  textSize(25);
+  stroke(8, 100, 100);
+  strokeWeight(2);
+  text("This item cannot be used in battle!", width/2, bag.vertical_margin / 2);
 }
