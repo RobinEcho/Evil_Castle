@@ -48,6 +48,7 @@ int command;
               if(p_class != 0){
                 p[0] = new Player(p_class);
                 p[0].set_img(p[0].job.name,1);
+                p[0].name = "Adam";
                 p[0].set_loc(800,450);
               }               
         
@@ -64,15 +65,16 @@ int command;
        
        case 81:
            if((x >= bagoptX && x<= bagoptX+bag.square_width*3) && (y >= bagoptY && y <= bagoptY+bag.square_height)){
-             println("x: " + bag_x + " y: " + bag_y);
-             println("used " + (bag_y * 5 + bag_x + 1));
+             //println("x: " + bag_x + " y: " + bag_y);
+             //println("used " + (bag_y * 5 + bag_x + 1));
+             item_list[bag.inv[bag_y][bag_x]].use(pid);
              room = 80;
            
            }
            
            else if((x >= bagoptX && x<= bagoptX+bag.square_width*3) && (y > bagoptY + bag.square_height&& y <= bagoptY+bag.square_height * 2)){
-             println("droped");
-             
+             //println("droped");
+             bag.inv[bag_y][bag_x] = item_count - 1;
            }
            
            else{         
@@ -112,8 +114,12 @@ int command;
              break;
              
            //monster turn
-           default:
+           case -1:
              println("Monster Turn!");
+             break;
+             
+           case 10:
+             //display_damage();
              break;
          }
         
@@ -153,7 +159,7 @@ int command;
  //bag_y = (int) ( (ogy - bag.vertical_margin - bag.vs) / (bag.vs + bag.square_height));
   
 void mouseDragged(){
-  if(select_item){
+  if(select_item && room == 80){
     move_item = true;
     
     image(item_list[temp_item_code].img, mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
@@ -307,7 +313,7 @@ void bag_select(int bag_mode){
               
                if(x >= sqx && x <= sqx + bag.square_width  && y >=  sqy && y <= sqy + bag.square_height)
                {
-                 if(bag.inv[i][j] != item_count - 1){
+                 if(bag.inv[i][j] < item_count - 4){
                    bag_x = j;
                    bag_y = i;
                    temp_item_code = bag.inv[i][j];
@@ -317,6 +323,28 @@ void bag_select(int bag_mode){
                }
             }
           }
+        
+        //select player equipment
+        for(int n=1 ; n <=p[0].Wpsq_num ; n++ ){
+          sqx = p[0].horizontal_margin + p[0].sq_distance + n*p[0].Wp_distance + (n-1)*p[0].Wpsq_sl;
+          sqy = p[0].vertical_margin + p[0].Avatarsq_sl + 2*p[0].sq_distance + 3*p[0].Wpsq_sl;
+          
+          if(x >= sqx && x <= sqx + p[0].Wpsq_sl && y >= sqy && y <= sqy + p[0].Wpsq_sl){
+            
+            if(p[pid].equipment[n-1] != item_count - 1){
+              for(int i = 0; i < bag.row; i++){
+                for(int j = 0; j < bag.col; j++){
+                  if(bag.inv[i][j] == item_count -1){
+                    item_list[bag.inv[i][j]].update_player_bonus(pid, p[pid].equipment[n-1], bag.inv[i][j]);
+                    bag.inv[i][j] = p[pid].equipment[n-1];
+                    p[pid].equipment[n-1] = item_count - 1;
+                  }
+                }
+              }
+            }
+            
+          }
+        }
        break;
      case 2:
                for(int i = 0; i < bag.row; i++){
@@ -328,7 +356,7 @@ void bag_select(int bag_mode){
                       && y <= ((i+1-(bag.row / 2 + bag.row % 2))*bag.vs + ((i-(bag.row / 2 + ((bag.row) % 2))) * bag.square_height))+ bag.vertical_margin + bag.square_height){
                         if(bag.inv[i][j] != item_count - 1){
                           if(item_list[bag.inv[i][j]].id < 40){
-                            println("usable");
+                            //println("usable");
                             bag_selected_x = j;
                             bag_selected_y = i;
                             selected_item_code = bag.inv[i][j];
@@ -350,7 +378,7 @@ void bag_select(int bag_mode){
                       && y >= ( ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin ) && y <= ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin + bag.square_height){
                         if(bag.inv[i][j] != item_count - 1){
                           if(item_list[bag.inv[i][j]].id < 40){
-                            println("usable");
+                            //println("usable");
                             bag_selected_x = j;
                             bag_selected_y = i;
                             selected_item_code = bag.inv[i][j];
@@ -409,8 +437,7 @@ void select_enemy_target(){
                   skill(pid, i, 0, command);
                 }
                 
-                //change c_pt to c_pt + enemy_count
-                cur = (cur + 1) % c_pt;
+                
                 select_target = true;
                 battle_mode = 0;
             }
@@ -421,6 +448,8 @@ void select_enemy_target(){
         
   if(!select_target){
     battle_mode = 0;
+  }else{
+    battle_mode = 10;
   }
 }
 
@@ -438,11 +467,12 @@ void select_ally_target(){
         select_item = false;
         
         bag.inv[bag_selected_y][bag_selected_x] = item_count - 1;
+        
       }else{
         skill(pid, i, 0, command);
+        
       }
-      //change c_pt to c_pt + enemy_count
-      cur = (cur + 1) % c_pt;
+      
       select_target = true;
       battle_mode = 0;
       
@@ -452,6 +482,8 @@ void select_ally_target(){
   if(!select_target){
     select_item = false;
     battle_mode = 0;
+  }else{
+    battle_mode = 10;
   }
 }
 

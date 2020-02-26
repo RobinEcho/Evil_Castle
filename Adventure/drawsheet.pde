@@ -30,7 +30,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   //
   
     textSize(60);
-    text("Game Title",side_margin,height_margin/2);
+    text("Castle Adventrue",side_margin,height_margin/2);
                                   
     textSize(30);
     text("New Game", side_margin, height_margin);
@@ -205,6 +205,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
       //image(m[i].img, enemy_x - i*enemy_width/2.0f, enemy_y + i*enemy_height*1.5f, enemy_width, enemy_height);
       case 1:
         enemy_selection();
+        
         break;
       
       //player uses skill
@@ -242,13 +243,42 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         
         break;
         
+      case -1:
+        println("monster round");
+        switch(m[mid].getMType()){
+          case 1:
+            normal.attack_mode();
+            break;
+          case 2:
+          normal.attack_mode();
+            break;
+          case 3:
+          normal.attack_mode();
+            break;
+        }
+        
+        battle_mode = 10;
+        break;
       
+      case 10:
+        
+        if(frameCount - start_frame < 100){
+          if(battle_list[cur].get_type() == 0){
+            display_damage(pid, 1);
+          }else{
+            display_damage(mid, 0);
+          }
+        }else{
+          cur = (cur + 1) % (c_pt + enemy_count);
+        
+          if(battle_list[cur].get_type() == 0){
+            battle_mode = -1;
+          }else{
+            battle_mode = 0;
+          }
+        }
     }
   
-  if(show_damage){
-    if(frameCount - start_frame < 100)
-      display_damage();
-  }
 }
 
 /*************************************************

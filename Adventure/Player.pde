@@ -6,11 +6,53 @@
 
 class Player extends Units{
 	protected float str = 1, con = 1, intel = 1, wis = 1, agi = 1;
-  protected int exp = 0, job_code;
-  public int dir = 2;
+  protected float flat_str = 1, flat_con = 1, flat_intel = 1, flat_wis = 1, flat_agi = 1;
+  protected int job_code;
+  public int dir = 2, AP = 3;
 	Job job;
   Skill skills;
-	
+  int[] equipment = {item_count - 1, item_count - 1, item_count - 1};
+  
+  /**************************************
+  *  CW
+  **************************************/
+  int Avatarsq_num = 4;
+  int Bigsq_num = 3 ;
+  
+  int Wpsq_num = 3;
+  
+  int Strip_num = 5 ;
+  
+  int All_stripnum = 11;
+  int UI_width = 500;
+  int UI_height = 800;
+  int UI_dis = 100;
+  int vertical_margin = (height - UI_height)/2;
+  int horizontal_margin = (width - 2*UI_width - UI_dis)/2;
+  
+  float sq_distance = UI_width / (Avatarsq_num*2 + 1);
+  
+  float Avatarsq_sl = sq_distance;
+  
+  float strip_distance = (UI_height -  Avatarsq_sl) / (All_stripnum*2 + 1);
+  
+  float Big_sl = 0.3*UI_height;
+  
+  float Wp_distance = Big_sl / (Wpsq_num * 3 +1);
+  
+  float Wpsq_sl = 2*Wp_distance;
+  
+  float Strip_height = strip_distance;
+  
+  float addsq_sl = Strip_height;
+  
+  float Strip_width = (UI_width - 4*sq_distance - addsq_sl) / 2;
+  
+  float v_a = 0.05*UI_height;
+  /**************************************
+  *  CW end
+  **************************************/	
+
 	public Player(){
 	}
 
@@ -28,11 +70,11 @@ class Player extends Units{
     this.job_code = x;
     job = new Job(x);
 		this.level = lv;
-		this.str = st;
-		this.con = co;
-		this.intel = in;
-		this.wis = wi;
-		this.agi = ag;
+		this.flat_str = st;
+		this.flat_con = co;
+		this.flat_intel = in;
+		this.flat_wis = wi;
+		this.flat_agi = ag;
 	}
 
   public void init_skillset(){
@@ -66,11 +108,11 @@ class Player extends Units{
   public void init_stats(){
     this.alive = true;
     this.level = 1;
-    this.str = job.stats[0];
-    this.con = job.stats[1];
-    this.intel = job.stats[2];
-    this.wis = job.stats[3];
-    this.agi = job.stats[4];
+    this.flat_str = job.stats[0];
+    this.flat_con = job.stats[1];
+    this.flat_intel = job.stats[2];
+    this.flat_wis = job.stats[3];
+    this.flat_agi = job.stats[4];
   }
 	
   public void change_map_img(){
@@ -85,19 +127,30 @@ class Player extends Units{
 	public void calc_stats(){
     this.alive = true;
     
-		this.str = str + bonus_str;
-		this.con = con + bonus_con;
-		this.intel = intel + bonus_intel;
-		this.wis = wis + bonus_wis;
-		this.agi = agi + bonus_agi;
+		this.str = flat_str + bonus_str;
+		this.con = flat_con + bonus_con;
+		this.intel = flat_intel + bonus_intel;
+		this.wis = flat_wis + bonus_wis;
+		this.agi = flat_agi + bonus_agi;
 
-		this.patk = str * job.amplifier[0] + level * (2 + job.amplifier[0]) + bonus_patk;
-		this.pdef = con * job.amplifier[1]  + level * (5 + job.amplifier[1]) + bonus_pdef;
-		this.matk = intel * job.amplifier[2]  + level * (2 + job.amplifier[2]) + bonus_matk;
-		this.mdef = wis * job.amplifier[3] + level * (3.5 + job.amplifier[3]) + bonus_mdef;
-		this.spd = agi * job.amplifier[4] + level * (1 + job.amplifier[4]) + bonus_spd;
-		this.max_hp = con * (3 + job.amplifier[5]) * 2  + level * (8 + job.amplifier[5]) + bonus_hp;
-		this.max_mp = wis * (2 + job.amplifier[6])  + level * (3 + job.amplifier[6]) + bonus_mp;
+		this.flat_patk = str * job.amplifier[0] + level * (2 + job.amplifier[0]);
+		this.flat_pdef = con * job.amplifier[1]  + level * (5 + job.amplifier[1]);
+		this.flat_matk = intel * job.amplifier[2]  + level * (2 + job.amplifier[2]);
+		this.flat_mdef = wis * job.amplifier[3] + level * (3.5 + job.amplifier[3]);
+		this.flat_spd = agi * job.amplifier[4] + level * (1 + job.amplifier[4]);
+		this.flat_max_hp = flat_con * (3 + job.amplifier[5]) * 2  + level * (8 + job.amplifier[5]);
+		this.flat_max_mp = flat_wis * (2 + job.amplifier[6])  + level * (3 + job.amplifier[6]);
+    this.bonus_hp = bonus_con * (3 + job.amplifier[5]) * 2 ;
+    this.bonus_mp = bonus_wis * (2 + job.amplifier[6]);
+
+    this.patk = flat_patk + bonus_patk;
+    this.pdef = flat_pdef + bonus_pdef;
+    this.matk = flat_matk + bonus_matk;
+    this.mdef = flat_mdef + bonus_mdef;
+    this.spd = flat_spd + bonus_spd;
+    this.max_hp = flat_max_hp + bonus_hp;
+    this.max_mp = flat_max_mp + bonus_mp;
+    
 		this.cur_hp = max_hp - hp_dec + bonus_hp;
     if(this.cur_hp <= 0){
       dead();
@@ -123,13 +176,54 @@ class Player extends Units{
 	}
 	
 	//temporary stats increments for equipments and buffs
-	public void levelUp(){
-		this.level++;
-	}
-	
-	public void gainExp(int ex){
-		this.exp += ex;
-	}
+  public void levelUp(){
+    
+         this.level++;       
+
+         this.AP += 3;
+         
+           for(int i =0;i<stats_count;i++)
+           {
+             this.job.stats[i] += this.job.stats_inc[i];             
+           }
+           
+           this.calc_stats(); 
+           
+           this.cur_hp = this.max_hp;
+           
+           this.cur_mp = this.max_mp;
+           
+            println("Level up!, level now: "+this.level+" hp now: "+this.cur_hp+" mp now: "+this.cur_mp);         
+ }
+  
+  public void gainExp(float ex){
+    
+    this.exp += ex;
+    
+    float exp_expect = this.level * 10;
+    
+    if(this.level == 25)
+    {
+        this.exp = exp_expect;
+    }
+    
+    else{        
+        do{
+          
+          if(this.exp - exp_expect >= 0)
+          {
+            if(this.exp - exp_expect == 0){
+              this.exp = 0;
+            }else{
+              this.exp = this.exp - exp_expect;
+            }
+              levelUp(); 
+          }
+          
+        }
+        while(this.exp >= exp_expect && this.level < 25);    
+    }
+  }
 	
 	public void inc_str(float a){
 		this.bonus_str += a;
@@ -152,10 +246,6 @@ class Player extends Units{
 	}
 	
 	//setters
-	
-	public void set_exp(int x){
-		this.exp = x;
-	}
 	
 	public void set_str(float x){
 		this.str = x;
@@ -180,9 +270,6 @@ class Player extends Units{
 	/***************************
 	*	Getters
 	***************************/
-	public int get_exp(){
-		return this.exp;
-	}
 	
 	public float get_str(){
 		return this.str;
@@ -265,6 +352,239 @@ public int[] interact(){
 		System.out.println("MDEF: " + this.mdef);
 		System.out.println("SPD: " + this.spd);
 	}
-
   
+  /**************************************
+  *  CW
+  **************************************/
+  public void PropertyPanel(){
+    noStroke();
+    fill((this.job_code - 1) * 12, 100, 100);
+    
+    rect(horizontal_margin, vertical_margin, UI_width, UI_height,10);
+    
+  }                    //close PropertyPanel()
+
+  /**************************************
+  *  CW
+  **************************************/
+  public void PropertySquare(){
+    
+    stroke((this.job_code - 1) * 12, 100, 100);
+    fill(0, 0, 100);
+    
+    for(int n = 1; n <= Avatarsq_num; n++){
+      rect(horizontal_margin + n*sq_distance + (n-1)*Avatarsq_sl,vertical_margin + strip_distance,Avatarsq_sl,Avatarsq_sl,10);
+    } 
+    
+    rect(horizontal_margin + sq_distance,vertical_margin + Avatarsq_sl + 2*v_a,Big_sl,Big_sl,10);
+    
+    fill(0,0,100);
+    
+    for(int n=1 ; n <=Wpsq_num ; n++ ){
+      
+      rect(horizontal_margin + sq_distance + n*Wp_distance + (n-1)*Wpsq_sl - 1,vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl - 1,Wpsq_sl+1,Wpsq_sl+1);
+      image(item_list[equipment[n-1]].img, horizontal_margin + sq_distance + n*Wp_distance + (n-1)*Wpsq_sl,vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl, Wpsq_sl, Wpsq_sl);
+    }
+    
+    textSize(20);
+    
+    textAlign(CENTER);
+    
+    for(int n = 1; n < Strip_num; n++){
+      
+    fill(0,0,100);
+    
+    rect(horizontal_margin + sq_distance + Big_sl + sq_distance,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance,Strip_width,Strip_height,10);
+    
+    //stroke(0);
+    
+    fill((this.job_code - 1) * 12, 100, 100);
+    
+    textSize(30);
+    
+      switch(n){
+      
+        case 1:
+        
+        text(this.name,horizontal_margin + sq_distance + Big_sl + sq_distance + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance + 0.75*Strip_height);
+        
+        break;
+        
+        case 2:
+        
+        text(this.job.name,horizontal_margin + sq_distance + Big_sl + sq_distance + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance + 0.75*Strip_height);
+        
+        break;
+        
+        case 3:
+        
+        text("Level: "+this.get_level(),horizontal_margin + sq_distance + Big_sl + sq_distance + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance + 0.75*Strip_height);
+        
+        break;
+        
+        case 4:
+        
+        text("Exp: "+this.get_exp(),horizontal_margin + sq_distance + Big_sl + sq_distance + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance + 0.75*Strip_height);
+        
+        break;
+        
+      
+      }
+    
+    }
+    
+    fill(0,0,100);
+    
+    rect(sq_distance + horizontal_margin,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + Strip_height,Strip_width,Strip_height,10);
+    
+    rect(horizontal_margin + Strip_width + 1.2*sq_distance + addsq_sl,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + Strip_height,Strip_width,Strip_height,10);
+    
+    //stroke(0);
+    
+    fill((this.job_code - 1) * 12, 100, 100);
+    
+    text("Hp: "+(int)this.get_cur_hp(),sq_distance + horizontal_margin + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.75*Strip_height);
+    
+    text("Mp: "+(int)this.get_cur_mp(),horizontal_margin + Strip_width + 1.2*sq_distance + addsq_sl + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.75*Strip_height);
+    
+    fill(0,0,100);
+    
+    ellipse(horizontal_margin + Strip_width + sq_distance + addsq_sl + Strip_width + 1.5*sq_distance,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.5*Strip_height,1.2*sq_distance,1.2*sq_distance);
+    
+    fill((this.job_code - 1) * 12, 100, 100);
+    text(this.AP, horizontal_margin + Strip_width + sq_distance + addsq_sl + Strip_width + 1.5*sq_distance,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.5*Strip_height);
+    
+    fill(0,0,100);
+    for(int n = 1; n <= Strip_num; n++){
+      
+      for(int l=1; l <=2 ;l++){
+        
+    rect(horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance),vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance,Strip_width,Strip_height,10);
+        
+    //stroke(0);
+    
+    fill((this.job_code - 1) * 12, 100, 100);
+    
+    if(n==1){
+    
+      if(l==1){
+      
+        text("Str: "+(int)this.get_str(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+      
+      }
+      
+      else{
+      
+        text("Patk: "+(int)this.get_patk(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+      
+      }
+      
+    }
+      
+    if(n==2){
+      
+      if(l==1){
+    
+      text("Con: "+(int)this.get_con(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+    
+      }
+      
+      else{
+      
+      text("Pdef: "+(int)this.get_pdef(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+      
+      }
+      
+    }
+    
+    if(n==3){
+      
+      if(l==1){
+    
+      text("Intel: "+(int)this.get_intel(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+    
+      }
+      
+      else{
+      
+      text("Matk: "+(int)this.get_matk(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+      
+      }
+      
+    }
+    
+    if(n==4){
+      
+      if(l==1){
+    
+      text("Wis: "+(int)this.get_wis(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+    
+      }
+      
+      else{
+      
+      text("Mdef: "+(int)this.get_mdef(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+      
+      }
+      
+    }
+    
+    if(n==5){
+      
+      if(l==1){
+    
+      text("Agi: "+(int)this.get_agi(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+    
+      }
+      
+      else{
+      
+      text("Spd: "+(int)this.get_spd(),horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance)+0.5*Strip_width,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance+0.75*Strip_height);
+      
+      }
+      
+    }
+    
+       fill(0,0,100);
+    
+     }
+     
+     //stroke(0);
+    
+     rect(horizontal_margin + sq_distance + Strip_width + sq_distance,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance,addsq_sl,addsq_sl,10);
+     
+     fill(0,100,0);
+     
+     text("+",horizontal_margin + sq_distance + Strip_width + sq_distance + 0.5*addsq_sl,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance +0.75*addsq_sl);
+     
+     fill(0,0,100);
+    
+    }
+    
+    for(int n=1 ; n <=Wpsq_num ; n++ ){  
+      if(mouseX >= (horizontal_margin + sq_distance + n*Wp_distance + (n-1)*Wpsq_sl)
+        && mouseX <= (horizontal_margin + sq_distance + n*Wp_distance + (n-1)*Wpsq_sl) + Wpsq_sl 
+        && mouseY >= (vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl)
+        && mouseY <= (vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl) + Wpsq_sl){
+          if(this.equipment[n-1] != item_count - 1){
+            item_list[this.equipment[n-1]].desc(mouseX - bag.square_width * 3, mouseY);
+          }
+      }
+      
+    }
+    
+  }
+
+  /**************************************
+  *  CW
+  **************************************/
+  public void charPanel(){
+  
+    PropertyPanel();
+    
+    PropertySquare();
+  }
+  /**************************************
+  *  CW end
+  **************************************/
 }

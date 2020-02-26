@@ -60,6 +60,7 @@ class Job{
   public float[] amplifier = new float[7];
   public int code = 0;
   public float[] stats = new float[stats_count];
+  public float[] stats_inc = new float[stats_count];
 
   public Job(){
   }
@@ -72,54 +73,55 @@ class Job{
         this.name = "Knight";
         Knight knight = new Knight();
         init_Knight(knight);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = knight.get_base_stats()[i];
-        }
+
+          this.stats = knight.get_base_stats();
+          this.stats_inc = knight.get_stats_inc();
+
         break;
         
       case 2:
         this.name = "Paladin";
         Paladin paladin = new Paladin();
         init_Paladin(paladin);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = paladin.get_base_stats()[i];
-        }
+
+          this.stats = paladin.get_base_stats();
+          this.stats_inc = paladin.get_stats_inc();
         break;
       
       case 3:
         this.name = "Ranger";
         Ranger ranger = new Ranger();
         init_Ranger(ranger);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = ranger.get_base_stats()[i];
-        }
+
+          this.stats = ranger.get_base_stats();
+          this.stats_inc = ranger.get_stats_inc();
         break;
         
       case 4:
         this.name = "Assassin";
         Assassin assassin = new Assassin();
         init_Assassin(assassin);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = assassin.get_base_stats()[i];
-        }
+
+          this.stats = assassin.get_base_stats();
+          this.stats_inc = assassin.get_stats_inc();
         break;
         
       case 5:
         this.name = "Mage";
         Mage mage = new Mage();
         init_Mage(mage);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = mage.get_base_stats()[i];
-        }
+
+          this.stats = mage.get_base_stats();
+          this.stats_inc = mage.get_stats_inc();
         break;
         
       case 6:
         this.name = "Priest";
         Priest priest = new Priest();
         init_Priest(priest);
-        for(int i = 0; i < stats_count; i++){
-          this.stats[i] = priest.get_base_stats()[i];
-        }
+
+          this.stats = priest.get_base_stats();
+          this.stats_inc = priest.get_stats_inc();
         break;
     }
   }

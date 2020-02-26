@@ -28,7 +28,9 @@ class Bag{
       for(int j = 0; j < col; j++)
       {
         //image(item_list[j%3], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
-        inv[i][j] = r.nextInt(item_count);
+        //inv[i][j] = r.nextInt(item_count);
+        //inv[i][j] = item_count - 1;
+        inv[i][j] = i * col + j;
       }    //for loop(j)
     }    //for loop (i)
     
@@ -40,7 +42,7 @@ class Bag{
   ********************************************/ 
 
   public void display_bag(){
-    PropertyPanel();
+    p[pid].charPanel();
     BagSquare(1);
     if(move_item){
       image(item_list[temp_item_code].img, mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);

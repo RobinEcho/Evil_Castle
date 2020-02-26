@@ -8,7 +8,6 @@
 class Monster extends Units{
   protected int m_type;
   protected String monster_type = "Normal";
-  protected String name;
   protected int skillset = 0;
   protected float mod = 1.0;
   
@@ -109,14 +108,6 @@ class Monster extends Units{
     this.monster_type = s;
   }
   
-  public void setName(String s){
-    this.name = s;
-  }
-  
-  public String getName(){
-    return this.name;
-  }
-  
   public int getMType(){
     return this.m_type;
   }
@@ -129,6 +120,15 @@ class Monster extends Units{
     return this.mod;
   }
 	
+  public float getExp(){
+    
+    this.exp = (this.level * 2) * this.mod;
+    
+    println("exp monster: "+this.exp);
+    
+    return this.exp;
+  }
+
 	/***********************
 	*test print
 	***********************/

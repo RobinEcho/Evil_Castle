@@ -74,6 +74,10 @@ import library
     
     Player[] p = new Player[4];
     Bag bag = new Bag(8, 5);        //Bag(row,column)
+    
+    Normal normal = new Normal();
+    Elite elite = new Elite();
+    Boss boss = new Boss();
   
   /*******************************************
     key variable to draw or action
@@ -189,7 +193,7 @@ import library
       map.drawmap(floor, floor_room);
       background(bg);
       //cur_room_npc();
-      structureline();
+      //structureline();
       change_room(floor_room);
       move();
       

@@ -130,6 +130,7 @@ void keyPressed(){
             
         case 'b':
         case 'B':
+            pid = 0;
             if(!inBag){
               inBag = true;
               room = 80;
@@ -147,6 +148,12 @@ void keyPressed(){
              dmg(10,0,1);
              p[0].calc_stats();
            break;
+       
+       case 'l':
+         case'L':
+             p[0].gainExp(20);
+             steps = 100;
+             break;
       }
     }
   }

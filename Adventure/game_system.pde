@@ -157,17 +157,17 @@ void monsterappear() {
           battle_list[i] = order[i];
         }
         
-        pid = 0;
-        battle_mode = 0;
-        //  if(order[cur].get_type() == 1){
-        //    pid = order[cur].get_id();
+        //pid = 0;
+        //battle_mode = 0;
+          if(order[cur].get_type() == 1){
+            pid = order[cur].get_id();
             
-        //    battle_mode = 0;
-        //  }else{
-        //    mid = order[cur].get_id();
+            battle_mode = 0;
+          }else{
+            mid = order[cur].get_id();
             
-        //    battle_mode = -1;
-        //  }
+            battle_mode = -1;
+          }
     }
   }  
 }                    //close monsterappear()

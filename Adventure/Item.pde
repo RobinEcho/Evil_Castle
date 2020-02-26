@@ -701,8 +701,75 @@ class Item{
       }
     }
     
+  }// end function desc
+  
+  public void use(int target){
+    int temp_item;
+    
+    
+      if(this.id < 50){
+        p[target].rec_hp(this.rec_hp);
+        p[target].rec_mp(this.rec_mp);
+        bag.inv[bag_y][bag_x] = item_count - 1;
+      }else if(this.id > 100){
+        if(p[target].job_code == (this.id / 100)){
+          if(p[target].level >= item_list[bag.inv[bag_y][bag_x]].level){
+            temp_item = p[target].equipment[((this.id % 100) / 10) - 1];
+            
+            update_player_bonus(target, temp_item, bag.inv[bag_y][bag_x]);
+            
+            p[target].equipment[((this.id % 100) / 10) - 1] = bag.inv[bag_y][bag_x];
+            bag.inv[bag_y][bag_x] = temp_item;
+          }else{
+            println("You don't meet the level requirement for this item!");
+          }
+        }else{
+          println("Wrong Job equipment!");
+        }
+      }
+    
   }
   
+  
+  public void update_player_bonus(int target, int prev_eq_code, int new_eq_code){
+    //decrease player stats added by previous equipment
+    p[target].inc_str(-1 * item_list[prev_eq_code].get_str());
+    p[target].inc_con(-1 * item_list[prev_eq_code].get_con());
+    p[target].inc_int(-1 * item_list[prev_eq_code].get_intel());
+    p[target].inc_wis(-1 * item_list[prev_eq_code].get_wis());
+    p[target].inc_agi(-1 * item_list[prev_eq_code].get_agi());
+    p[target].inc_patk(-1 * item_list[prev_eq_code].get_patk());
+    p[target].inc_pdef(-1 * item_list[prev_eq_code].get_pdef());
+    p[target].inc_matk(-1 * item_list[prev_eq_code].get_matk());
+    p[target].inc_mdef(-1 * item_list[prev_eq_code].get_mdef());
+    p[target].inc_spd(-1 * item_list[prev_eq_code].get_spd());
+    p[target].inc_hp(-1 * item_list[prev_eq_code].get_hp());
+    p[target].inc_mp(-1 * item_list[prev_eq_code].get_mp());
+    println("dec stats");
+    println("str:  " + item_list[prev_eq_code].get_str());
+    println("con:  " + item_list[prev_eq_code].get_con());
+    println("hp:  " + item_list[prev_eq_code].get_hp());
+    
+    //increase player stats by new equipment bonuses
+    p[target].inc_str(item_list[new_eq_code].get_str());
+    p[target].inc_con(item_list[new_eq_code].get_con());
+    p[target].inc_int(item_list[new_eq_code].get_intel());
+    p[target].inc_wis(item_list[new_eq_code].get_wis());
+    p[target].inc_agi(item_list[new_eq_code].get_agi());
+    p[target].inc_patk(item_list[new_eq_code].get_patk());
+    p[target].inc_pdef(item_list[new_eq_code].get_pdef());
+    p[target].inc_matk(item_list[new_eq_code].get_matk());
+    p[target].inc_mdef(item_list[new_eq_code].get_mdef());
+    p[target].inc_spd(item_list[new_eq_code].get_spd());
+    p[target].inc_hp(item_list[new_eq_code].get_hp());
+    p[target].inc_mp(item_list[new_eq_code].get_mp());
+    println("dec stats");
+    println("str:  " + item_list[new_eq_code].get_str());
+    println("con:  " + item_list[new_eq_code].get_con());
+    println("hp:  " + item_list[new_eq_code].get_hp());
+    
+    p[target].calc_stats();
+  }
 }//end Item class
 
 

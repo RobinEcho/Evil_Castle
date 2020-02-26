@@ -2,7 +2,7 @@
  have battle with monster
 ********************************************/
 
-boolean dodge = false;
+boolean dodge = false, esc = true;
 boolean inBattle = false;
 boolean show_damage = false;
 int battle_UI_margin = 10;
@@ -52,8 +52,6 @@ void dmg(float x, int rec, int rec_type){
     println((int)x);
     //println("dmg: " + m[rec].get_hp_dec());
   }
-  
-  
 }
 
 //def_type 1 = player, 0 = monster
@@ -204,21 +202,25 @@ void escape(){
   
     int escape = r.nextInt(100);
     
-    
-    
     if(escape >= 60){
       
-    inBattle = false;
-
-    room = map.get_map_room();
-    
-
-    
+      inBattle = false;
+      esc = true;
+  
+      room = map.get_map_room();
     }
     
     else{
 
-    println("escape fail");
+      
+      cur = (cur + 1) % (c_pt + enemy_count);
+      println("escape fail, cur: " + cur);
+      esc = false;
+      if(battle_list[cur].get_type() == 0){
+        battle_mode = -1;
+      }else{
+        battle_mode = 0;
+      }
     
     }
       
@@ -308,16 +310,44 @@ void battle_end(){
     room = 2;
   }else if(monster_dead_count == enemy_count){
     println("Victory!");
+    
+    
     inBattle = false;
     room = 2;
+    int total_exp = 0;
+    
+    for(int i = 0; i < c_pt; i++)
+    {
+      for(int j = 0;j<enemy_count;j++)
+      {
+         total_exp += m[i].getExp();       
+      }
+      
+       p[i].gainExp(total_exp);
+    }
   }
     //victory or defeted
 }
 
-void display_damage(){
+void display_damage(int target, int def_type){
+  //println("display damage");
+  fill(30,70,100);
+  noStroke();
+  rect(command_x - command_radius, command_y - command_radius, command_radius * 2, command_radius * 2, 20);
+  
   stroke(0,100,100);
   strokeWeight(2);
   textSize(30);
   fill(0,100,100);
-  text(display_dmg, dmg_x, dmg_y);
+  if(!esc){
+    text("Escape Failed!" , command_x , command_y - command_radius/2);
+  }
+  switch(def_type){
+    case 0:
+      text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, command_x, command_y);
+      break;
+    case 1:
+      text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[target].name, command_x, command_y);
+      break;
+  }
 }

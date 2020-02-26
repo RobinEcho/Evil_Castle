@@ -6,9 +6,11 @@ class units to set some basic data about unit
 
 class Units{
   protected int id, type;
+  public String name;
   protected int level;
   protected boolean alive = true;
-	protected float patk, pdef, matk, mdef, max_hp, max_mp, cur_hp, cur_mp, spd;
+	protected float patk, pdef, matk, mdef, max_hp, max_mp, cur_hp, cur_mp, spd,exp;;
+  protected float flat_patk, flat_pdef, flat_matk, flat_mdef, flat_max_hp, flat_max_mp, flat_spd;
 	protected float hp_dec = 0, mp_dec = 0;
 	protected float bonus_str = 0, bonus_con = 0, bonus_intel = 0, bonus_wis = 0, bonus_agi = 0;
 	protected float bonus_patk = 0, bonus_pdef = 0, bonus_matk = 0, bonus_mdef = 0, bonus_hp = 0, bonus_mp = 0, bonus_spd = 0;
@@ -134,6 +136,10 @@ class Units{
 	public void set_level(int x){
 		this.level = x;
 	}
+
+  public void set_exp(int x){
+    this.exp = x;
+  }
 	
 	public void set_patk(float x){
 		this.patk = x;
@@ -179,6 +185,10 @@ class Units{
 	public int get_level(){
 		return this.level;
 	}
+
+  public float get_exp(){
+    return this.exp;
+  }
 	
 	public float get_patk(){
 		return this.patk;
