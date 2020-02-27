@@ -45,3 +45,26 @@
     output.println(p[0].exp);
     output.close();
   }                    //close saveData()
+  
+void check_buff_status(){
+    
+    for(int i = 0; i < (c_pt + enemy_count); i++){
+      for(int j = 0; j < buff_count; j++){
+        
+        if(battle_list[i].buff_round[j] > 0){
+          battle_list[i].buff_round[j]--;
+        }
+        
+        if(battle_list[i].buff_round[j] == 0){
+          buff_end(i, j);
+        }
+      }
+    }
+}
+
+void buff_end(int target, int loc){
+    
+    println("end buff");
+    battle_list[target].buff_list[loc] = 0;
+    
+}

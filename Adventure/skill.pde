@@ -5,14 +5,14 @@ class Skill{
   public int id, type, dmg_type;
   public String name; 
   public String job_name;
-  public float origin_status,damage, mod, fix_dmg,last_damage,heal,mp_dec;
+  public float origin_status,damage, mod, fix_dmg,heal,mp_dec;
   public float fix_rate = 1;
-  public int left_round = 0;
-  public boolean healing = false;
+  public int round_count = 0;
+  public boolean healing = false,buff_Set = false;
   public void skilldamage(){
   }
   
-  public void skillUsed(int round){
+  public void skillUsed(){
   }
 }
 
@@ -55,12 +55,12 @@ knight skill 1 unlock at lv1
     }
     
     @Override
-         public void skilldamage(){
-         
-         this.mod = 1.25;
-           
-         this.damage = p[pid].get_patk() * this.mod;
-  }
+             public void skilldamage(){
+             
+             this.mod = 1.25;
+               
+             this.damage = p[pid].get_patk() * this.mod;
+            }
     
   }
     
@@ -81,31 +81,20 @@ knight skill 2 unlock at lv5
       this.dmg_type = 4;
       
       this.mp_dec = 20;
+      
+      this.round_count = 4;
     }
     
-    
-    public void skillUsed(int round){
-               
-          this.mod = 1.5;
-          
-          this.left_round = round;
-          
-          if(this.left_round > 0){
-            this.mod = 1.5;
+  
+  @Override  
+            public void skillUsed(){
+             
+              this.mod = 0.5;
+              
+              p[pid].buff_list[0] = this.mod;
+              
+              p[pid].buff_round[0] = this.round_count;        
           }
-          
-          else if(this.left_round == 0){
-            this.mod = 1.0;
-          }
-          
-                     //buff
-          p[pid].bonus_pdef += p[pid].get_pdef() * this.mod;
-          
-          p[pid].bonus_mdef += p[pid].get_pdef() * this.mod;
-          
-                    
-  }
-    
 }
   
 /*******************************************
@@ -126,13 +115,17 @@ knight skill 3 unlock at lv10
     }
     
     @Override
-         public void skilldamage(){
-          
-         this.mod = 1.25;
-         
-         this.damage = p[pid].get_patk() * this.mod;         
-  }
-  }
+             public void skilldamage(){
+              
+             this.mod = 1.25;
+             
+             this.damage = p[pid].get_patk() * this.mod;
+             
+             for(int i = 0; i < enemy_count; i++){
+               dmg(this.damage,i,0);
+               }        
+            }
+}
     
     
 /*******************************************
@@ -142,13 +135,26 @@ knight skill 4 unlock at lv15
     class k_skill_4 extends Skill{
       
       public  k_skill_4(){
-        this.type = 2;
-       //tiaoxin
+        
+      this.type = 2;
+      
+      this.dmg_type = 4;
+      
       this.name = "Taunt";
       
       this.mp_dec = 51;
-      }    
-    }
+      }
+      
+      @Override
+               public void skillUsed(){
+                 
+                 this.round_count = 1;
+                 this.mod = 75.0;
+                 
+                 p[pid].buff_list[1] = this.mod;
+                 p[pid].buff_round[1] = this.round_count;            
+              }
+}
     
 /*******************************************
 knight skill 5 unlock at lv20
@@ -163,29 +169,23 @@ knight skill 5 unlock at lv20
       this.type = 0;
       
       this.dmg_type = 4;      
+      
+      this.round_count = 3;
             
       this.mp_dec = 68;
+      
+      
       }
       
-       public void skillUsed(int round){
-               
-          this.mod = 2.2;
-          
-          this.left_round = round;
-          
-          if(this.left_round > 0){
-            this.mod = 2.2;
-          }
-          
-          else if(this.left_round == 0){
-            this.mod = 1.0;          
-          }
-          
-          //buff
-          p[pid].bonus_patk = p[pid].get_patk() * this.mod;
-                                         
-  }
-    }
+       @Override
+                 public void skillUsed(){
+                   this.mod = 1.2;                 
+                   
+                   p[pid].buff_list[2] = this.mod;
+                   
+                   p[pid].buff_round[2] = this.round_count;                                          
+                }
+}
     
 /*******************************************
 knight skill 6 unlock at lv25
@@ -198,30 +198,30 @@ knight skill 6 unlock at lv25
        
        this.type = 2;
         
-       this.dmg_type = 0;
+       this.dmg_type = 4;
        
        this.mp_dec = 80;
      }
       
-      
-      public void skillUsed(int round){
-           
-      this.left_round = round;
-          
-      if(this.left_round > 0){
-          this.last_damage = p[pid].get_patk() * 0.2;
-        }
-        
-        else if(this.left_round == 0){
-          this.last_damage = 0;        
-        }
-        
-        else if(this.left_round == 4)
-        {
-          this.damage = p[pid].get_patk() * this.mod;        
-        }
-  }
-      
+      @Override
+                public void skilldamage(){
+                    
+                  this.mod = 2.2;
+                  this.damage = p[pid].get_patk() * this.mod;
+                  for(int i = 0; i < enemy_count; i++)
+                    {         
+                       dmg(this.damage,i,0);
+                    }
+                  }
+                
+                public void skillUsed(){
+                 
+                    p[pid].buff_list[3] = 0.2;
+                    
+                    p[pid].buff_round[3] = this.round_count;  
+               
+                 }
+  
     }
 
 /*******************************************
@@ -260,13 +260,13 @@ class pal_skill_1 extends Skill {
                 
   }
   
-  @Override
-         public void skilldamage(){
-           
-        this.mod = 1.25;   
-           
-        this.damage = p[pid].get_matk() * this.mod;         
-  }
+      @Override
+                public void skilldamage(){
+                   
+                this.mod = 1.25;   
+                   
+                this.damage = p[pid].get_matk() * this.mod;         
+                }
 }
 
 
@@ -282,11 +282,12 @@ class pal_skill_2 extends Skill {
     
       this.type = 2;
       
-      this.dmg_type = 1;
+      this.round_count = 1;
+      
+      this.dmg_type = 4;
       
       this.mp_dec = 39;
           
-      //stun havent added aoe
   }
   
   @Override
@@ -294,8 +295,21 @@ class pal_skill_2 extends Skill {
          
          this.mod = 1.2;
            
-         this.damage = p[pid].get_patk() * this.mod;      
+         this.damage = p[pid].get_patk() * this.mod;
+         
+         for(int i = 0; i< enemy_count;i++)
+         {
+           dmg(this.damage,i,0);
+         }
   }
+        public void skillUsed(){
+          
+          this.mod = 50.0;
+          
+          p[pid].buff_list[4] = this.mod;
+          
+          p[pid].buff_round[4] = this.round_count;  
+        }
 }
 
 
@@ -312,12 +326,22 @@ class pal_skill_3 extends Skill {
       this.type = 1;
       
       this.dmg_type = 4;
-      //death = false;
+      
+      this.round_count = 5;
   }
   
-  void skilldamage(){
-      this.mp_dec = p[pid].max_mp * 0.5;
-  }
+  @Override
+          void skilldamage(){
+              this.mp_dec = p[pid].get_max_mp() * 0.5;
+          }
+          
+          void skillUsed(){
+                  this.mod = 100.0;
+                  
+                  p[pid].buff_list[5] = this.mod;
+                  
+                  p[pid].buff_round[5] = this.round_count; 
+          }
 }
 
 /*******************************************
@@ -339,11 +363,16 @@ class pal_skill_4 extends Skill {
   }
   
   @Override
-         public void skilldamage(){   
-         
-         this.mod = 1.2;
-         
-         this.damage = p[pid].get_matk() * this.mod;      
+           public void skilldamage(){   
+           
+           this.mod = 1.2;
+           
+           this.damage = p[pid].get_matk() * this.mod;
+           
+           for(int i = 0;i<enemy_count;i++)
+           {
+             dmg(this.damage,i,0);
+           }
   }
   
 }
@@ -360,7 +389,7 @@ class pal_skill_5 extends Skill {
     
     this.type = 0;
     
-    this.dmg_type = 3;
+    this.dmg_type = 4;
     
     this.mp_dec = 85;
     
@@ -370,18 +399,18 @@ class pal_skill_5 extends Skill {
   
   
   
-  
-  public void skillUsed(int round){
-      
-      this.left_round = round;
-      
-      
-      if(this.left_round > 0) {
-        
-        this.heal = p[pid].get_max_hp() * 0.15;       
-      
-    }
-  }
+  @Override//aoe heal
+            public void skillUsed(){
+                
+                  this.round_count = 3;
+          
+                  
+                  this.heal = p[pid].get_max_hp() * 0.15;
+                  
+                  p[pid].buff_list[6] = this.heal;
+                  
+                  p[pid].buff_round[6] = this.round_count;
+                 }
 }
 
 /*******************************************
@@ -395,34 +424,23 @@ class pal_skill_6 extends Skill {
     
     this.type = 2;    
     
-    this.dmg_type = 0;
+    this.dmg_type = 4;
     
     this.mp_dec = 143;
   }
-  
-  public  void skillUsed(int round){
-      
-      
-      this.left_round = round;
-      
-      this.mod = 1.5;
-      
-      this.last_damage = p[pid].get_matk() * 0.8 ;
-      
-      if(left_round > 0)
-      {
-        this.mod = 1.5; 
-      }
-      
-      else{
-        this.mod = 1.0;  
-      }
-      
-      m[mid].pdef = m[mid].bonus_pdef * this.mod;
-        
-      m[mid].mdef = m[mid].bonus_mdef * this.mod;
-      
-  }
+
+  @Override
+            public  void skillUsed(){
+                
+                this.mod = 50.0;
+              
+                this.round_count = 2;
+                
+                //skip round sleepy shiled
+                p[pid].buff_list[7] = this.mod;
+                
+                p[pid].buff_round[7] = this.round_count; 
+              }
  
 }
 
@@ -463,12 +481,12 @@ class r_skill_1 extends Skill{
     }
     
     @Override
-      public void skilldamage(){           
-      
-      this.mod = 1.4; 
-        
-      this.damage = p[pid].get_patk() * this.mod;   
-  }
+              public void skilldamage(){           
+              
+              this.mod = 1.4; 
+                
+              this.damage = p[pid].get_patk() * this.mod;   
+          }
 }
 
 /*******************************************
@@ -488,12 +506,12 @@ class r_skill_2 extends Skill{
     }
     
     @Override
-         public void skilldamage(){
-        
-        this.mod = 1.4; 
-           
-        this.damage = p[pid].get_patk() * this.mod;   
-  }
+             public void skilldamage(){
+            
+            this.mod = 1.4; 
+               
+            this.damage = p[pid].get_patk() * this.mod;   
+            }
 }
 
 /*******************************************
@@ -509,25 +527,22 @@ class r_skill_3 extends Skill{
       
       this.dmg_type = 4;
       
-      this.mp_dec = 22; 
+      this.mp_dec = 22;
+      
+      this.round_count = 3;
     }
-    
-    public  void skillUsed(int round){
-      
-      this.left_round = round;
-      
-      if(left_round > 0)
-      {       
-            p[pid].patk = p[pid].get_patk() + p[pid].get_matk();
-            p[pid].matk = p[pid].patk;
-      }
-      
-      else{
-            p[pid].patk = p[pid].bonus_patk;
-            p[pid].matk = p[pid].bonus_matk; 
-      }      
-            
-    }
+
+    @Override
+              public  void skillUsed(){
+                
+                this.mod = p[pid].get_patk() + p[pid].get_matk();
+                
+                //set patk and matk as mod
+                
+                p[pid].buff_list[8] = this.mod;
+                
+                p[pid].buff_round[8] = this.round_count;
+              }
 }
 
 /*******************************************
@@ -606,18 +621,32 @@ class r_skill_6 extends Skill{
       
       this.type = 2;
       
-      this.dmg_type = 2;
+      this.dmg_type = 4;
       
       this.mp_dec = 57;      
     }
     
     @Override
-            public void skilldamage(){
-            
-            this.mod = 1.3;
+                  public void skilldamage(){
+                  
+                  this.mod = 1.3;
+                    
+                  this.damage = (p[pid].get_matk()+p[pid].get_patk())*this.mod;
+                  
+                      for(int i = 0;i < enemy_count; i++)
+                      {
+                        dmg(this.damage,i,0);
+                      }
+                    }
               
-            this.damage = (p[pid].get_matk()+p[pid].get_patk())*this.mod;   
-        }
+              public void skillUsed(){
+                  this.round_count = 2;
+                  this.mod = 50.0;
+                  
+                  //skip round
+                  p[pid].buff_list[9] = this.mod;
+                  p[pid].buff_round[9] = this.round_count;
+                    }
 }
 
 
@@ -709,25 +738,18 @@ class a_skill_3 extends Skill{
       
       this.mp_dec = 39;
       
+      this.round_count = 1;
     }
-    
-    public  void skillUsed(int round){
+
+ @Override
+          public  void skillUsed(){
+                     
+            this.mod = 0.4;
             
-      this.left_round = round;
-      
-      if(this.left_round > 0)
-      {
-        this.mod = 1.4;
-        
-      }
-      
-      else{
-        this.mod = 1.0;
-      }
-      
-      p[pid].agi = p[pid].bonus_agi * this.mod;
-    
-    }
+            p[pid].buff_list[10] = this.mod;
+            
+            p[pid].buff_round[10] = this.round_count;          
+          }
 }
 
 /*******************************************
@@ -741,37 +763,33 @@ class a_skill_4 extends Skill{
       
       this.type = 2;
       
-      this.dmg_type = 1;
+      this.dmg_type = 4;
       
       this.mp_dec = 59;
       
     }
-    
-    public  void skillUsed(int round){
+
+@Override    
+          public  void skilldamage(){
+            this.mod = 1.2;
+            
+            this.damage = p[pid].get_patk() * this.mod;
+            
+            for(int i = 0; i < enemy_count; i++){
+              dmg(this.damage,i,0);
+              } 
+            }
+          
+          public  void skillUsed(){
+            
+            this.round_count = 4;
       
-      
-      this.mod = 1.2;
-      
-      this.left_round = round;
-      
-      if(this.left_round == 4)
-      {
-          this.damage = p[pid].get_patk() * this.mod;
-          // AOE        
-      }
-      
-      else if(this.left_round == 0)
-      {
-        this.last_damage = 0;
-      }
-      
-      else{
-      
-      this.last_damage = p[pid].get_patk() * 0.2;
-      
-      }
-    
-    }
+            this.mod = 0.2;
+            
+            p[pid].buff_list[11] = this.mod;
+            
+            p[pid].buff_round[11] = this.round_count;     
+            }
 }
 
 /*******************************************
@@ -789,25 +807,20 @@ class a_skill_5 extends Skill{
       
       this.mp_dec = 82;
     }
+
     
-    public  void skillUsed(int round){
-      
-               
-      this.left_round = round;
-      
-      if(this.left_round >0)
-      {
-        this.mod = 1.25;
-      }
-      
-      else{
-        this.mod = 1.0;
-      }
-      
-      p[pid].patk = p[pid].bonus_patk * this.mod;
-      
-    
-    }
+@Override
+            public  void skillUsed(){
+            
+            this.mod = 1.2;
+            
+            this.round_count = 1;
+            
+            p[pid].buff_list[12] = this.mod;
+            
+            p[pid].buff_round[12] = this.round_count;
+          
+          }
 }
 
 
@@ -826,7 +839,7 @@ class a_skill_6 extends Skill{
       
     }
     
-    @Override
+@Override
             public void skilldamage(){  
             
             this.mp_dec = p[pid].get_max_mp();
@@ -834,7 +847,7 @@ class a_skill_6 extends Skill{
             this.mod = 2.2;  
               
             this.damage = p[pid].get_patk() * this.mod; 
-        }
+            }
 }
 
 
@@ -905,7 +918,12 @@ class m_skill_2 extends Skill{
               
             this.mod = 1.3;  
               
-            this.damage = p[pid].get_matk() * this.mod; 
+            this.damage = p[pid].get_matk() * this.mod;
+            
+            for(int i = 0; i<enemy_count;i++)
+            {
+              dmg(this.damage,i,0);
+            }
         }
 }
 
@@ -927,30 +945,11 @@ class m_skill_3 extends Skill{
       
       this.healing = false;
     }
-    
-    public void skillUsed(int round){
 
-      
-      this.left_round = round;
-      
-      if(this.left_round > 0)
-      {
-        this.mod = 1.3;
-        
-        
-        this.heal = p[pid].get_max_mp() * 0.2;        
-      }
-      
-      else {       
-        this.heal = 0;
-        
-        this.mod = 1.0;
-      }
-      
-        p[pid].pdef = p[pid].get_pdef() * this.mod;
-        
-        p[pid].mdef = p[pid].get_mdef() * this.mod; 
-    }
+@Override  
+          public void skilldamage(){        
+              this.heal = p[pid].get_max_mp() * 0.3;        
+            }
 }
 
 
@@ -965,34 +964,24 @@ class m_skill_4 extends Skill{
       
       this.type = 2;
       
-      this.dmg_type = 3;
+      this.dmg_type = 4;
       
       this.mp_dec = 72;
     }
-    
-    public  void skillUsed(int round){
 
+@Override    
+          public  void skillUsed(){
       
-      this.left_round = round;
-      
-      
-      if(this.left_round > 0)
-      {
-        //stun enemy.....boss 40%
-        
-        this.heal = m[mid].max_hp * 0.2;
-      }
-      
-      else{
-      
-        this.heal = 0;
-      }
-      
-      m[mid].cur_hp += this.heal;
-      
-      
-    
-    }
+            this.round_count = 3;
+            
+            this.mod = 50.0;
+            
+            //skip round
+            
+            p[pid].buff_list[13] = 50.0;
+            
+            p[pid].buff_round[13] = this.round_count;
+          }
 }
 
 /*******************************************
@@ -1014,7 +1003,7 @@ class m_skill_5 extends Skill{
     
     }
     
-    @Override
+@Override
             public void skilldamage(){
       //after damaged reset doubled as false              
              doubled = false;
@@ -1054,12 +1043,17 @@ class m_skill_6 extends Skill{
     }
     
     @Override
-            public void skilldamage(){
+              public void skilldamage(){
+                
+              this.mod = 1.6;
+                
+              this.damage = p[pid].get_matk() * this.mod;
               
-            this.mod = 1.6;
+              for(int i = 0; i<enemy_count;i++){
               
-            this.damage = p[pid].get_matk() * this.mod; 
-        }
+                dmg(this.damage,i,0);          
+              }
+            }
 }
 
 
@@ -1150,32 +1144,18 @@ class pri_skill_3 extends Skill{
       
       this.mp_dec = 80;
     }
-      
-      public  void skillUsed(int round){
-      
 
-      
-      this.left_round = round;
-      
-      this.mod = 1.2;
-      
-      if(round > 0)
-      {
-        this.mod = 1.2;
-      }
-      
-      else
-      {  
-        this.mod = 1.0;
-      }
-      
-       p[pid].str = p[pid].bonus_str * this.mod;
-       p[pid].con = p[pid].bonus_con * this.mod;
-       p[pid].intel = p[pid].bonus_intel * this.mod;
-       p[pid].wis = p[pid].bonus_wis * this.mod;
-       p[pid].agi = p[pid].bonus_agi * this.mod;
-      
-    }
+@Override            
+          public  void skillUsed(){
+        
+          this.round_count = 4;
+          
+          this.mod = 0.2;
+          
+          p[pid].buff_list[14] = this.mod;
+          
+          p[pid].buff_round[14] = this.round_count;   
+        }
 }
 
 /*******************************************
@@ -1199,12 +1179,12 @@ class pri_skill_4 extends Skill{
     }
     
     @Override
-            public void skilldamage(){
-            
-            this.mod = 0.8; 
+              public void skilldamage(){
               
-            this.heal = p[pid].matk * this.mod;
-        }
+              this.mod = 0.8; 
+                
+              this.heal = p[pid].matk * this.mod;
+            }
 }
 
 /*******************************************
@@ -1223,28 +1203,18 @@ class pri_skill_5 extends Skill{
       this.mp_dec = 112;
     }
     
-    public  void skillUsed(int round){
-      //AOE
-      
-      this.left_round = round;
-      
-      if(round > 0)
-      {
-        this.mod = 1.15;
-      }
-      
-      else
-      {  
-        this.mod = 1.0;
-      }
-      
-       p[pid].str = p[pid].bonus_str * this.mod;
-       p[pid].con = p[pid].bonus_con * this.mod;
-       p[pid].intel = p[pid].bonus_intel * this.mod;
-       p[pid].wis = p[pid].bonus_wis * this.mod;
-       p[pid].agi = p[pid].bonus_agi * this.mod;
-         
-    }
+    @Override
+            public  void skillUsed(){
+              //AOE
+              
+              this.round_count = 4;
+              
+              this.mod = 0.15;
+              
+              p[pid].buff_list[15] = this.mod;
+              
+              p[pid].buff_round[15] = this.round_count;
+            }
 }
 
 /*******************************************
@@ -1264,13 +1234,14 @@ class pri_skill_6 extends Skill{
       this.healing = true;
   
     }
-    
-    void skilldamage(){
-     
-      this.heal = p[pid].get_max_hp();
-      
-      //death = false
-      
-      this.mp_dec = p[pid].get_max_mp() * 0.4;    
-  }
+
+    @Override
+            void skilldamage(){
+             
+              this.heal = p[pid].get_max_hp();
+              
+              p[pid].ress();
+              
+              this.mp_dec = p[pid].get_max_mp() * 0.4;    
+          }
 }

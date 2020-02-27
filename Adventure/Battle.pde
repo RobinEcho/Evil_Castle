@@ -96,9 +96,10 @@ void attack(int attacker, int defender, int def_type){
 }
 
 
-void skill(int releaser, int reciever, int def_type, int skill_id){
+void skill(int releaser, int receiver, int def_type, int skill_id){
   float damage;
   if(def_type == 0){
+    
     p[releaser].skills.skill[skill_id].skilldamage();
     
     switch(p[releaser].skills.skill[skill_id].dmg_type){
@@ -113,7 +114,9 @@ void skill(int releaser, int reciever, int def_type, int skill_id){
                       }
                 
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
-                dmg(damage,reciever,def_type);
+                
+                dmg(damage,receiver,def_type);
+                
                 p[releaser].calc_stats();            
           }
               else{
@@ -125,14 +128,14 @@ void skill(int releaser, int reciever, int def_type, int skill_id){
         case 1:
               if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
                 
-                damage = p[releaser].skills.skill[skill_id].damage-m[reciever].get_pdef();
+                damage = p[releaser].skills.skill[skill_id].damage-m[receiver].get_pdef();
                 
                 if(damage < 1){
                         damage = 1;
                       }
                 
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
-                dmg(damage,reciever,def_type);
+                dmg(damage,receiver,def_type);
                 p[releaser].calc_stats();          
           }
               else{
@@ -143,14 +146,14 @@ void skill(int releaser, int reciever, int def_type, int skill_id){
         case 2:
               if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
                 
-                damage = p[releaser].skills.skill[skill_id].damage - m[reciever].get_mdef();
+                damage = p[releaser].skills.skill[skill_id].damage - m[receiver].get_mdef();
                 
                 if(damage < 1){
                         damage = 1;
                       }
                 
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
-                dmg(damage,reciever,def_type);
+                dmg(damage,receiver,def_type);
                 p[releaser].calc_stats();
             
           }
@@ -163,15 +166,16 @@ void skill(int releaser, int reciever, int def_type, int skill_id){
        case 3:
              if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
                        if(p[releaser].skills.skill[skill_id].healing){
-                         println("healing!");
-                         p[releaser].rec_hp( p[releaser].skills.skill[skill_id].heal);
+                         p[receiver].rec_hp( p[releaser].skills.skill[skill_id].heal);
                          p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);
                          p[releaser].calc_stats();
+                         p[receiver].calc_stats();
                      }
                      else{
-                         p[releaser].rec_mp(p[releaser].skills.skill[skill_id].heal);
+                         p[receiver].rec_mp(p[releaser].skills.skill[skill_id].heal);
                          p[releaser].dec_mp(p[releaser].skills.skill[skill_id].mp_dec);
                          p[releaser].calc_stats();
+                         p[receiver].calc_stats();
                      }          
              }
              else{
@@ -180,6 +184,23 @@ void skill(int releaser, int reciever, int def_type, int skill_id){
            break;
                      // buff set
       case 4:
+            if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
+                       
+                        println("releaser pdef  prev: "+p[releaser].get_pdef());            
+              
+                pid = releaser;
+                       p[releaser].skills.skill[skill_id].skillUsed();
+                       p[releaser].calc_stats();
+                       
+                       println("releaser pdef  after: "+p[releaser].get_pdef());
+                       
+                       p[releaser].dec_mp(p[releaser].skills.skill[skill_id].mp_dec);
+                       p[releaser].calc_stats();          
+             }
+             else{
+               println("low mp");
+             }
+                         
            break;
     }
   }
@@ -324,6 +345,24 @@ void battle_end(){
       }
       
        p[i].gainExp(total_exp);
+    }
+    
+    for(int i = 0; i < c_pt; i++)
+    {
+      for(int j = 0;j<buff_count;j++)
+      {
+        p[i].buff_list[j] = 0;
+        p[i].buff_round[j] = 0;
+      }
+    }
+    
+    for(int i = 0; i < enemy_count; i++)
+    {
+      for(int j = 0;j < buff_count;j++)
+      {
+        m[i].buff_list[j] = 0;
+        m[i].buff_round[j] = 0;
+      }
     }
   }
     //victory or defeted

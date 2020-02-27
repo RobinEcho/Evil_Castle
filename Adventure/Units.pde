@@ -7,9 +7,12 @@ class units to set some basic data about unit
 class Units{
   protected int id, type;
   public String name;
+  public float patk_mod = 1, pdef_mod = 1, matk_mod = 1, mdef_mod = 1, hp_mod = 1, mp_mod = 1, spd_mod = 1;
+  public float[] buff_list = new float[buff_count];
+  public int[] buff_round = new int[buff_count];
   protected int level;
   protected boolean alive = true;
-	protected float patk, pdef, matk, mdef, max_hp, max_mp, cur_hp, cur_mp, spd,exp;;
+	protected float patk, pdef, matk, mdef, max_hp, max_mp, cur_hp, cur_mp, spd, exp;;
   protected float flat_patk, flat_pdef, flat_matk, flat_mdef, flat_max_hp, flat_max_mp, flat_spd;
 	protected float hp_dec = 0, mp_dec = 0;
 	protected float bonus_str = 0, bonus_con = 0, bonus_intel = 0, bonus_wis = 0, bonus_agi = 0;

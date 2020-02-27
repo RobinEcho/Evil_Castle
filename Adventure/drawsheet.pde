@@ -175,27 +175,34 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   
   //Draw player images and player status
   for(int i = 0; i < c_pt; i++){
-    image(p[i].battle_img, i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy, pc_width, pc_height);
-    
-    //over head hp bar
-    hp_percent = (float)p[i].get_cur_hp() / (float)p[i].get_max_hp();
-    strokeWeight(1);
-    stroke(0,100,0);
-    fill(0,0,100);
-    rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width, battle_UI_margin, 50);
-    fill(0,100,100);
-    rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width * hp_percent, battle_UI_margin, 50);
-    
-   // if(death){
-    
-       
-    
-    //}
-    
-      //player stats
-      p_stats(i);
+    if(p[i].is_alive()){
+      image(p[i].battle_img, i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy, pc_width, pc_height);
+      
+      //over head hp bar
+      hp_percent = (float)p[i].get_cur_hp() / (float)p[i].get_max_hp();
+      strokeWeight(1);
+      stroke(0,100,0);
+      fill(0,0,100);
+      rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width, battle_UI_margin, 50);
+      fill(0,100,100);
+      rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width * hp_percent, battle_UI_margin, 50);
+      
+     // if(death){
+      
+         
+      
+      //}
+      
+        //player stats
+        p_stats(i);
+      }
     }
-  
+    
+    stroke(0, 100, 100);
+    fill(0, 100, 100);
+    textSize(20);
+    textAlign(CENTER);
+    text(round, width/2, p[0].vertical_margin/2);
     switch(battle_mode){
       //player turn start draw commands
       case 0:
@@ -220,7 +227,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
            fill(0,0,100);
            textSize(skill_box_height/3);
            textAlign(CENTER, CENTER);
-           text(p[cur].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
+           text(p[battle_list[cur].get_id()].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
         }
       break;
       
@@ -270,8 +277,16 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
             display_damage(mid, 0);
           }
         }else{
-          cur = (cur + 1) % (c_pt + enemy_count);
-        
+          
+          cur++;
+          if(cur >= (c_pt + enemy_count)){
+            cur = 0;
+            round++;
+            
+            check_buff_status();
+            println(p[0].get_pdef());
+          }
+          
           if(battle_list[cur].get_type() == 0){
             battle_mode = -1;
           }else{
@@ -346,9 +361,9 @@ void p_box(){
     cx = c_width*c + (c+1)*battle_UI_margin;
     fill(0,0,100);
     textAlign(CENTER);
-    text(p[c].job.name, cx + c_width/2, cy + c_height/4);
-    text("HP: " + (int)p[c].cur_hp + " / " + (int)p[0].max_hp, cx + c_width/2, cy + c_height/2);
-    text("MP: " + (int)p[c].cur_mp + " / " + (int)p[0].max_mp, cx + c_width/2, cy + c_height*3/4);
+    text(p[c].name, cx + c_width/2, cy + c_height/4);
+    text("HP: " + (int)p[c].cur_hp + " / " + (int)p[c].max_hp, cx + c_width/2, cy + c_height/2);
+    text("MP: " + (int)p[c].cur_mp + " / " + (int)p[c].max_mp, cx + c_width/2, cy + c_height*3/4);
   }
   
   /*****************************************************

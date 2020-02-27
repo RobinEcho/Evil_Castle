@@ -20,6 +20,8 @@ class Normal extends Monster_AI{
       this.target = r.nextInt(100) % c_pt;
     }while(!p[this.target].is_alive());
     
+    //println("target: " + target);
+    pid = target;
     attack(mid, target, 1);
   }
 }

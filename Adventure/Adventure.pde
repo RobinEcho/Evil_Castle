@@ -30,6 +30,7 @@ import library
   int boss_defeated = 0;
   
   int total_jobs = 6, floor = 1, floor_room = 1;
+  int buff_count = 20;
   
   int steps = 0, encounter;
   float side_margin, height_margin;

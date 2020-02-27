@@ -128,11 +128,12 @@ class Player extends Units{
 	public void calc_stats(){
     this.alive = true;
     
-		this.str = flat_str + bonus_str;
-		this.con = flat_con + bonus_con;
-		this.intel = flat_intel + bonus_intel;
-		this.wis = flat_wis + bonus_wis;
-		this.agi = flat_agi + bonus_agi;
+    
+		this.str = (flat_str + bonus_str);
+		this.con = (flat_con + bonus_con);
+		this.intel = (flat_intel + bonus_intel);
+		this.wis = (flat_wis + bonus_wis);
+		this.agi = (flat_agi + bonus_agi);
 
 		this.flat_patk = str * job.amplifier[0] + level * (2 + job.amplifier[0]);
 		this.flat_pdef = con * job.amplifier[1]  + level * (5 + job.amplifier[1]);
@@ -144,13 +145,13 @@ class Player extends Units{
     this.bonus_hp = bonus_con * (3 + job.amplifier[5]) * 2 ;
     this.bonus_mp = bonus_wis * (2 + job.amplifier[6]);
 
-    this.patk = flat_patk + bonus_patk;
-    this.pdef = flat_pdef + bonus_pdef;
-    this.matk = flat_matk + bonus_matk;
-    this.mdef = flat_mdef + bonus_mdef;
-    this.spd = flat_spd + bonus_spd;
-    this.max_hp = flat_max_hp + bonus_hp;
-    this.max_mp = flat_max_mp + bonus_mp;
+    this.patk = (flat_patk + bonus_patk) * this.patk_mod;
+    this.pdef = (flat_pdef + bonus_pdef) * this.pdef_mod;
+    this.matk = (flat_matk + bonus_matk) * this.matk_mod;
+    this.mdef = (flat_mdef + bonus_mdef) * this.mdef_mod;
+    this.spd = (flat_spd + bonus_spd) * this.spd_mod;
+    this.max_hp = (flat_max_hp + bonus_hp) * this.hp_mod;
+    this.max_mp = (flat_max_mp + bonus_mp) * this.mp_mod;
     
 		this.cur_hp = max_hp - hp_dec + bonus_hp;
     if(this.cur_hp <= 0){
@@ -247,27 +248,74 @@ class Player extends Units{
 	}
 	
 	//setters
+
+  public void set_str(float x){
+    this.str = x;
+  }
+  
+  public void set_con(float x){
+    this.con = x;
+  }
+  
+  public void set_intel(float x){
+    this.intel = x;
+  }
+  
+  public void set_wis(float x){
+    this.wis = x;
+  }
+  
+  public void set_agi(float x){
+    this.agi = x;
+  }
 	
-	public void set_str(float x){
-		this.str = x;
+	public void set_flat_str(float x){
+		this.flat_str = x;
 	}
 	
-	public void set_con(float x){
-		this.con = x;
+	public void set_flat_con(float x){
+		this.flat_con = x;
 	}
 	
-	public void set_intel(float x){
-		this.intel = x;
+	public void set_flat_intel(float x){
+		this.flat_intel = x;
 	}
 	
-	public void set_wis(float x){
-		this.wis = x;
+	public void set_flat_wis(float x){
+		this.flat_wis = x;
 	}
 	
-	public void set_agi(float x){
-		this.agi = x;
+	public void set_flat_agi(float x){
+		this.flat_agi = x;
 	}
 	
+  public void set_flat_patk(float x){
+    this.flat_patk = x;
+  }
+  
+  public void set_flat_pdef(float x){
+    this.flat_pdef = x;
+  }
+  
+  public void set_flat_matk(float x){
+    this.flat_matk = x;
+  }
+  
+  public void set_flat_mdef(float x){
+    this.flat_mdef = x;
+  }
+  
+  public void set_flat_spd(float x){
+    this.flat_spd = x;
+  }
+  
+  public void set_flat_hp(float x){
+    this.flat_max_hp = x;
+  }
+  
+  public void set_flat_mp(float x){
+    this.flat_max_mp = x;
+  }
 	/***************************
 	*	Getters
 	***************************/
@@ -291,6 +339,35 @@ class Player extends Units{
 	public float get_agi(){
 		return this.agi;
 	}
+
+  public float get_flat_str(){
+    return this.flat_str;
+  }
+  
+  public float get_flat_con(){
+    return this.flat_con;
+  }
+  
+  public float get_flat_intel(){
+    return this.flat_intel;
+  }
+  
+  public float get_flat_wis(){
+    return this.flat_wis;
+  }
+  
+  public float get_flat_agi(){
+    return this.flat_agi;
+  }
+  
+  public float get_flat_max_hp(){
+    return this.flat_max_hp;
+  }
+  
+  public float get_flat_max_mp(){
+    return this.flat_max_mp;
+  }
+
 
 /********************
 interaction
@@ -370,7 +447,7 @@ public int[] interact(){
   **************************************/
   public void PropertySquare(){
     
-    stroke((this.job_code - 1) * 12, 100, 100);
+    //fill((this.job_code - 1) * 12, 100, 60);
     fill(0, 0, 100);
     
     for(int n = 1; n <= Avatarsq_num; n++){
@@ -399,7 +476,7 @@ public int[] interact(){
     
     //stroke(0);
     
-    fill((this.job_code - 1) * 12, 100, 100);
+    fill((this.job_code - 1) * 12, 100, 60);
     
     textSize(30);
     
@@ -425,7 +502,7 @@ public int[] interact(){
         
         case 4:
         
-        text("Exp: "+this.get_exp(),horizontal_margin + sq_distance + Big_sl + sq_distance + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance + 0.75*Strip_height);
+        text("Exp: "+(int)this.get_exp(),horizontal_margin + sq_distance + Big_sl + sq_distance + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + (n - 1)*sq_distance + 0.75*Strip_height);
         
         break;
         
@@ -442,7 +519,7 @@ public int[] interact(){
     
     //stroke(0);
     
-    fill((this.job_code - 1) * 12, 100, 100);
+    fill((this.job_code - 1) * 12, 100, 60);
     
     text("Hp: "+(int)this.get_cur_hp(),sq_distance + horizontal_margin + 0.5*Strip_width,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.75*Strip_height);
     
@@ -452,7 +529,7 @@ public int[] interact(){
     
     ellipse(horizontal_margin + Strip_width + sq_distance + addsq_sl + Strip_width + 1.5*sq_distance,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.5*Strip_height,1.2*sq_distance,1.2*sq_distance);
     
-    fill((this.job_code - 1) * 12, 100, 100);
+    fill((this.job_code - 1) * 12, 100, 60);
     text(this.AP, horizontal_margin + Strip_width + sq_distance + addsq_sl + Strip_width + 1.5*sq_distance,vertical_margin + Avatarsq_sl + 2*v_a + Big_sl + 1.5*Strip_height);
     
     fill(0,0,100);
@@ -464,7 +541,7 @@ public int[] interact(){
         
     //stroke(0);
     
-    fill((this.job_code - 1) * 12, 100, 100);
+    fill((this.job_code - 1) * 12, 100, 60);
     
     if(n==1){
     
@@ -554,7 +631,7 @@ public int[] interact(){
     
      rect(horizontal_margin + sq_distance + Strip_width + sq_distance,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance,addsq_sl,addsq_sl,10);
      
-     fill(0,100,0);
+     fill((this.job_code - 1) * 12, 100, 60);
      
      text("+",horizontal_margin + sq_distance + Strip_width + sq_distance + 0.5*addsq_sl,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance +0.75*addsq_sl);
      

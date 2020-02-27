@@ -49,12 +49,25 @@ int command;
                 p[0] = new Player(p_class);
                 p[0].set_img(p[0].job.name,1);
                 p[0].name = "Adam";
+                p[0].set_id(0);
                 p[0].set_loc(800,450);
               }   
               
-                p[1] = new Player(3);
-                p[1].set_img(p[1].job.name,1);
-                p[1].name = "Tester";
+                //p[1] = new Player(3);
+                //p[1].set_img(p[1].job.name,1);
+                //p[1].set_id(1);
+                //p[1].name = "Tester 1";
+                
+                //p[2] = new Player(2);
+                //p[2].set_img(p[2].job.name,1);
+                //p[2].set_id(2);
+                //p[2].name = "Tester 2";
+                
+                //p[3] = new Player(5);
+                //p[3].set_img(p[3].job.name,1);
+                //p[3].set_id(3);
+                //p[3].name = "Tester 3";
+                //c_pt = 4;
         
         break;
         
@@ -63,7 +76,7 @@ int command;
  */
        case 80:  //  item selct drop-down menu
          bag_select(1);
-            
+         spend_attribute_points();   
          break;
        
        
@@ -109,7 +122,6 @@ int command;
            //use item
            case 3:
              bag_select(2);
-
              break;
              
            //select ally target
@@ -286,7 +298,7 @@ void skill_commands(){
                     println("use skill " + (i+1));
                     command = i;
                     
-                    if(p[cur].skills.skill[i].type == 2){
+                    if(p[battle_list[cur].get_id()].skills.skill[i].type == 2){
                       battle_mode = 1;
                     }else{
                       battle_mode = 4;
@@ -483,7 +495,8 @@ void select_ally_target(){
         bag.inv[bag_selected_y][bag_selected_x] = item_count - 1;
         
       }else{
-        skill(pid, i, 0, command);
+        //println("i: " + i);
+        skill(battle_list[cur].get_id(), i, 0, command);
         
       }
       
@@ -499,6 +512,48 @@ void select_ally_target(){
   }else{
     battle_mode = 10;
   }
+}
+
+void spend_attribute_points(){
+  if(p[pid].AP > 0){
+    for(int i = 0; i < p[0].Strip_num; i++){
+      if(x >= (p[0].horizontal_margin + p[0].sq_distance + p[0].Strip_width + p[0].sq_distance)
+        && x <= (p[0].horizontal_margin + p[0].sq_distance + p[0].Strip_width + p[0].sq_distance) + p[0].addsq_sl
+        && y >= (p[0].vertical_margin + p[0].Avatarsq_sl + 13*p[0].strip_distance + i*p[0].sq_distance)
+        && y <= (p[0].vertical_margin + p[0].Avatarsq_sl + 13*p[0].strip_distance + i*p[0].sq_distance) + p[0].addsq_sl){
+          switch(i){
+            case 0:
+              //println("inc str");
+              p[pid].set_flat_str(p[pid].get_flat_str() + 1);
+              p[pid].AP--;
+              break;
+            case 1:
+            //println("inc con");
+              p[pid].set_flat_con(p[pid].get_flat_con() + 1);
+              p[pid].AP--;
+              break;
+            case 2:
+            //println("inc int");
+              p[pid].set_flat_intel(p[pid].get_flat_intel() + 1);
+              p[pid].AP--;
+              break;
+            case 3:
+            //println("inc wis");
+              p[pid].set_flat_wis(p[pid].get_flat_wis() + 1);
+              p[pid].AP--;
+              break;
+            case 4:
+            //println("inc agi");
+              p[pid].set_flat_agi(p[pid].get_flat_agi() + 1);
+              p[pid].AP--;
+              break;
+          }
+          
+          p[pid].calc_stats();
+        }
+    }
+  }
+  
 }
 
 void not_usable(){

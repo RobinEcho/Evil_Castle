@@ -1,4 +1,57 @@
 /*
+   buff list:
+   when 
+   mod = 50.0,stun; 
+   mod = 75.0, taunt; 
+   mod = 100.0, wont death;
+   
+    knight:
+     
+     0: pdef increase   
+     
+     1: Taunt
+     
+     2: patk increase
+     
+     3: AOE bleed
+    
+    Paladin:
+     
+     4: stun
+     
+     5: wont death
+     
+     6: heal
+     
+     7: sleep stun
+    
+    Ranger:
+    
+     8: Patk add Matk up, so as Matk
+     
+     9: AOE, stun
+     
+    Assassin:
+     
+     10: AGI increase
+     
+     11: AOE bleed
+     
+     12: Patk increase
+     
+    Mage:
+     
+     13: AOE stun
+    
+    Priest:
+     
+     14: All stats increase
+     
+     15: AOE all stats increase
+*/
+
+
+/*
     skill type:
       0: self as target
       1: ally as target

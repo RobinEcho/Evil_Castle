@@ -151,8 +151,11 @@ void keyPressed(){
        
        case 'l':
          case'L':
-             p[0].gainExp(20);
-             steps = 100;
+             p[0].gainExp(100);
+             p[1].gainExp(100);
+             p[2].gainExp(100);
+             p[3].gainExp(100);
+             //steps = 100;
              break;
       }
     }
