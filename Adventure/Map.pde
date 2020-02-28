@@ -566,6 +566,14 @@ void init_1F(){
                   floor_1[i].wall[j][k] = false;
                 }
               }
+              
+              //NPC set up
+              floor_1[i].npc[8][13] = true;
+              floor_1[i].npc[8][18] = true;
+              floor_1[i].npc[8][23] = true;
+              floor_1[i].npc[13][13] = true;
+              floor_1[i].npc[13][18] = true;
+              floor_1[i].npc[13][23] = true;
               break;
         
         case 3:
@@ -1468,6 +1476,9 @@ void init_5F(){
         floor_5[f].wall[15][18] = false;
         floor_5[f].wall[15][19] = false;
         
+        //shop npc
+        floor_5[f].npc[11][26] = true;
+        floor_5[f].npc[12][26] = true;
         break;
         
       case 4:

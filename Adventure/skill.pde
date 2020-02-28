@@ -3,8 +3,10 @@ boolean doubled = false;
 class Skill{
   Skill[] skill;
   public int id, type, dmg_type;
-  public String name; 
+  public String name;
+  public String[] monster_skill_name = new String[5];
   public String job_name;
+  public String description;
   public float origin_status,damage, mod, fix_dmg,heal,mp_dec;
   public float fix_rate = 1;
   public int round_count = 0;
@@ -15,9 +17,6 @@ class Skill{
   public void skillUsed(){
   }
 }
-
-
-
 
 /*******************************************
  class array to store all the knight skill data
@@ -47,6 +46,8 @@ knight skill 1 unlock at lv1
      public  k_skill_1(){
          this.name = "Half moon slash";
          
+         this.description = "Slash enemy by your blade, cause physical damage";
+         
          this.type = 2;
          
          this.dmg_type = 1;
@@ -61,7 +62,7 @@ knight skill 1 unlock at lv1
                
              this.damage = p[pid].get_patk() * this.mod;
             }
-    
+            
   }
     
     
@@ -76,25 +77,27 @@ knight skill 2 unlock at lv5
       
       this.name = "Honor guard";
       
+      this.description = "Become a tough guy, increse physical defence";
+      
       this.type = 0;
       
       this.dmg_type = 4;
       
       this.mp_dec = 20;
-      
-      this.round_count = 4;
     }
     
   
   @Override  
             public void skillUsed(){
-             
+              
+              this.round_count = 5;             
+              
               this.mod = 0.5;
               
-              p[pid].buff_list[0] = this.mod;
+              battle_list[cur].buff_list[0] = this.mod;
               
-              p[pid].buff_round[0] = this.round_count;        
-          }
+              battle_list[cur].buff_round[0] = this.round_count;        
+    }
 }
   
 /*******************************************
@@ -105,6 +108,8 @@ knight skill 3 unlock at lv10
   { 
     public  k_skill_3(){
       this.name = "War stomp";
+      
+      this.description = "Trample the ground and create hit wave, attack all enemy";
       
       this.type = 2;
       
@@ -118,13 +123,20 @@ knight skill 3 unlock at lv10
              public void skilldamage(){
               
              this.mod = 1.25;
-             
-             this.damage = p[pid].get_patk() * this.mod;
-             
-             for(int i = 0; i < enemy_count; i++){
-               dmg(this.damage,i,0);
-               }        
-            }
+
+           for(int i = 0; i < enemy_count; i++){
+               hit[i] = i;
+               
+               if(i != mid){          
+                 
+                 this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+        
+                 dmg(this.damage,i,0);
+               }
+               m[i].calc_stats();
+              }        
+            
+          }
 }
     
     
@@ -142,17 +154,20 @@ knight skill 4 unlock at lv15
       
       this.name = "Taunt";
       
-      this.mp_dec = 51;
+      this.description = "Taunt monster with sexy body";
+      
+      //51
+      this.mp_dec = 0;
       }
       
       @Override
                public void skillUsed(){
                  
-                 this.round_count = 1;
-                 this.mod = 75.0;
+                 this.round_count = 3;
                  
-                 p[pid].buff_list[1] = this.mod;
-                 p[pid].buff_round[1] = this.round_count;            
+                 m[mid].buff_list[1] = pid;
+                 
+                 m[mid].buff_round[1] = this.round_count;            
               }
 }
     
@@ -165,6 +180,8 @@ knight skill 5 unlock at lv20
       public  k_skill_5(){
       
       this.name = "Combat focus";
+      
+      this.description = "Forget everthing but enemy, increse physical damage";
       
       this.type = 0;
       
@@ -181,9 +198,9 @@ knight skill 5 unlock at lv20
                  public void skillUsed(){
                    this.mod = 1.2;                 
                    
-                   p[pid].buff_list[2] = this.mod;
+                   battle_list[cur].buff_list[2] = this.mod;
                    
-                   p[pid].buff_round[2] = this.round_count;                                          
+                   battle_list[cur].buff_round[2] = this.round_count;                                          
                 }
 }
     
@@ -194,32 +211,58 @@ knight skill 6 unlock at lv25
     class k_skill_6 extends Skill{
         
      public k_skill_6(){
-       this.name = "Frey's Crest";
+       this.name = "Frey's Lævateinn";
+       
+       this.description = "Slash all enemy with Lævateinn, cause physical damage and bleed";
        
        this.type = 2;
         
        this.dmg_type = 4;
        
        this.mp_dec = 80;
+       
      }
       
       @Override
                 public void skilldamage(){
                     
-                  this.mod = 2.2;
-                  this.damage = p[pid].get_patk() * this.mod;
+                  this.mod = 1.2;
+                                 
+                  
                   for(int i = 0; i < enemy_count; i++)
-                    {         
+                    {
+                       hit[i] = i;   
+                       
+                       this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                       
+                       if(this.damage < 1){
+                        this.damage = 1;
+                      }                  
                        dmg(this.damage,i,0);
                     }
-                  }
+                 }
                 
                 public void skillUsed(){
-                 
-                    p[pid].buff_list[3] = 0.2;
                     
-                    p[pid].buff_round[3] = this.round_count;  
-               
+                    this.mod = 0.2;
+                    
+                    this.round_count = 4;                    
+                    
+                    this.damage = p[pid].get_patk() * this.mod;
+                    
+                    for(int i = 0; i < enemy_count; i++)
+                    {
+                       hit[i] = i;   
+
+                      if(this.damage < 1){
+                        this.damage = 1;
+                      }
+
+                       m[i].buff_list[3] = this.damage; 
+                                          
+                       m[i].buff_round[3] = this.round_count;
+
+                    }               
                  }
   
     }
@@ -252,6 +295,8 @@ class pal_skill_1 extends Skill {
   public  pal_skill_1(){
       this.name = "Curse";  
       
+      this.description = "curse your enemy, cause magical damage";
+      
       this.type = 2;
       
       this.dmg_type = 2;
@@ -280,9 +325,9 @@ class pal_skill_2 extends Skill {
       
       this.name = "Buffalo bump";   
     
-      this.type = 2;
+      this.description = "Bump all enemy with shiled, cause physical damage and stun them";
       
-      this.round_count = 1;
+      this.type = 2;
       
       this.dmg_type = 4;
       
@@ -295,20 +340,37 @@ class pal_skill_2 extends Skill {
          
          this.mod = 1.2;
            
-         this.damage = p[pid].get_patk() * this.mod;
          
-         for(int i = 0; i< enemy_count;i++)
-         {
-           dmg(this.damage,i,0);
-         }
-  }
+         for(int i = 0; i < enemy_count; i++){
+               
+                 hit[i] = i;
+                 
+                 this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                 
+                 if(this.damage < 1){
+                        this.damage = 1;
+                      }
+                 
+                 dmg(this.damage,i,0);
+
+                 m[i].calc_stats();
+              }
+  
+}
         public void skillUsed(){
           
-          this.mod = 50.0;
+          this.mod = 0.2;
           
-          p[pid].buff_list[4] = this.mod;
+          this.round_count = 2;
           
-          p[pid].buff_round[4] = this.round_count;  
+          for(int i = 0; i < enemy_count; i++)
+                    {
+                       hit[i] = i;   
+
+                       m[i].buff_list[4] = this.mod;
+          
+                       m[i].buff_round[4] = this.round_count;
+                    } 
         }
 }
 
@@ -322,23 +384,24 @@ class pal_skill_3 extends Skill {
   public  pal_skill_3(){
       
       this.name = "kiss of Hel";  
-    
+      
+      this.description = "Show the crown of death from Hel, immortal body set";
+      
       this.type = 1;
       
       this.dmg_type = 4;
       
-      this.round_count = 5;
+      this.round_count = 6;
   }
   
   @Override
           void skilldamage(){
-              this.mp_dec = p[pid].get_max_mp() * 0.5;
+              this.mp_dec = battle_list[cur].get_max_mp() * 0.5;
           }
           
           void skillUsed(){
-                  this.mod = 100.0;
                   
-                  p[pid].buff_list[5] = this.mod;
+                  //p[pid].buff_list[5] = this.mod;
                   
                   p[pid].buff_round[5] = this.round_count; 
           }
@@ -352,7 +415,9 @@ class pal_skill_4 extends Skill {
 
   public  pal_skill_4(){
     
-    this.name = "Holy light"; 
+    this.name = "San light"; 
+    
+    this.description = "The light of gods, cause magical damage to all enemy";
     
     this.type = 2;
       
@@ -367,12 +432,20 @@ class pal_skill_4 extends Skill {
            
            this.mod = 1.2;
            
-           this.damage = p[pid].get_matk() * this.mod;
-           
-           for(int i = 0;i<enemy_count;i++)
-           {
-             dmg(this.damage,i,0);
-           }
+           for(int i = 0; i < enemy_count; i++){
+               hit[i] = i;
+                 
+               this.damage = p[pid].get_matk() * this.mod - m[i].get_mdef();
+               
+               if(this.damage < 1){
+                        this.damage = 1;
+                      }
+                 
+               dmg(this.damage,i,0);
+
+               m[i].calc_stats();
+              }
+              
   }
   
 }
@@ -387,14 +460,14 @@ class pal_skill_5 extends Skill {
     
     this.name = "Striker codex";
     
+    this.description = "Codex 1: protect our side. Heal all friendly target";
+    
     this.type = 0;
     
     this.dmg_type = 4;
     
     this.mp_dec = 85;
-    
-    this.healing = true;
-  }
+}
   
   
   
@@ -402,14 +475,17 @@ class pal_skill_5 extends Skill {
   @Override//aoe heal
             public void skillUsed(){
                 
-                  this.round_count = 3;
-          
+                  this.round_count = 4;          
+               
+                  for(int i = 0;i < c_pt;i++)
+                  {
+                    this.heal = p[i].get_max_hp() * 0.15;
+                    
+                    p[i].buff_list[6] = this.heal;
+                    
+                    p[i].buff_round[6] = this.round_count;
                   
-                  this.heal = p[pid].get_max_hp() * 0.15;
-                  
-                  p[pid].buff_list[6] = this.heal;
-                  
-                  p[pid].buff_round[6] = this.round_count;
+                  }                  
                  }
 }
 
@@ -420,7 +496,10 @@ paladin skill 6 unlock at lv25
 class pal_skill_6 extends Skill {
 
   public pal_skill_6(){
+    
     this.name = "Sleepy shield";
+    
+    this.description = "Draw enemy life power, sleep them and cause true damage continued";
     
     this.type = 2;    
     
@@ -431,15 +510,18 @@ class pal_skill_6 extends Skill {
 
   @Override
             public  void skillUsed(){
+
+                this.round_count = 3;
                 
-                this.mod = 50.0;
-              
-                this.round_count = 2;
+                this.mod = 0.8;
                 
                 //skip round sleepy shiled
-                p[pid].buff_list[7] = this.mod;
+                this.damage = p[pid].get_matk() * this.mod; 
+
+                  m[mid].buff_list[7] = this.damage;
                 
-                p[pid].buff_round[7] = this.round_count; 
+                  m[mid].buff_round[7] = this.round_count;
+
               }
  
 }
@@ -470,7 +552,9 @@ class r_skill_1 extends Skill{
     
     public  r_skill_1(){
       
-      this.name = "Arrow of penetration"; 
+      this.name = "Arrow of penetration";
+      
+      this.description = "Shoot enemy, cause physical damage to target";
       
       this.type = 2;
       
@@ -496,7 +580,10 @@ ranger skill 2 unlock at lv5
 class r_skill_2 extends Skill{
     
     public  r_skill_2(){
-      this.name = "Wind arrow"; 
+      
+      this.name = "Vestri's arrow"; 
+      
+      this.description = "Shoot enemy with Vestri's blessing, cause magical damage to target";
       
       this.type = 2;
       
@@ -521,7 +608,10 @@ ranger skill 3 unlock at lv10
 class r_skill_3 extends Skill{
     
     public  r_skill_3(){      
+      
       this.name = "Forest blessing";
+      
+      this.description = "Combine your spiritual power and strength, increase all damage";
       
       this.type = 0;
       
@@ -529,19 +619,19 @@ class r_skill_3 extends Skill{
       
       this.mp_dec = 22;
       
-      this.round_count = 3;
+      this.round_count = 4;
     }
 
     @Override
               public  void skillUsed(){
                 
-                this.mod = p[pid].get_patk() + p[pid].get_matk();
+                this.mod = (p[pid].get_patk() + p[pid].get_matk())/2;
                 
                 //set patk and matk as mod
                 
-                p[pid].buff_list[8] = this.mod;
+                battle_list[cur].buff_list[8] = this.mod;
                 
-                p[pid].buff_round[8] = this.round_count;
+                battle_list[cur].buff_round[8] = this.round_count;
               }
 }
 
@@ -554,6 +644,8 @@ class r_skill_4 extends Skill{
     public  r_skill_4(){
 
       this.name = "Steel shot";
+      
+      this.description = "Change into steel arrow head, cause physical damage";
       
       this.type = 2;
       
@@ -579,7 +671,10 @@ ranger skill 5 unlock at lv20
 class r_skill_5 extends Skill{
     
     public  r_skill_5(){
+      
       this.name = "Cyclone arrow"; 
+      
+      this.description = "Special way to archery, cause magical damage"; 
       
       this.type = 2;
       
@@ -603,21 +698,12 @@ ranger skill 6 unlock at lv25
 ********************************************/
 
 class r_skill_6 extends Skill{
-  
-  /*
-    AOE
-    
-    stun : boss 30 elimet: 60 nomal :80
-    if()
-    {
-      
-    }
-    */
-  
     
     public  r_skill_6(){
       
       this.name = "Flame twine";
+      
+      this.description = "Summon flame twine around enemy, case magical damage and imprison enemy";
       
       this.type = 2;
       
@@ -631,22 +717,33 @@ class r_skill_6 extends Skill{
                   
                   this.mod = 1.3;
                     
-                  this.damage = (p[pid].get_matk()+p[pid].get_patk())*this.mod;
-                  
-                      for(int i = 0;i < enemy_count; i++)
-                      {
-                        dmg(this.damage,i,0);
-                      }
+                              for(int i = 0; i < enemy_count; i++){
+                                  
+                                  hit[i] = i;
+
+                                  this.damage = (p[pid].get_matk()+p[pid].get_patk())*this.mod - m[i].get_mdef();
+                                  
+                                  if(this.damage < 1){
+                                      this.damage = 1;
+                                    }
+                                     
+                                  dmg(this.damage,i,0);
+
+                                  m[i].calc_stats();
+                                }
                     }
               
               public void skillUsed(){
-                  this.round_count = 2;
-                  this.mod = 50.0;
                   
-                  //skip round
-                  p[pid].buff_list[9] = this.mod;
-                  p[pid].buff_round[9] = this.round_count;
-                    }
+                    this.round_count = 3;
+                   
+                   for(int i = 0;i<enemy_count; i++)
+                   {
+                     //m[i].buff_list[9] = this.mod;
+                  
+                      m[i].buff_round[9] = this.round_count;
+                   }                                   
+                 }
 }
 
 
@@ -676,7 +773,9 @@ class a_skill_1 extends Skill{
     
     public  a_skill_1(){
       
-      this.name = "Pursuit";
+      this.name = "Pursuit hit";
+      
+      this.description = "Despair breakthrough, cause physical damage";
       
       this.type = 2;
       
@@ -706,6 +805,8 @@ class a_skill_2 extends Skill{
       
       this.name = "Back thorn";
       
+      this.description = "Thorn enemy at their back, cause physical damage";
+      
       this.type = 2;
       
       this.dmg_type = 1;
@@ -730,7 +831,10 @@ assassin skill 3 unlock at lv10
 class a_skill_3 extends Skill{
     
     public  a_skill_3(){
-      this.name = "Absorbed";
+      
+      this.name = "Absorb";
+      
+      this.description = "Absorb wind's power, increase speed";
       
       this.type = 0;
       
@@ -738,17 +842,18 @@ class a_skill_3 extends Skill{
       
       this.mp_dec = 39;
       
-      this.round_count = 1;
     }
 
  @Override
           public  void skillUsed(){
-                     
+
+            this.round_count = 2;
+            
             this.mod = 0.4;
             
-            p[pid].buff_list[10] = this.mod;
+            battle_list[cur].buff_list[10] = this.mod;
             
-            p[pid].buff_round[10] = this.round_count;          
+            battle_list[cur].buff_round[10] = this.round_count;          
           }
 }
 
@@ -759,7 +864,10 @@ assassin skill 4 unlock at lv15
 class a_skill_4 extends Skill{
     
     public  a_skill_4(){
+      
       this.name = "Shadow thorn";
+      
+      this.description = "Wield your knife in the shadow and slash all enemy, cause physical damage and bleed";
       
       this.type = 2;
       
@@ -772,23 +880,40 @@ class a_skill_4 extends Skill{
 @Override    
           public  void skilldamage(){
             this.mod = 1.2;
-            
-            this.damage = p[pid].get_patk() * this.mod;
-            
-            for(int i = 0; i < enemy_count; i++){
-              dmg(this.damage,i,0);
-              } 
+        
+                  for(int i = 0; i < enemy_count; i++){
+                       
+                       hit[i] = i;
+
+                       this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                       
+                       if(this.damage < 1){
+                        this.damage = 1;
+                      }
+                       
+                       dmg(this.damage,i,0);
+
+                     m[i].calc_stats();
+                    } 
             }
           
           public  void skillUsed(){
             
-            this.round_count = 4;
+            this.round_count = 5;
       
             this.mod = 0.2;
             
-            p[pid].buff_list[11] = this.mod;
+            this.damage = p[pid].get_patk() * this.mod;
             
-            p[pid].buff_round[11] = this.round_count;     
+            for(int i = 0; i < enemy_count;i++)
+            {
+              hit[i] = i;
+              
+              m[i].buff_list[11] = this.damage;
+            
+              m[i].buff_round[11] = this.round_count;   
+            }           
+              
             }
 }
 
@@ -801,24 +926,26 @@ class a_skill_5 extends Skill{
     public  a_skill_5(){
       this.name = "Shadow world";
       
+      this.description = "Break the wall between void and reality and absorb power of void, increase physical damage";
+      
       this.type = 0;
       
       this.dmg_type = 4;
       
-      this.mp_dec = 82;
+      this.mp_dec = p[pid].get_max_mp() * 0.3;
     }
 
     
 @Override
             public  void skillUsed(){
             
-            this.mod = 1.2;
+            this.mod = 0.3;
             
             this.round_count = 1;
             
-            p[pid].buff_list[12] = this.mod;
+            battle_list[cur].buff_list[12] = this.mod;
             
-            p[pid].buff_round[12] = this.round_count;
+            battle_list[cur].buff_round[12] = this.round_count;
           
           }
 }
@@ -831,7 +958,10 @@ assassin skill 1 unlock at lv25
 class a_skill_6 extends Skill{
     
     public  a_skill_6(){
-      this.name = "Left me to the moon";
+      
+      this.name = "Ghost Blade";
+      
+      this.description = "Summon a demon to control your body, cause phycial damage";
       
       this.type = 2;
       
@@ -876,7 +1006,9 @@ class m_skill_1 extends Skill{
     
     public m_skill_1(){
       
-      this.name = "Flame bomb";
+      this.name = "Flame ball";
+      
+      this.description = "Summon a flame ball and bump enemy,cause magical damage";
       
       this.type = 2;
       
@@ -904,6 +1036,8 @@ class m_skill_2 extends Skill{
     public m_skill_2(){
       this.name = "Anthem of aegir";
       
+      this.description = "Sing a anthem of aegir, punish all enemy, cause magical damage";
+      
       // to all
       this.type = 2;
       
@@ -918,12 +1052,22 @@ class m_skill_2 extends Skill{
               
             this.mod = 1.3;  
               
-            this.damage = p[pid].get_matk() * this.mod;
+           
             
-            for(int i = 0; i<enemy_count;i++)
-            {
-              dmg(this.damage,i,0);
-            }
+              for(int i = 0; i < enemy_count; i++){
+                  
+                   hit[i] = i;
+
+                   this.damage = p[pid].get_matk() * this.mod - m[i].get_mdef(); 
+                   
+                   if(this.damage < 1){
+                        this.damage = 1;
+                      }
+                   
+                   dmg(this.damage,i,0);
+
+                   m[i].calc_stats();
+                }
         }
 }
 
@@ -937,6 +1081,8 @@ class m_skill_3 extends Skill{
     public m_skill_3(){
       this.name = "Requiem";
       
+      this.description = "Keep your mind in peace, regenerate your power";
+      
       this.type = 0;
       
       this.dmg_type = 3;
@@ -948,7 +1094,7 @@ class m_skill_3 extends Skill{
 
 @Override  
           public void skilldamage(){        
-              this.heal = p[pid].get_max_mp() * 0.3;        
+              this.heal = p[pid].get_max_mp() * 0.6;        
             }
 }
 
@@ -960,7 +1106,10 @@ mage skill 4 unlock at lv15
 class m_skill_4 extends Skill{
     
     public m_skill_4(){
-      this.name = "Blizzard";
+      
+      this.name = "Absolute zero";
+      
+      this.description = "Create an extreme cold filed, freeze all enemy but regenerate their health";
       
       this.type = 2;
       
@@ -972,15 +1121,18 @@ class m_skill_4 extends Skill{
 @Override    
           public  void skillUsed(){
       
-            this.round_count = 3;
+            this.round_count = 4;
+         
+            for(int i = 0; i<enemy_count;i++)
+            {
+                this.heal = m[i].get_max_hp() * 0.2;
+                
+                m[i].buff_list[13] = this.heal;
             
-            this.mod = 50.0;
+                m[i].buff_round[13] = this.round_count;
+            }
+                        
             
-            //skip round
-            
-            p[pid].buff_list[13] = 50.0;
-            
-            p[pid].buff_round[13] = this.round_count;
           }
 }
 
@@ -993,6 +1145,8 @@ class m_skill_5 extends Skill{
     public m_skill_5(){
       
       this.name = "Karma";
+      
+      this.description = "God with punish those people with sin, cause magical damage";
       
       this.type = 2;
       
@@ -1032,7 +1186,7 @@ class m_skill_6 extends Skill{
       
       this.name = "Meteor strike";
       
-       //AOE
+      this.description = "Summon meteor rain to attack all enemy, cause magical damge";
       
       this.type = 2;
       
@@ -1045,14 +1199,22 @@ class m_skill_6 extends Skill{
     @Override
               public void skilldamage(){
                 
-              this.mod = 1.6;
-                
-              this.damage = p[pid].get_matk() * this.mod;
+                    this.mod = 1.6;
               
-              for(int i = 0; i<enemy_count;i++){
-              
-                dmg(this.damage,i,0);          
-              }
+                  for(int i = 0; i < enemy_count; i++){
+                    
+                     hit[i] = i;
+
+                     this.damage = p[pid].get_matk() * this.mod - m[i].get_mdef();                      
+                      
+                     if(this.damage < 1){
+                        this.damage = 1;
+                      }
+                     
+                     dmg(this.damage,i,0);
+
+                     m[i].calc_stats();
+                  }
             }
 }
 
@@ -1086,6 +1248,8 @@ class pri_skill_1 extends Skill{
       
       this.name = "Light bullet";
       
+      this.description = "Have you ever tried high level laser? cause magical damge";
+      
       this.type = 2;
       
       this.dmg_type = 2;
@@ -1113,6 +1277,8 @@ class pri_skill_2 extends Skill{
       
       this.name = "Iden's blessing"; 
       
+      this.description = "Iden show mercy to her people, regenerate target health";
+      
       this.type = 1;
       
       this.dmg_type = 3;
@@ -1125,7 +1291,7 @@ class pri_skill_2 extends Skill{
     @Override
             public void skilldamage(){
               
-            this.heal = p[pid].get_matk();
+            this.heal = battle_list[cur].get_matk();
         }
 }
 
@@ -1136,7 +1302,10 @@ priest skill 3 unlock at lv10
 class pri_skill_3 extends Skill{
     
     public  pri_skill_3(){
-      this.name = "San.Light";
+      
+      this.name = "Seraph’s Aura";
+      
+      this.description = "Seraph recognized you, increase all base status";
       
       this.type = 1;
       
@@ -1148,7 +1317,7 @@ class pri_skill_3 extends Skill{
 @Override            
           public  void skillUsed(){
         
-          this.round_count = 4;
+          this.round_count = 5;
           
           this.mod = 0.2;
           
@@ -1166,7 +1335,9 @@ class pri_skill_4 extends Skill{
     
     public  pri_skill_4(){
       
-      this.name = "Yggdrasill's Sap"; 
+      this.name = "Yggdrasill's Sap";
+      
+      this.description = "Yggdrasill is our world. regenerate all friendly target's health";
       
       this.type = 0;
       
@@ -1183,7 +1354,16 @@ class pri_skill_4 extends Skill{
               
               this.mod = 0.8; 
                 
-              this.heal = p[pid].matk * this.mod;
+              this.heal = battle_list[cur].matk * this.mod;
+              
+              for(int i = 0; i< c_pt; i++)
+              {
+                 if(i != pid){
+                   
+                   p[i].rec_hp(this.heal);
+                 }
+                 p[i].calc_stats();
+              }              
             }
 }
 
@@ -1194,7 +1374,10 @@ priest skill 5 unlock at lv20
 class pri_skill_5 extends Skill{
     
     public  pri_skill_5(){
+      
       this.name = "Well of radiance";
+      
+      this.description = "Gods create this miracle, increase all friendly target's status";
       
       this.type = 0;      
       
@@ -1207,13 +1390,20 @@ class pri_skill_5 extends Skill{
             public  void skillUsed(){
               //AOE
               
-              this.round_count = 4;
+              this.round_count = 5;
               
               this.mod = 0.15;
               
-              p[pid].buff_list[15] = this.mod;
+              for(int i = 0; i<c_pt; i++)
+              {
+               
+               p[i].buff_list[15] = this.mod;
               
-              p[pid].buff_round[15] = this.round_count;
+               p[i].buff_round[15] = this.round_count;
+                
+              }
+              
+             
             }
 }
 
@@ -1227,21 +1417,407 @@ class pri_skill_6 extends Skill{
       
       this.name = "Nirvana";
       
+      this.description = "This is a story about phoenix, resurrect target";
+      
       this.type = 1;
       
       this.dmg_type = 3;
       
-      this.healing = true;
+      this.healing = false;
   
     }
 
     @Override
             void skilldamage(){
              
-              this.heal = p[pid].get_max_hp();
-              
               p[pid].ress();
               
-              this.mp_dec = p[pid].get_max_mp() * 0.4;    
+              this.heal = p[pid].get_max_mp();
+              p[pid].rec_hp(p[pid].get_max_hp());
+              this.mp_dec = battle_list[cur].get_max_mp() * 0.4;    
           }
+}
+
+
+//normal type monster skill set
+
+class Normal_Skill extends Skill{  
+  
+  public Normal_Skill(){
+     this.skill = new Skill[6];
+     skill[0] = new Normal_Skill_1();
+     skill[1] = new Normal_Skill_2();
+     skill[2] = new Normal_Skill_3();
+     skill[3] = new Normal_Skill_4();
+     skill[4] = new Normal_Skill_5();
+     skill[5] = new Normal_Skill_6();
+     
+  }
+  
+}
+
+class Normal_Skill_1 extends Skill{
+  
+  public Normal_Skill_1(){
+    
+    this.monster_skill_name[0] ="Collision";
+    
+    this.monster_skill_name[1] ="Body Blow";
+     
+    this.mod = 1.4;
+    
+    this.dmg_type = 1;
+}
+
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.3;
+    
+    this.damage = m[mid].get_patk() * this.mod;    
+  }
+  
+}
+
+class Normal_Skill_2 extends Skill{
+  
+  public Normal_Skill_2(){
+    
+    this.monster_skill_name[0] ="Body Smash";
+    
+    this.monster_skill_name[1] ="Fierce Fang";
+    
+    this.mod = 1.6;
+    
+    this.dmg_type = 1;
+    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.5;
+    
+    this.damage = m[mid].get_patk() * this.mod;    
+  }
+
+}
+
+class Normal_Skill_3 extends Skill{
+  
+  public Normal_Skill_3(){
+    
+    this.monster_skill_name[0] ="Strike";
+    
+    this.monster_skill_name[1] ="Armorbreak";
+    
+    this.dmg_type = 1;
+    
+    this.mod = 1.8;
+  }
+  
+   public void skilldamage(){
+     
+    this.mp_dec = m[mid].get_max_mp() * 0.7; 
+     
+    this.damage = m[mid].get_patk() * this.mod;    
+  }
+
+}
+
+class Normal_Skill_4 extends Skill{
+  
+  public Normal_Skill_4(){
+    
+    
+    this.monster_skill_name[0] ="Flame Branch";
+    
+    
+    this.monster_skill_name[1] ="Calamity";
+    
+    this.mod = 1.6;
+    
+    this.dmg_type = 2;
+    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.5;
+    
+    this.damage = m[mid].get_matk() * this.mod;    
+  }
+
+}
+
+class Normal_Skill_5 extends Skill{
+  
+  public Normal_Skill_5(){
+    
+    this.monster_skill_name[0] ="Grumburst";
+    
+    this.monster_skill_name[1] ="Magical power";
+    
+    this.mod = 1.8;
+    
+    this.dmg_type = 2;
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.7;
+    
+    this.damage = m[mid].get_matk() * this.mod;    
+  }
+}
+
+class Normal_Skill_6 extends Skill{
+  
+  public Normal_Skill_6(){
+    
+    this.monster_skill_name[0] ="rest";
+    
+    this.monster_skill_name[1] ="focus";
+    
+    this.mod = 0.3;
+    
+    this.healing = r.nextBoolean();
+    
+    this.dmg_type = 3;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.2;
+    
+    this.heal = m[mid].get_max_hp() * this.mod;    
+  }
+}
+
+class Elite_Skill extends Skill{  
+  
+  public Elite_Skill(){
+     this.skill = new Skill[6];
+     skill[0] = new Elite_Skill_1();
+     skill[1] = new Elite_Skill_2();
+     skill[2] = new Elite_Skill_3();
+     skill[3] = new Elite_Skill_4();
+     skill[4] = new Elite_Skill_5();
+     skill[5] = new Elite_Skill_6();
+     skill[6] = new Elite_Skill_7();
+  }  
+}
+
+class Elite_Skill_1 extends Skill{
+  
+  public Elite_Skill_1(){
+    
+    this.monster_skill_name[0] ="Synergistic effect";
+    
+    this.monster_skill_name[1] ="Evil Pollution";
+    
+    this.mod = 0.3;
+    
+    this.healing = r.nextBoolean();
+    
+    this.dmg_type = 3;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
+    
+    this.heal = m[mid].get_max_hp() * this.mod;
+    
+    for(int i = 0; i<enemy_count; i++)
+    {  
+      if(i != mid)
+      {
+        m[i].rec_hp(this.heal);
+      }
+      
+      m[i].calc_stats();   
+    }
+  
+}
+}
+
+
+class Elite_Skill_2 extends Skill{
+  
+  public Elite_Skill_2(){
+    
+    this.monster_skill_name[0] ="Reshape";
+    
+    this.monster_skill_name[1] ="Battle Posture";
+    
+    this.mod = 0.1;
+    
+    this.dmg_type = 1;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.5;
+    
+    m[mid].inc_patk(m[mid].get_patk() * this.mod);
+    
+    this.damage = m[mid].get_patk() * (1.1 + this.mod);
+  }
+}
+
+class Elite_Skill_3 extends Skill{
+  
+  public Elite_Skill_3(){
+    
+    this.monster_skill_name[0] ="Factor conversion";
+    
+    this.monster_skill_name[1] ="Autophagy";
+    
+    this.mod = 0.25;
+    
+    this.healing = false;
+    
+    this.dmg_type = 3;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = 0;
+    
+    this.heal = m[mid].get_max_mp();
+    
+    this.damage = m[mid].get_patk() * this.mod;
+    
+    dmg(this.damage,mid,1);
+  }
+}
+
+
+class Elite_Skill_4 extends Skill{
+  
+  public Elite_Skill_4(){
+    
+    this.monster_skill_name[0] ="Power of Dracula";
+    
+    this.monster_skill_name[1] ="Luna's Howl";
+    
+    this.mod = 1.4;
+    
+    this.dmg_type = 1;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.3;
+    
+    this.damage = m[mid].get_patk() * this.mod;
+    
+    for(int i = 0; i <c_pt;i++)
+    {     
+      if(i != mid)
+      {
+         hit[i] = i;
+         
+         this.damage = m[mid].get_patk() - p[i].get_pdef();
+         
+         dmg(this.damage, i , 1);
+         
+      }
+      
+      p[i].calc_stats();   
+    }
+  }
+}
+
+
+class Elite_Skill_5 extends Skill{
+  
+  public Elite_Skill_5(){
+    
+    this.monster_skill_name[0] ="Nature choice";
+    
+    this.monster_skill_name[1] ="Phototaxis evolution";
+    
+    this.dmg_type = 3;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.2;
+    
+    if(m[mid].cur_hp < m[mid].get_max_hp() * 0.5)
+    {      
+        this.mod = 0.3;
+        
+        this.healing = true;
+        
+        this.heal = m[mid].get_max_hp() * this.mod;  
+    }
+    else
+    {
+      this.mod = 0.5;
+      
+      this.healing = false;
+      
+      this.heal = m[mid].get_max_mp() * this.mod;  
+    }
+      
+  }
+}
+
+class Elite_Skill_6 extends Skill{
+  
+  public Elite_Skill_6 (){
+    
+    this.monster_skill_name[0] ="Space collapse";
+    
+    this.monster_skill_name[1] ="Black hole devour";
+    
+    this.mod = 1.4;
+    
+    this.dmg_type = 2;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.5;
+    
+    for(int i = 0;i<c_pt;i++)
+    {
+        if(i != mid)
+        {
+          this.damage = m[mid].get_matk() * this.mod - p[i].get_mdef();
+          
+          dmg(this.damage,i,1);
+        }
+        
+      p[i].calc_stats();      
+    } 
+  }
+}
+
+class Elite_Skill_7 extends Skill{
+  
+  public Elite_Skill_7 (){
+    
+    this.monster_skill_name[0] ="Dim extraction";
+    
+    this.monster_skill_name[1] ="Bloodthirsty";
+    
+    this.mod = 0.8;
+    
+    this.healing = true;
+    
+    this.dmg_type = 3;    
+  }
+  
+  public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.2;
+    
+    this.damage = m[mid].get_matk() * this.mod;
+    
+    this.heal = this.damage;
+    
+    dmg(this.damage,r.nextInt(100) % c_pt,1);
+  }
 }

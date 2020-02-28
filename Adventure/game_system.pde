@@ -136,7 +136,7 @@ void monsterappear() {
             enemy_count =  r.nextInt(100) % floor + 1;
           }
         }else{
-          if(floor > 4){
+          if(floor > 3){
             enemy_count =  r.nextInt(100) % 4 + 1;
           }else{
             enemy_count =  r.nextInt(100) % floor + 1;

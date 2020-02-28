@@ -24,12 +24,13 @@ import library
  Create style
 ********************************************/   
   
-  PImage bg, bag_img;
+  PImage bg, bag_img, indicator;
+  PImage[] npc = new PImage[6];
   PFont font;
   
   int boss_defeated = 0;
   
-  int total_jobs = 6, floor = 1, floor_room = 1;
+  int total_jobs = 6, floor = 5, floor_room = 4;
   int buff_count = 20;
   
   int steps = 0, encounter;
@@ -47,7 +48,13 @@ import library
   
   int max_pt = 4, c_pt = 1;
   int item_count = 102;
+  int[] hit = new int[max_pt];
   
+  int new_companion;
+  
+  boolean shop_set = false, cell_key = true;
+
+
 /*******************************************
   key variable to draw or action
 ********************************************/ 
@@ -79,6 +86,8 @@ import library
     Normal normal = new Normal();
     Elite elite = new Elite();
     Boss boss = new Boss();
+    
+    Merchant shop = new Merchant();
   
   /*******************************************
     key variable to draw or action
@@ -100,10 +109,18 @@ import library
   
   public void setup(){
     
-    frameRate(60);
+    frameRate(30);
     background(0,0,100);
      text("Loading", 400, 400);
     colorMode(HSB, 100);
+    indicator = loadImage("src/turn.png");
+    
+    npc[0] = loadImage("src/npc/knight.png");
+    npc[1] = loadImage("src/npc/paladin.png");
+    npc[2] = loadImage("src/npc/ranger.png");
+    npc[3] = loadImage("src/npc/assassin.png");
+    npc[4] = loadImage("src/npc/mage.png");
+    npc[5] = loadImage("src/npc/priest.png");
     
     load_items();
     
@@ -137,7 +154,9 @@ import library
     }
     
     wall_set();
-    map = floor_1[floor_room - 1];
+    map = floor_5[floor_room - 1];
+    
+    hit_set();
   /************************************************
   try to check if save file can be loaded normally
   *************************************************/ 
@@ -195,12 +214,20 @@ import library
       map.drawmap(floor, floor_room);
       background(bg);
       //cur_room_npc();
-      //structureline();
+      structureline();
       change_room(floor_room);
       move();
       
       map.isBoundary();
       
+      if(floor == 1 && floor_room == 3){
+        draw_NPC(13*sqw, 6*sqh, 0);
+        draw_NPC(18*sqw, 6*sqh, 1);
+        draw_NPC(23*sqw, 6*sqh, 2);
+        draw_NPC(13*sqw, 15*sqh, 3);
+        draw_NPC(18*sqw, 15*sqh, 4);
+        draw_NPC(23*sqw, 15*sqh, 5);
+      }
       
       //fill(17, 64, 98, 75);
       //rect(0,0,500, 900);
@@ -208,11 +235,22 @@ import library
       p[0].display();
         break;
       
+      case 11:
+      
+       if(frameCount - start_frame < 100)
+       {           
+         display_level_up();
+       }else{
+         room = 2;
+       }
+       
+       break;
+      
             
       case 80:
         
         background(0,0,100);
-        
+        p[pid].charPanel();
         bag.display_bag();
         
         if(!select_item){
@@ -225,11 +263,19 @@ import library
       case 81:
       
         background(0,0,100);
-        
+        p[pid].charPanel();
         bag.display_bag();
         
         bag_option();
         
+        break;
+      
+      case 88:
+        background(0,0,100);
+        shop.display_shop();
+        
+        bag.display_bag();
+        item_desc(3);
         break;
       
       case 90:

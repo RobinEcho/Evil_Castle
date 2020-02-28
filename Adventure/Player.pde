@@ -6,11 +6,13 @@
 
 class Player extends Units{
 	protected float str = 1, con = 1, intel = 1, wis = 1, agi = 1;
+  //public float str_mod = 1, con_mod = 1, intel_mod = 1, wis_mod = 1, agi_mod = 1;
   protected float flat_str = 1, flat_con = 1, flat_intel = 1, flat_wis = 1, flat_agi = 1;
   protected int job_code;
   public int dir = 2, AP = 3;
+  
+  public boolean level_up = false;
 	Job job;
-  Skill skills;
   int[] equipment = {item_count - 1, item_count - 1, item_count - 1};
   
   /**************************************
@@ -57,6 +59,7 @@ class Player extends Units{
 	}
 
 	public Player(int x){
+    this.level = 1;
     this.job_code = x;
     job = new Job(x);
     this.battle_img = loadImage("src/player/" + this.job.name + ".png");
@@ -108,7 +111,6 @@ class Player extends Units{
 
   public void init_stats(){
     this.alive = true;
-    this.level = 1;
     this.flat_str = job.stats[0];
     this.flat_con = job.stats[1];
     this.flat_intel = job.stats[2];
@@ -126,8 +128,7 @@ class Player extends Units{
 
 	//stats calculations
 	public void calc_stats(){
-    this.alive = true;
-    
+    calc_buff();
     
 		this.str = (flat_str + bonus_str);
 		this.con = (flat_con + bonus_con);
@@ -153,13 +154,19 @@ class Player extends Units{
     this.max_hp = (flat_max_hp + bonus_hp) * this.hp_mod;
     this.max_mp = (flat_max_mp + bonus_mp) * this.mp_mod;
     
-		this.cur_hp = max_hp - hp_dec + bonus_hp;
-    if(this.cur_hp <= 0){
-      dead();
-      cur_hp = 0;
+		this.cur_hp = max_hp - hp_dec;
+    
+    if(this.hp_dec >= this.max_hp){
+      println("die!");
+      this.cur_hp = 0;
+      this.hp_dec = this.max_hp;
+      this.dead();
     }
+    println("max_hp: " + this.max_hp + " hp dec: " + this.hp_dec + " cur hp: " + this.cur_hp);
+    
     if(this.cur_hp > max_hp){
-      cur_hp = max_hp;
+      this.cur_hp = this.max_hp;
+      this.hp_dec = 0;
     }
     
 		this.cur_mp = max_mp - mp_dec + bonus_mp;
@@ -170,10 +177,7 @@ class Player extends Units{
       cur_mp = max_mp;
     }
 
-    
     //println("lv: "+level+" patk= "+patk+" pdef = "+pdef+" matk = "+matk+" mdef = "+mdef+" spd = "+spd+" hp = "+max_hp+" mp = "+max_mp);
-    
-    
     
 	}
 	
@@ -184,19 +188,25 @@ class Player extends Units{
 
          this.AP += 3;
          
+         room = 11;
+         
+         println("room: "+room);
+         
            for(int i =0;i<stats_count;i++)
            {
-             this.job.stats[i] += this.job.stats_inc[i];             
-           }
+             this.job.stats[i] += this.job.stats_inc[i];
+         }
+           
+           this.init_stats();
+           
+           this.hp_dec = 0;
+           
+           this.mp_dec = 0;
            
            this.calc_stats(); 
-           
-           this.cur_hp = this.max_hp;
-           
-           this.cur_mp = this.max_mp;
-           
-            println("Level up!, level now: "+this.level+" hp now: "+this.cur_hp+" mp now: "+this.cur_mp);         
+           // println("Level up!, level now: "+this.level+" hp now: "+this.cur_hp+" mp now: "+this.cur_mp);         
  }
+   
   
   public void gainExp(float ex){
     
@@ -219,13 +229,16 @@ class Player extends Units{
             }else{
               this.exp = this.exp - exp_expect;
             }
-              levelUp(); 
+              levelUp();
+              
+              level_up = true;
           }
           
         }
         while(this.exp >= exp_expect && this.level < 25);    
     }
   }
+ 
 	
 	public void inc_str(float a){
 		this.bonus_str += a;
@@ -457,7 +470,7 @@ public int[] interact(){
     rect(horizontal_margin + sq_distance,vertical_margin + Avatarsq_sl + 2*v_a,Big_sl,Big_sl,10);
     
     fill(0,0,100);
-    
+    stroke((this.job_code - 1) * 12, 100, 60);
     for(int n=1 ; n <=Wpsq_num ; n++ ){
       
       rect(horizontal_margin + sq_distance + n*Wp_distance + (n-1)*Wpsq_sl - 1,vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl - 1,Wpsq_sl+1,Wpsq_sl+1);
@@ -467,7 +480,7 @@ public int[] interact(){
     textSize(20);
     
     textAlign(CENTER);
-    
+    noStroke();
     for(int n = 1; n < Strip_num; n++){
       
     fill(0,0,100);
@@ -645,7 +658,7 @@ public int[] interact(){
         && mouseY >= (vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl)
         && mouseY <= (vertical_margin + Avatarsq_sl + 2*sq_distance + 3*Wpsq_sl) + Wpsq_sl){
           if(this.equipment[n-1] != item_count - 1){
-            item_list[this.equipment[n-1]].desc(mouseX - bag.square_width * 3, mouseY);
+            item_list[this.equipment[n-1]].desc(mouseX - bag.square_width * 3, mouseY, 1);
           }
       }
       
@@ -665,4 +678,48 @@ public int[] interact(){
   /**************************************
   *  CW end
   **************************************/
+}
+
+
+  /******************************************
+
+    show stats change while level up
+
+******************************************/
+
+public void display_level_up(){
+
+            stroke(0);
+            
+            smooth();
+            
+            for(int i = 0; i < c_pt;i++)
+            {   
+              
+                if(p[i].level_up)
+                {
+                  fill(60,100,100);
+                
+                  rect(width*3/8 ,height/4 + 100*i,width/4,height/8);
+                  
+                  textAlign(CENTER);
+                  
+                  textSize(30);
+                  
+                  fill(0,0,100);
+                  
+                  text(p[i].name+"'s level up! Level now: "+p[i].level,width/2,  height*5/16 + 100*i);
+                  
+                  if(p[i].level % 5 == 0 && (int)(p[i].level / 5) >= 1 )
+                  {
+                    textSize(20);
+                    
+                    text(p[i].name + " have learned " + p[i].skills.skill[(int)(p[i].level / 5)].name,  width/2 ,height*5/16 + 20+ 100*i);
+                  }
+                  
+                  p[i].level_up = false;                
+                }
+                
+          }
+           
 }

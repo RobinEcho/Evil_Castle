@@ -8,7 +8,6 @@
 class Monster extends Units{
   protected int m_type;
   protected String monster_type = "Normal";
-  protected int skillset = 0;
   protected float mod = 1.0;
   
   public Monster(){
@@ -19,12 +18,15 @@ class Monster extends Units{
     this.m_type = t;
     
     type = 0;
+    this.skillset = new int[this.m_type];
   }
   
 	public Monster(int t, int lv){
     this.m_type = t;
 		this.level = lv;
     type = 0;
+    
+    this.skillset = new int[this.m_type];
   
     init_stats();
 	}
@@ -38,18 +40,33 @@ class Monster extends Units{
         this.monster_type = "Normal";
         this.mod = 1.0;
         this.img = loadImage("src/monster/normal/n1.png");
+        this.skillset[0] = r.nextInt(6);
+        this.skills = new Normal_Skill();
         break;
       
       case 2:
         this.monster_type = "Elite";
         this.mod = 1.5;
         this.img = loadImage("src/monster/elite/e1.png");
+        
+        for(int i = 0; i < skillset.length; i++){
+          this.skillset[i] = r.nextInt(7);
+        }
+        
+        this.skills = new Elite_Skill();
         break;
+        
       
       case 3:
         this.monster_type = "Boss";
         this.mod = 2.0;
         this.img = loadImage("src/monster/boss/b1.png");
+        
+        for(int i = 0; i < skillset.length; i++){
+          this.skillset[i] = r.nextInt(7);
+        }
+        
+        this.skills = new Elite_Skill();
         break;
       
     }
@@ -70,6 +87,7 @@ class Monster extends Units{
   }
 	
 	public void calc_stats(){
+    this.calc_buff();
     this.alive = true;
 		this.patk = patk + bonus_patk;
 		this.pdef = pdef + bonus_pdef;
@@ -127,6 +145,13 @@ class Monster extends Units{
     println("exp monster: "+this.exp);
     
     return this.exp;
+  }
+  
+  public int get_gold(){
+    
+    this.gold = (this.level * 40) + r.nextInt(100);
+    
+    return this.gold;
   }
 
 	/***********************

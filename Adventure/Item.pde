@@ -1,7 +1,7 @@
 class Item{
   public int id;
   PImage img;
-  public int level = 1;
+  public int level = 1, gold = 0;
   protected int str = 0, con = 0, intel = 0, wis = 0, agi = 0, patk = 0, pdef = 0, matk = 0, mdef = 0, spd = 0, hp = 0, mp = 0, rec_hp = 0, rec_mp = 0;
   public String name;
   protected String type;
@@ -662,17 +662,17 @@ class Item{
     return this.rec_mp;
   }
   
-  public void desc(float display_x, float display_y){
+  public void desc(float display_x, float display_y, int dg){
     int count = 0, not_displayed = 0;
     String[] attr = {"Level: ", "Strength: ", "Constitution: ", "Intelligence: ", "Wisdom: ", "Agility: ", 
                     "Physical Attack: ", "Physical Defense: ", "Magical Attack: ", "Magical Defense: ", 
-                    "Speed: ", "HP: ", "MP: ", "Recover HP: ", "Recover MP: "};
+                    "Speed: ", "HP: ", "MP: ", "Recover HP: ", "Recover MP: ", "Gold: "};
                     
     int[] pt = {this.level, this.str, this.con, this.intel, this.wis, this.agi, 
                 this.patk, this.pdef, this.matk, this.mdef, this.spd, this.hp, this.mp, 
-                this.rec_hp, this.rec_mp};
+                this.rec_hp, this.rec_mp, this.gold};
     
-    for(int i = 0; i < pt.length; i++){
+    for(int i = 0; i < pt.length - dg; i++){
       if(pt[i] != 0){
         count++;
       }
@@ -692,7 +692,7 @@ class Item{
     text(this.name, display_x + bag.square_width * 1.5, display_y + 15);
     
     if(count > 0){
-      for(int i = 0; i < pt.length; i++){
+      for(int i = 0; i < pt.length - dg; i++){
         if(pt[i] != 0){
           text(attr[i] + pt[i], display_x + bag.square_width * 1.5, display_y + 15 + (i+1 - not_displayed) * 30);
         }else{
@@ -923,7 +923,7 @@ void item_desc(int bag_mode){
             && mouseY >= ((i+1)*bag.vs + (i * bag.square_height) + bag.vertical_margin) && mouseY <= ((i+1)*bag.vs + (i * bag.square_height) + bag.vertical_margin) + bag.square_height){
               
               if(bag.inv[i][j] != item_count - 1){
-                item_list[bag.inv[i][j]].desc(mouseX - bag.square_width * 3, mouseY);
+                item_list[bag.inv[i][j]].desc(mouseX - bag.square_width * 3, mouseY, 1);
               }
               
           }
@@ -936,7 +936,7 @@ void item_desc(int bag_mode){
               && mouseY <= ((i+1-(bag.row / 2 + bag.row % 2))*bag.vs + ((i-(bag.row / 2 + ((bag.row) % 2))) * bag.square_height))+ bag.vertical_margin + bag.square_height){
                 
                 if(bag.inv[i][j] != item_count - 1){
-                    item_list[bag.inv[i][j]].desc(mouseX - bag.square_width * 3, mouseY);
+                    item_list[bag.inv[i][j]].desc(mouseX - bag.square_width * 3, mouseY, 1);
                 }
             }    
           }else{
@@ -944,7 +944,7 @@ void item_desc(int bag_mode){
                 && mouseY >= ( ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin ) && mouseY <= ((i+1)*bag.vs + (i * bag.square_height))+ bag.vertical_margin + bag.square_height){
                   
                    if(bag.inv[i][j] != item_count - 1){
-                       item_list[bag.inv[i][j]].desc(mouseX - bag.square_width * 3, mouseY);
+                       item_list[bag.inv[i][j]].desc(mouseX - bag.square_width * 3, mouseY, 1);
                    }
               }    
           }
@@ -953,4 +953,47 @@ void item_desc(int bag_mode){
             
     }    //for loop(j)
   }    //for loop (i)
+  
+  //shop
+  if(bag_mode == 3){
+    
+    item_desc(1);
+    
+    shop.dis_y = bag.vertical_margin + bag.vs;
+    for(int i = 0; i < shop.sale_count; i++){
+      if(i % 5 == 0){
+        shop.dis_y += bag.vs + bag.square_height;
+      }
+      
+      if(mouseX >= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width)
+        && mouseX <= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width) + bag.square_width
+        && mouseY >= shop.dis_y && mouseY <= shop.dis_y + bag.square_height){
+          
+          if(shop.sell[i] != item_list[item_count - 1]){
+            shop.sell[i].desc(mouseX - bag.square_width * 3, mouseY, 0);
+          }
+          
+      }
+    }//end shop for
+            
+    shop.dis_y = bag.UI_height / 2 - bag.vs;
+    for(int i = 0; i < shop.sale_count; i++){
+      if(i % 5 == 0){
+        shop.dis_y += bag.vs + bag.square_height;
+      }
+      
+      if(mouseX >= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width)
+        && mouseX <= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width) + bag.square_width
+        && mouseY >= shop.dis_y && mouseY <= shop.dis_y + bag.square_height){
+          
+          if(shop.cart[i] != item_list[item_count - 1]){
+            shop.cart[i].desc(mouseX - bag.square_width * 3, mouseY, 0);
+          }
+          
+      }
+              
+    }//end cart for
+    
+    
+  }
 }

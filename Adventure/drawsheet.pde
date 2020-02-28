@@ -11,7 +11,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   float command_x, command_y, command_radius;
   float target_diameter;
   float tri_width, tri_height;
-  
+  boolean no_move = false;
   
 
   /*******************************************
@@ -154,7 +154,12 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   noStroke();
   for(int i = 0; i < enemy_count; i++){
     if(i == 0){
-      image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      if(m[0].is_alive()){
+        image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      }else{
+        fill(0,100,100);
+        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      }
     }else{
       
       if(i % 2 == 0){
@@ -163,7 +168,12 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         enemy_x -= enemy_width * m[i-1].get_mod();
       }
       
-      image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      if(m[i].is_alive()){
+        image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      }else{
+        fill(0,100,100);
+        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      }
     }
     
     enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
@@ -186,27 +196,38 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
       rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width, battle_UI_margin, 50);
       fill(0,100,100);
       rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width * hp_percent, battle_UI_margin, 50);
-      
-     // if(death){
-      
-         
-      
-      //}
+    }
       
         //player stats
         p_stats(i);
-      }
+      
     }
     
     stroke(0, 100, 100);
     fill(0, 100, 100);
-    textSize(20);
+    textSize(30);
     textAlign(CENTER);
-    text(round, width/2, p[0].vertical_margin/2);
+    text("ROUND: " + round, width/2, p[0].vertical_margin/2);
+    
+    unit_turn();
+    /*****************************
+    *  battle round starts
+    *****************************/
     switch(battle_mode){
       //player turn start draw commands
       case 0:
-        battle_command_UI();
+        if(battle_list[cur].is_alive()){
+          if(battle_list[cur].can_move){
+            no_move = false;
+            battle_command_UI();
+          }else{
+            no_move = true;
+            battle_mode = 10;
+          }
+        }else{
+          battle_mode = 10;
+          println("player dead");
+        }
         break;
         
       //player chooses attack target
@@ -229,6 +250,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
            textAlign(CENTER, CENTER);
            text(p[battle_list[cur].get_id()].skills.skill[i].name, command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width/2, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height/2);
         }
+        skill_desc();
       break;
       
       //player uses item
@@ -252,47 +274,82 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         break;
         
       case -1:
-        println("monster round");
-        switch(m[mid].getMType()){
-          case 1:
-            normal.attack_mode();
-            break;
-          case 2:
-          normal.attack_mode();
-            break;
-          case 3:
-          normal.attack_mode();
-            break;
+        if(battle_list[cur].is_alive()){
+          if(battle_list[cur].can_move){
+            no_move = false;
+            println("monster round");
+            switch(m[mid].getMType()){
+              case 1:
+                normal.attack_mode();
+                break;
+              case 2:
+              normal.attack_mode();
+                break;
+              case 3:
+              normal.attack_mode();
+                break;
+            }
+          }else{
+            no_move = true;
+          }
+        }else{
+          println("monster dead");
         }
-        
         battle_mode = 10;
         break;
       
+      //battle turn & round end
       case 10:
         
         if(frameCount - start_frame < 100){
-          if(battle_list[cur].get_type() == 0){
-            display_damage(pid, 1);
-          }else{
-            display_damage(mid, 0);
-          }
-        }else{
-          
-          cur++;
-          if(cur >= (c_pt + enemy_count)){
-            cur = 0;
-            round++;
+            for(int i = 0; i < max_pt; i++){
+              if(hit[i] != -1){
+                display_damage(hit[i], ((battle_list[cur].get_type() + 1) % 2));
+              }
+            }
             
-            check_buff_status();
-            println(p[0].get_pdef());
+            //for(int i = 0; i < c_pt; i++){
+            //  println("Name: " + p[i].name + " is alive: " + p[i].is_alive());
+            //}
+        }
+        else{
+          
+          if(battle_list[cur].buff_round[12] <= 0){
+            cur++;
+            if(cur >= (c_pt + enemy_count)){
+              cur = 0;
+              round++;
+              
+              check_buff_status();
+              hit_set();
+              
+              for(int i = 0; i < (c_pt + enemy_count); i++){
+                battle_list[i] = round_order()[i];
+              }
+              //println("cur pdef: " + p[0].get_pdef());
+            }
+            
+          //Assassin delay move buff
+          }else{
+            Units temp;
+            battle_list[cur].calc_buff();
+            for(int i = cur; i < (c_pt + enemy_count) - 1; i++){
+                temp = battle_list[i];
+                battle_list[i] = battle_list[i + 1];
+                battle_list[i + 1] = temp;
+              }
           }
           
           if(battle_list[cur].get_type() == 0){
+            mid = battle_list[cur].get_id();
             battle_mode = -1;
           }else{
+            pid = battle_list[cur].get_id();
             battle_mode = 0;
           }
         }
+        
+      break;     
     }
   
 }
@@ -385,9 +442,10 @@ void enemy_selection(){
               enemy_x -= enemy_width * m[i-1].get_mod();
             }
           }
-            
-          ellipse(enemy_x + (enemy_width/2.0f * m[i].get_mod()), enemy_y + enemy_height/2.0 * m[i].get_mod(), target_diameter * m[i].get_mod(), target_diameter * m[i].get_mod());
           
+          if(m[i].is_alive()){
+            ellipse(enemy_x + (enemy_width/2.0f * m[i].get_mod()), enemy_y + enemy_height/2.0 * m[i].get_mod(), target_diameter * m[i].get_mod(), target_diameter * m[i].get_mod());
+          }
           enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
         }
 }
@@ -401,8 +459,53 @@ void ally_selection(){
         tri_width = c_width * 0.1;
         tri_height = tri_width * 1.5;
         
-        for(int i = 0; i < c_pt; i++){
-          cx = c_width*i + (i+1)*battle_UI_margin;
-          triangle(cx + c_width/2 - tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2 + tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2, cy - battle_UI_margin);
+        //when using skill
+        if(command != 7){
+          //0 use on self only, 1 use on ally
+          switch(battle_list[cur].skills.skill[command].type){
+              case 0:
+                for(int i = 0; i < c_pt; i++){
+                  cx = c_width*i + (i+1)*battle_UI_margin;
+                  if(p[i] == battle_list[cur]){
+                    triangle(cx + c_width/2, cy - battle_UI_margin, cx + c_width/2 - tri_width, cy - battle_UI_margin - tri_height, cx + c_width/2 + tri_width, cy - battle_UI_margin - tri_height);
+                  }  
+                }
+                break;
+                
+              case 1:
+                for(int i = 0; i < c_pt; i++){
+                  cx = c_width*i + (i+1)*battle_UI_margin;
+                  
+                  //if priest uses revive
+                  if(p[battle_list[cur].get_id()].job_code == 6 && command == 5){
+                    if(!p[i].is_alive()){
+                      triangle(cx + c_width/2 - tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2 + tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2, cy - battle_UI_margin);
+                    }
+                    
+                  //if other skills
+                  }else{
+                    if(p[i].is_alive()){
+                      triangle(cx + c_width/2 - tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2 + tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2, cy - battle_UI_margin);
+                    }
+                  }
+                }
+                break;
+          }
+          
+        //when using item
+        }else{
+          for(int i = 0; i < c_pt; i++){
+            cx = c_width*i + (i+1)*battle_UI_margin;
+            
+            if(item_list[bag.inv[bag_y][bag_x]].id != 39){
+              if(p[i].is_alive()){
+                triangle(cx + c_width/2 - tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2 + tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2, cy - battle_UI_margin);
+              }
+            }else{
+              if(!p[i].is_alive()){
+                triangle(cx + c_width/2 - tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2 + tri_width/2, cy - tri_height - battle_UI_margin, cx + c_width/2, cy - battle_UI_margin);
+              }
+            }
+          }
         }
 }

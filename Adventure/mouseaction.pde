@@ -53,21 +53,21 @@ int command;
                 p[0].set_loc(800,450);
               }   
               
-                //p[1] = new Player(3);
-                //p[1].set_img(p[1].job.name,1);
-                //p[1].set_id(1);
-                //p[1].name = "Tester 1";
+                p[1] = new Player(1);
+                p[1].set_img(p[1].job.name,1);
+                p[1].set_id(1);
+                p[1].name = "Tester 1";
                 
-                //p[2] = new Player(2);
-                //p[2].set_img(p[2].job.name,1);
-                //p[2].set_id(2);
-                //p[2].name = "Tester 2";
+                p[2] = new Player(1);
+                p[2].set_img(p[2].job.name,1);
+                p[2].set_id(2);
+                p[2].name = "Tester 2";
                 
                 //p[3] = new Player(5);
                 //p[3].set_img(p[3].job.name,1);
                 //p[3].set_id(3);
                 //p[3].name = "Tester 3";
-                //c_pt = 4;
+                c_pt = 3;
         
         break;
         
@@ -100,6 +100,67 @@ int command;
          
        
          break;
+         
+       case 88:
+          shop.dis_y = bag.vertical_margin + bag.vs;
+          for(int i = 0; i < shop.sale_count; i++){
+            if(i % 5 == 0){
+              shop.dis_y += bag.vs + bag.square_height;
+            }
+            
+            if(mouseX >= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width)
+              && mouseX <= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width) + bag.square_width
+              && mouseY >= shop.dis_y && mouseY <= shop.dis_y + bag.square_height){
+                
+                if(shop.sell[i] != item_list[item_count - 1]){
+                  
+                  for(int j = 0; j < shop.cart.length; j++){
+                    if(shop.cart[j] == item_list[item_count - 1]){
+                      shop.cart[j] = shop.sell[i];
+                      shop.sell[i] = item_list[item_count - 1];
+                    }
+                  }
+                }
+                
+            }
+          }//end shop for
+                  
+          shop.dis_y = bag.UI_height / 2 - bag.vs;
+          for(int i = 0; i < shop.sale_count; i++){
+            if(i % 5 == 0){
+              shop.dis_y += bag.vs + bag.square_height;
+            }
+            
+            if(mouseX >= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width)
+              && mouseX <= (bag.horizontal_margin + ((i%5)+1)*bag.hs + (i%5)*bag.square_width) + bag.square_width
+              && mouseY >= shop.dis_y && mouseY <= shop.dis_y + bag.square_height){
+                
+                if(shop.cart[i] != item_list[item_count - 1]){
+                  for(int j = 0; j < shop.sell.length; j++){
+                    if(shop.sell[j] == item_list[item_count - 1]){
+                      shop.sell[j] = shop.cart[i];
+                      shop.cart[i] = item_list[item_count - 1];
+                    }
+                  }
+                }
+                
+            }
+                    
+          }//end cart for
+          
+          //confirmation box
+          if(x >= (bag.horizontal_margin + bag.square_width) && x <= (bag.horizontal_margin + bag.square_width) +  bag.square_width * 2
+            && y >= (height - bag.vertical_margin - bag.square_height) && y <= (height - bag.vertical_margin - bag.square_height) + bag.square_height / 2){
+              if(p[0].get_gold() >= shop.gold_req){
+                
+              }
+            }
+          
+          //cancel and quit box
+          if(x >= (bag.horizontal_margin + bag.UI_width/2 + bag.square_width) && x <= (bag.horizontal_margin + bag.UI_width/2 + bag.square_width) +  bag.square_width * 2
+            && y >= (height - bag.vertical_margin - bag.square_height) && y <= (height - bag.vertical_margin - bag.square_height) + bag.square_height / 2){
+            }
+         break;
        
        case 90:
          switch(battle_mode){
@@ -122,6 +183,7 @@ int command;
            //use item
            case 3:
              bag_select(2);
+
              break;
              
            //select ally target
@@ -137,6 +199,7 @@ int command;
            case 10:
              //display_damage();
              break;
+             
          }
         
        break;
@@ -145,8 +208,7 @@ int command;
             
              if((x >= boxX && x <= boxX+boxwidth)&&(y >= mainY-text_height && y<= mainY+text_height)){ 
                opt = false;
-               room = 0;               
-                          
+               room = 0;                                         
              }
              
              if((x >= boxX && x<=boxX+boxwidth) && (y >= saveY-text_height && y<= saveY+text_height)){
@@ -367,8 +429,9 @@ void bag_select(int bag_mode){
          if(mouseX >= (p[0].horizontal_margin + n*p[0].sq_distance + (n-1)*p[0].Avatarsq_sl)
            && mouseX <= (p[0].horizontal_margin + n*p[0].sq_distance + (n-1)*p[0].Avatarsq_sl) + p[0].Avatarsq_sl
            && mouseY >= (p[0].vertical_margin + p[0].strip_distance) && mouseY < (p[0].vertical_margin + p[0].strip_distance) + p[0].Avatarsq_sl){
-         
-             pid = n-1;
+             if(n-1 < c_pt){
+               pid = n-1;
+             }
          }
         } 
        break;
@@ -456,16 +519,19 @@ void select_enemy_target(){
           
             distance = (float)Math.sqrt(x_dis * x_dis + y_dis * y_dis);
             if(distance <= target_diameter * m[i].get_mod() / 2){
+              if(m[i].is_alive()){
                 if(command == 6){
                   attack(pid, i, 0);
                 }else{
-                  p[pid].skills.skill[command].skilldamage();
                   skill(pid, i, 0, command);
                 }
                 
                 
                 select_target = true;
                 battle_mode = 0;
+              }else{
+                battle_mode = 0;
+              }
             }
           
           
@@ -479,30 +545,88 @@ void select_enemy_target(){
   }
 }
 
+/********************************************
+*  Select ALLY
+********************************************/
 void select_ally_target(){
   select_target = false;
   for(int i = 0; i < c_pt; i++){
     cx = c_width*i + (i+1)*battle_UI_margin;
     if(x >= cx && x <= cx + c_width && y >= cy & y <= cy + c_height){
-      //println("use on player " + (i+1));
+      
+      //Use Item
       if(command == 7){
-        p[i].rec_hp(item_list[selected_item_code].get_rec_hp());
-        p[i].rec_mp(item_list[selected_item_code].get_rec_mp());
-        p[i].calc_stats();
-        
-        select_item = false;
-        
-        bag.inv[bag_selected_y][bag_selected_x] = item_count - 1;
-        
+        if(item_list[selected_item_code].id != 39){
+          if(p[i].is_alive()){
+            p[i].rec_hp(item_list[selected_item_code].get_rec_hp());
+            p[i].rec_mp(item_list[selected_item_code].get_rec_mp());
+            p[i].calc_stats();
+            
+            select_item = false;
+            
+            bag.inv[bag_selected_y][bag_selected_x] = item_count - 1;
+            
+            select_target = true;
+            battle_mode = 0;
+          }else{
+            select_item = false;
+            select_target = false;
+            battle_mode = 0;
+          }
+          
+        //use revive
+        }else{
+          if(!p[i].is_alive()){
+            p[i].rec_hp(item_list[selected_item_code].get_rec_hp());
+            p[i].calc_stats();
+            
+            select_item = false;
+            
+            bag.inv[bag_selected_y][bag_selected_x] = item_count - 1;
+            
+            select_target = true;
+            battle_mode = 0;
+          }else{
+            select_item = false;
+            select_target = false;
+            battle_mode = 0;
+          }
+        }
+      
+      //use skill
       }else{
-        //println("i: " + i);
-        skill(battle_list[cur].get_id(), i, 0, command);
         
+        switch(battle_list[cur].skills.skill[command].type){
+            //use on self only
+            case 0:
+              if(p[i] == battle_list[cur]){
+                skill(battle_list[cur].get_id(), i, 0, command);
+                select_target = true;
+              }else{
+                battle_mode = 0;
+                select_target = false;
+              }
+              break;
+            
+            //use on ally
+            case 1:
+              //priest revive
+              if(p[battle_list[cur].get_id()].job_code == 6 && command == 5){
+                if(!p[i].is_alive()){
+                    skill(battle_list[cur].get_id(), i, 0, command);
+                    select_target = true;
+                }
+                
+              //other skills
+              }else{
+                if(p[i].is_alive()){
+                    skill(battle_list[cur].get_id(), i, 0, command);
+                    select_target = true;
+                }  
+              }
+              break;
+        }
       }
-      
-      select_target = true;
-      battle_mode = 0;
-      
     }
   }
   
@@ -514,6 +638,9 @@ void select_ally_target(){
   }
 }
 
+/****************************************
+*  use AP
+****************************************/
 void spend_attribute_points(){
   if(p[pid].AP > 0){
     for(int i = 0; i < p[0].Strip_num; i++){

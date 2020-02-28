@@ -125,7 +125,110 @@ void keyPressed(){
             
             if(map.npc[target_coord[1]][target_coord[0]]){
               println("HI!");
+              switch(floor){
+                case 1:
+                  if(floor_room == 3){
+                    if(target_coord[1] == 8 && target_coord[0] == 13){
+                      if(cell_key){
+                          new_companion = 1;
+                      }else{
+                        new_companion = 0;
+                      }
+                      
+                      
+                      room = 98;
+                      println("knight");
+                    }
+                    
+                    if(target_coord[1] == 8 && target_coord[0] == 18){
+                      if(cell_key){
+                          new_companion = 2;
+                      }else{
+                        new_companion = 0;
+                      }
+                      room = 98;
+                      println("paladin");
+                    }
+                    
+                    if(target_coord[1] == 8 && target_coord[0] == 23){
+                      if(cell_key){
+                          new_companion = 3;
+                      }else{
+                        new_companion = 0;
+                      }
+                      room = 98;
+                      println("ranger");
+                    }
+                    
+                    if(target_coord[1] == 13 && target_coord[0] == 13){
+                      if(cell_key){
+                          new_companion = 4;
+                      }else{
+                        new_companion = 0;
+                      }
+                      room = 98;
+                      println("assassin");
+                    }
+                    
+                    if(target_coord[1] == 13 && target_coord[0] == 18){
+                      if(cell_key){
+                          new_companion = 5;
+                      }else{
+                        new_companion = 0;
+                      }
+                      room = 98;
+                      println("mage");
+                    }
+                    
+                    if(target_coord[1] == 13 && target_coord[0] == 23){
+                      if(cell_key){
+                          new_companion = 6;
+                      }else{
+                        new_companion = 0;
+                      }
+                      room = 98;
+                      println("priest");
+                    }
+                  }
+                  break;
+                  
+                case 2:
+                  if(floor_room == 5){
+                    if(!in_shop){
+                      in_shop = true;
+                      room = 88;
+                    }else{
+                      
+                    }
+                  }
+                  break;
+                case 3:
+                  if(floor_room == 9){
+                    if(!in_shop){
+                      room = 88;
+                    }
+                  }
+                  break;
+                case 4:
+                  if(floor_room == 6){
+                    if(!in_shop){
+                      room = 88;
+                    }
+                  }
+                  break;
+                case 5:
+                  if(floor_room == 4){
+                    if(target_coord[0] == 26 && (target_coord[1] == 11 || target_coord[1] == 12)){
+                      if(!in_shop){
+                        room = 88;
+                      }
+                    }
+                  }
+                  break;
+              }
             }
+            
+            println("room: " + room);
             break;
             
         case 'b':
@@ -151,10 +254,11 @@ void keyPressed(){
        
        case 'l':
          case'L':
+             start_frame = frameCount;
              p[0].gainExp(100);
              p[1].gainExp(100);
              p[2].gainExp(100);
-             p[3].gainExp(100);
+             //p[3].gainExp(100);
              //steps = 100;
              break;
       }

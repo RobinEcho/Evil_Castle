@@ -1,9 +1,105 @@
 /*
+  monster skill list:
+  
+  /************
+  Normal:
+  
+  physical:
+      
+   patk * 1.4:
+   
+      Collision
+      
+      Body Blow
+   
+   patk * 1.6:
+   
+      Body Smash
+      
+      Fierce Fang
+   
+   patk * 1.8:
+   
+      Strike
+      
+      Armorbreak
+  
+  magical:
+  
+     matk * 1.6:
+        
+        Flame Branch
+        
+        Calamity
+
+    matk * 1.8:
+        
+        Grumburst
+        
+        Magical power
+    
+    recovery mp or hp:
+        
+        rest
+  
+        focus
+  /************ 
+    Elite:
+    
+    Recovery self mp or hp and friendly hp:
+        
+        Synergistic effect
+        
+        Evil Pollution
+        
+   permanent patk increase and cause physical damage:
+       
+       Reshape
+       
+       Battle Posture
+       
+       patk * 1.1
+    
+   Recovery all mp but cause damage to self:
+   
+       Autophagy
+       
+       Factor conversion
+       
+   AOE physical damge:
+   
+       Luna's Howl
+       
+       Power of Dracula
+   
+   when hp < 50%, recovery 30% of hp, else mp recovery 50%:
+   
+       Nature choice
+       
+       Phototaxis evolution
+       
+   magical aoe:
+       Space collapse
+       
+       Black hole devour
+       
+       matk * 1.4
+   
+   magical damage and steal lift
+       
+       Dim extraction
+       
+       Bloodthirsty
+       
+    
+  /************  
+*/
+
+
+
+/*
    buff list:
-   when 
-   mod = 50.0,stun; 
-   mod = 75.0, taunt; 
-   mod = 100.0, wont death;
+
    
     knight:
      

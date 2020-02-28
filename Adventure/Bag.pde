@@ -45,7 +45,6 @@ class Bag{
   ********************************************/ 
 
   public void display_bag(){
-    p[pid].charPanel();
     BagSquare(1);
     if(move_item){
       image(item_list[temp_item_code].img, mouseX - (bag.square_width/2), mouseY - (bag.square_height/2), bag.square_width, bag.square_height);
@@ -53,14 +52,6 @@ class Bag{
   }                    //close display_bag()
   
 /*-----------------------------------------------------------------------------------------------------*/
-
-  public void PropertyPanel(){
-    noStroke();
-    fill(0);
-    
-    rect(horizontal_margin, vertical_margin, UI_width, UI_height);
-    
-  }                    //close PropertyPanel()
 
 
   /*******************************************
