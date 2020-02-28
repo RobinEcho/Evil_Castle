@@ -112,7 +112,7 @@ import library
     
     frameRate(rate);
     background(0,0,100);
-     text("Loading", 400, 400);
+    text("Loading", 400, 400);
     colorMode(HSB, 100);
     indicator = loadImage("src/turn.png");
     
@@ -215,7 +215,7 @@ import library
       map.drawmap(floor, floor_room);
       background(bg);
       //cur_room_npc();
-      structureline();
+      //structureline();
       change_room(floor_room);
       move();
       
