@@ -62,7 +62,9 @@ class Player extends Units{
     this.level = 1;
     this.job_code = x;
     job = new Job(x);
-    this.battle_img = loadImage("src/player/" + this.job.name + ".png");
+    this.battle_img = loadImage("src/player/battle/" + this.job.name + ".png");
+    this.icon = loadImage("src/player/icon/" + this.job_code + ".png");
+    this.avatar = loadImage("src/player/avatar/" + this.job_code + ".png");
     type = 1;
     init_stats();
     calc_stats();
@@ -463,11 +465,11 @@ public int[] interact(){
     //fill((this.job_code - 1) * 12, 100, 60);
     fill(0, 0, 100);
     
-    for(int n = 1; n <= Avatarsq_num; n++){
-      rect(horizontal_margin + n*sq_distance + (n-1)*Avatarsq_sl,vertical_margin + strip_distance,Avatarsq_sl,Avatarsq_sl,10);
+    for(int n = 0; n < c_pt; n++){
+      image(p[n].icon, horizontal_margin + (n+1)*sq_distance + n*Avatarsq_sl,vertical_margin + strip_distance,Avatarsq_sl,Avatarsq_sl);
     } 
     
-    rect(horizontal_margin + sq_distance,vertical_margin + Avatarsq_sl + 2*v_a,Big_sl,Big_sl,10);
+    image(this.avatar, horizontal_margin + sq_distance + Big_sl *0.1,vertical_margin + Avatarsq_sl + 2*v_a - Big_sl * 0.1,Big_sl * 0.8,Big_sl* 0.8);
     
     fill(0,0,100);
     stroke((this.job_code - 1) * 12, 100, 60);
@@ -713,6 +715,8 @@ public void display_level_up(){
                   if(p[i].level % 5 == 0 && (int)(p[i].level / 5) >= 1 )
                   {
                     textSize(20);
+                    
+                    p[i].skills.skill_count++;
                     
                     text(p[i].name + " have learned " + p[i].skills.skill[(int)(p[i].level / 5)].name,  width/2 ,height*5/16 + 20+ 100*i);
                   }

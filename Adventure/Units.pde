@@ -5,9 +5,10 @@ class units to set some basic data about unit
 
 
 class Units{
-  protected int id, type;
+  protected int id, type, skill_count;
   public int[] skillset;
   public String name;
+  public float battle_x, battle_y;
   public float patk_mod = 1, pdef_mod = 1, matk_mod = 1, mdef_mod = 1, hp_mod = 1, mp_mod = 1, spd_mod = 1;
   public float[] buff_list = new float[buff_count];
   public int[] buff_round = new int[buff_count];
@@ -19,7 +20,7 @@ class Units{
 	protected float bonus_str = 0, bonus_con = 0, bonus_intel = 0, bonus_wis = 0, bonus_agi = 0;
 	protected float bonus_patk = 0, bonus_pdef = 0, bonus_matk = 0, bonus_mdef = 0, bonus_hp = 0, bonus_mp = 0, bonus_spd = 0;
   protected int charX, charY;
-  PImage img, battle_img;
+  PImage img, battle_img, icon, avatar;
   Skill skills;
 	
   public Units(){

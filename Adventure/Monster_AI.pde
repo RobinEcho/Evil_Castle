@@ -39,7 +39,7 @@ class Normal extends Monster_AI{
       break;
       
       case 1:
-        int use_skill = r.nextInt(battle_list[cur].skillset.length);
+        int use_skill = r.nextInt(battle_list[cur].skill_count);
         if(battle_list[cur].cur_mp > battle_list[cur].skills.skill[battle_list[cur].skillset[use_skill]].mp_dec){
           do{
             this.target = (r.nextInt(100) % c_pt);
@@ -128,7 +128,7 @@ class Elite extends Monster_AI{
       break;
       
       case 1:
-        int use_skill = r.nextInt(battle_list[cur].skillset.length);
+        int use_skill = r.nextInt(battle_list[cur].skill_count);
         
         if(battle_list[cur].cur_mp > battle_list[cur].skills.skill[battle_list[cur].skillset[use_skill]].mp_dec){
           do{
@@ -145,7 +145,7 @@ class Elite extends Monster_AI{
         target = min;
         max = 0;
         
-        for(int i = 0; i < battle_list[cur].skillset.length; i++){
+        for(int i = 0; i < battle_list[cur].skill_count; i++){
           if(battle_list[cur].get_cur_mp() > battle_list[cur].skills.skill[battle_list[cur].skillset[i]].mp_dec){
             if(battle_list[cur].skills.skill[battle_list[cur].skillset[i]].mod > battle_list[cur].skills.skill[max].mod){
               max = battle_list[cur].skillset[i];

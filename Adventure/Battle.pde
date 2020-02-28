@@ -5,9 +5,14 @@
 boolean dodge = false, esc = true;
 boolean inBattle = false;
 boolean show_damage = false;
+boolean arrive = false, returned = false;
 int battle_UI_margin = 10;
 float c_width = (width - battle_UI_margin * 5)/4, c_height = height/3 - 2 * battle_UI_margin;
 float cx, cy = height*2/3 + battle_UI_margin;
+  float attacker_x, attacker_y;
+  float defender_x, defender_y;
+  float distance_x, distance_y;
+  int atk, def;
 
 /*******************************************
  calculation damage
@@ -58,12 +63,22 @@ void dmg(float x, int rec, int rec_type){
 
 //def_type 1 = player, 0 = monster
 void attack(int attacker, int defender, int def_type){
-  
+  start_frame = frameCount;
   float damage = 0.0f;
   
   if(def_type == 0){
     pid = attacker;
     mid = defender;
+    
+    atk = attacker;
+    def = defender;
+    attacker_x = p[attacker].battle_x;
+    attacker_y = p[attacker].battle_y;
+    defender_x = m[defender].battle_x;
+    defender_y = m[defender].battle_y;
+    distance_x = attacker_x - defender_x + m[defender].get_mod() * enemy_width;
+    distance_y = attacker_y - defender_y;
+    
     damage = p[attacker].get_patk() - m[defender].get_pdef();
     //println("a patk: " + p[attacker].get_patk() + " m pdef: " + m[defender].get_pdef());
     if(m[mid].buff_list[7] > 0){
@@ -91,7 +106,6 @@ void attack(int attacker, int defender, int def_type){
   
    //if_dodge(attacker,defender, (def_type + 1)% 2);
   
-  
   if(dodge){
     
     damage = 0;
@@ -110,6 +124,7 @@ void attack(int attacker, int defender, int def_type){
   
   }
   
+  room= 91;
 }
 
 
@@ -350,11 +365,147 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
   }
 }
 
+void ani_draw(int cover, int type){
+  textSize(40);
+  pc_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt + 1);
+  pc_height = (height*2/3 - 3.0f * battle_UI_margin)/ (float)(max_pt + 2);
+  pcx = width*2/3.0f + battle_UI_margin + (float)(max_pt/2.0) * pc_width;
+  pcy = battle_UI_margin + pc_height/2.0f;
+  
+  enemy_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt+1);
+  enemy_height = (height*2/3.0f - 3.0f * battle_UI_margin)/ (float)(max_pt+2);
+  enemy_start_x = battle_UI_margin + (float)enemy_width;
+  enemy_start_y = battle_UI_margin + enemy_height/2.0f;
+  enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+  enemy_y = enemy_start_y;
+  
+  //Draw enemies
+  noStroke();
+  for(int i = 0; i < enemy_count; i++){
+    if(i == 0){
+      if(m[0].is_alive()){
+        if(type == 0){
+          if(cover != i){
+            image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+            m[i].battle_x = enemy_x;
+            m[i].battle_y = enemy_y;
+          }
+        }else{
+          image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+          m[i].battle_x = enemy_x;
+          m[i].battle_y = enemy_y;
+        }
+      }else{
+        fill(0,100,100);
+        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+      }
+    }else{
+      
+      if(i % 2 == 0){
+        enemy_x += enemy_width * m[i-1].get_mod();
+      }else{
+        enemy_x -= enemy_width * m[i-1].get_mod();
+      }
+      
+      if(m[i].is_alive()){
+        if(type == 0){
+          if(cover != i){
+            image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+            m[i].battle_x = enemy_x;
+            m[i].battle_y = enemy_y;
+          }
+        }else{
+          image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+          m[i].battle_x = enemy_x;
+          m[i].battle_y = enemy_y;
+        }
+      }else{
+        fill(0,100,100);
+        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        m[i].battle_x = enemy_x;
+        m[i].battle_y = enemy_y;
+      }
+    }
+    
+    enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
+    //println("enemy y: " + enemy_y + " i: " + i);
+    //println("mob lv: " + m[i].get_level() + " patk: " + m[i].get_patk());
+  }
+  
+  //Draw player status boxes
+  p_box();
+  
+  //Draw player images and player status
+  for(int i = 0; i < c_pt; i++){
+    if(p[i].is_alive()){
+      p[i].battle_x = i*pc_width/2.0f + pcx;
+      p[i].battle_y = i*pc_height*1.5f + pcy;
+      
+      if(type == 1){
+        if(cover != i){
+          image(p[i].battle_img, p[i].battle_x, p[i].battle_y, pc_width, pc_height);
+        }
+      }else{
+        image(p[i].battle_img, p[i].battle_x, p[i].battle_y, pc_width, pc_height);
+      }
+      
+      //over head hp bar
+      hp_percent = (float)p[i].get_cur_hp() / (float)p[i].get_max_hp();
+      strokeWeight(1);
+      stroke(0,100,0);
+      fill(0,0,100);
+      rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width, battle_UI_margin, 50);
+      fill(0,100,100);
+      rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width * hp_percent, battle_UI_margin, 50);
+    }
+      
+        //player stats
+        p_stats(i);
+      
+    }
+}
 
-void attackanimation(int attacker, int defender){
-  //int attacker_X = p[attacker].;
-  //int defender_X = p[defender].;
-
+void attackanimation(int attacker, int def_type){
+    
+  if(def_type == 0){
+    noStroke();
+    //fill(0,0,100);
+    //rect(p[attacker].battle_x, p[attacker].battle_y, pc_width, pc_height);
+    
+    if(!arrive){
+      if(attacker_x > defender_x + m[def].get_mod() * enemy_width){
+        //println("move");
+        //println("atk_x: " + attacker_x + " atk_y: " + attacker_y);
+        image(p[attacker].battle_img, attacker_x, attacker_y, pc_width, pc_height);
+      
+        attacker_x -= distance_x/rate;
+        attacker_y -= distance_y/rate;
+      }else{
+        arrive = true;
+      }
+    }else{
+      if(attacker_x < p[attacker].battle_x){
+        image(p[attacker].battle_img, attacker_x, attacker_y, pc_width, pc_height);
+      
+        attacker_x += distance_x/rate;
+        attacker_y += distance_y/rate;
+      }else{
+        returned = true;
+      }
+    }
+    
+    if(returned){
+      room = 90;
+      arrive = false;
+      returned = false;
+    }
+    
+    //println("monster x: " + m[def].battle_x + " px : " + attacker_x);
+    //println("monster y: " + m[def].battle_y + " py : " + attacker_y);
+  }else{
+    println("monster attack");
+    room = 90;
+  }
 
 }
 

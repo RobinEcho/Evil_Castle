@@ -30,12 +30,12 @@ import library
   
   int boss_defeated = 0;
   
-  int total_jobs = 6, floor = 5, floor_room = 4;
+  int total_jobs = 6, floor = 1, floor_room = 1;
   int buff_count = 20;
   
   int steps = 0, encounter;
   float side_margin, height_margin;
-  float rate = 60;
+  float rate = 30;
   
   float dmg_x, dmg_y;
   int display_dmg, start_frame;
@@ -53,6 +53,7 @@ import library
   int new_companion;
   
   boolean shop_set = false, cell_key = true;
+  boolean[] npc_in_cell = {true, true, true, true, true, true};
 
 
 /*******************************************
@@ -109,7 +110,7 @@ import library
   
   public void setup(){
     
-    frameRate(30);
+    frameRate(rate);
     background(0,0,100);
      text("Loading", 400, 400);
     colorMode(HSB, 100);
@@ -154,7 +155,7 @@ import library
     }
     
     wall_set();
-    map = floor_5[floor_room - 1];
+    map = floor_1[floor_room - 1];
     
     hit_set();
   /************************************************
@@ -221,12 +222,23 @@ import library
       map.isBoundary();
       
       if(floor == 1 && floor_room == 3){
-        draw_NPC(13*sqw, 6*sqh, 0);
-        draw_NPC(18*sqw, 6*sqh, 1);
-        draw_NPC(23*sqw, 6*sqh, 2);
-        draw_NPC(13*sqw, 15*sqh, 3);
-        draw_NPC(18*sqw, 15*sqh, 4);
-        draw_NPC(23*sqw, 15*sqh, 5);
+        if(npc_in_cell[0])
+          draw_NPC(13*sqw, 6*sqh, 0);
+          
+        if(npc_in_cell[1])
+          draw_NPC(18*sqw, 6*sqh, 1);
+        
+        if(npc_in_cell[2])
+          draw_NPC(23*sqw, 6*sqh, 2);
+        
+        if(npc_in_cell[3])
+          draw_NPC(13*sqw, 15*sqh, 3);
+        
+        if(npc_in_cell[4])
+          draw_NPC(18*sqw, 15*sqh, 4);
+        
+        if(npc_in_cell[5])
+          draw_NPC(23*sqw, 15*sqh, 5);
       }
       
       //fill(17, 64, 98, 75);
@@ -282,6 +294,17 @@ import library
                
         battle_UI(enemy_count);
         
+        break;
+      
+      //attack animation
+      case 91:
+      background(0,0,100);
+      ani_draw(atk, battle_list[cur].get_type());
+        attackanimation(atk, (battle_list[cur].get_type() + 1) % 2);
+        break;
+        
+      case 98:
+        NPC_join();
         break;
         
       case 99:

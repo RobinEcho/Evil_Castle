@@ -12,21 +12,20 @@ class Monster extends Units{
   
   public Monster(){
     type = 0;
+    
+    this.skillset = new int[3];
   }
   
   public Monster(int t){
     this.m_type = t;
     
     type = 0;
-    this.skillset = new int[this.m_type];
   }
   
 	public Monster(int t, int lv){
     this.m_type = t;
 		this.level = lv;
     type = 0;
-    
-    this.skillset = new int[this.m_type];
   
     init_stats();
 	}
@@ -39,7 +38,24 @@ class Monster extends Units{
       case 1:
         this.monster_type = "Normal";
         this.mod = 1.0;
-        this.img = loadImage("src/monster/normal/n1.png");
+        switch(floor){
+          case 1:
+            this.img = loadImage("src/monster/normal/floor_1/n" + (r.nextInt(3)+1) + ".png");
+            break;
+          case 2:
+            this.img = loadImage("src/monster/normal/floor_2/n" + (r.nextInt(3)+1) + ".png");
+            break;
+          case 3:
+            this.img = loadImage("src/monster/normal/floor_3/n" + (r.nextInt(3)+1) + ".png");
+            break;
+          case 4:
+            this.img = loadImage("src/monster/normal/floor_4/n" + (r.nextInt(3)+1) + ".png");
+            break;
+          case 5:
+            this.img = loadImage("src/monster/normal/floor_5/n" + (r.nextInt(4)+1) + ".png");
+            break;
+        }
+        this.skill_count = 1;
         this.skillset[0] = r.nextInt(6);
         this.skills = new Normal_Skill();
         break;
@@ -47,9 +63,26 @@ class Monster extends Units{
       case 2:
         this.monster_type = "Elite";
         this.mod = 1.5;
-        this.img = loadImage("src/monster/elite/e1.png");
+        switch(floor){
+          case 1:
+            this.img = loadImage("src/monster/elite/floor_1/e1.png");
+            break;
+          case 2:
+            this.img = loadImage("src/monster/elite/floor_2/e1.png");
+            break;
+          case 3:
+            this.img = loadImage("src/monster/elite/floor_3/e1.png");
+            break;
+          case 4:
+            this.img = loadImage("src/monster/elite/floor_4/e1.png");
+            break;
+          case 5:
+            this.img = loadImage("src/monster/elite/floor_5/e1.png");
+            break;
+        }
+        this.skill_count = 2;
         
-        for(int i = 0; i < skillset.length; i++){
+        for(int i = 0; i < skill_count; i++){
           this.skillset[i] = r.nextInt(7);
         }
         
@@ -60,9 +93,27 @@ class Monster extends Units{
       case 3:
         this.monster_type = "Boss";
         this.mod = 2.0;
-        this.img = loadImage("src/monster/boss/b1.png");
+        switch(floor){
+          case 1:
+            this.img = loadImage("src/monster/boss/floor_1/b1.png");
+            break;
+          case 2:
+            this.img = loadImage("src/monster/boss/floor_2/b1.png");
+            break;
+          case 3:
+            this.img = loadImage("src/monster/boss/floor_3/b1.png");
+            break;
+          case 4:
+            this.img = loadImage("src/monster/boss/floor_4/b1.png");
+            break;
+          case 5:
+            this.img = loadImage("src/monster/boss/floor_5/b1.png");
+            break;
+        }
         
-        for(int i = 0; i < skillset.length; i++){
+        this.skill_count = 3;
+        
+        for(int i = 0; i < skill_count; i++){
           this.skillset[i] = r.nextInt(7);
         }
         

@@ -77,7 +77,7 @@ void buff_end(int target, int loc){
 
 void skill_desc(){
   String[] skill_type = {"true damage","physical damage", "magic damage", "recovery hp,mp", "buff"};
-  for(int i = 0; i < 6; i++){
+  for(int i = 0; i < p[battle_list[cur].get_id()].skills.skill_count; i++){
     if(mouseX >= (command_x + command_radius * 1.5 + battle_UI_margin) && mouseX <= (command_x + command_radius * 1.5 + battle_UI_margin) + skill_box_width
       && mouseY >= (command_y + skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) && mouseY <= (command_y + skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)) + skill_box_height){
         fill(12,70,90);

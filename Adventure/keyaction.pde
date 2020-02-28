@@ -76,6 +76,10 @@ void keyPressed(){
     
     if(room > 1 && room < 90){
       switch(keyCode){
+        case 'h':
+        case 'H':
+          steps = 100;
+          break;
         case 'a':
         case 'A':
           if(!up && !down && !left && !right){

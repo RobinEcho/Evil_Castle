@@ -156,6 +156,8 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     if(i == 0){
       if(m[0].is_alive()){
         image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        m[i].battle_x = enemy_x;
+        m[i].battle_y = enemy_y;
       }else{
         fill(0,100,100);
         rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
@@ -170,9 +172,13 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
       
       if(m[i].is_alive()){
         image(m[i].img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        m[i].battle_x = enemy_x;
+        m[i].battle_y = enemy_y;
       }else{
         fill(0,100,100);
         rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        m[i].battle_x = enemy_x;
+        m[i].battle_y = enemy_y;
       }
     }
     
@@ -186,7 +192,10 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   //Draw player images and player status
   for(int i = 0; i < c_pt; i++){
     if(p[i].is_alive()){
-      image(p[i].battle_img, i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy, pc_width, pc_height);
+      p[i].battle_x = i*pc_width/2.0f + pcx;
+      p[i].battle_y = i*pc_height*1.5f + pcy;
+      
+      image(p[i].battle_img, p[i].battle_x, p[i].battle_y, pc_width, pc_height);
       
       //over head hp bar
       hp_percent = (float)p[i].get_cur_hp() / (float)p[i].get_max_hp();
@@ -242,7 +251,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         battle_command_UI();
         skill_box_width = command_radius * 1.5;
         skill_box_height = height * 2 / (command_radius/4.0);
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < p[battle_list[cur].get_id()].skills.skill_count; i++){
            fill(65, 100, 100);
            rect(command_x + command_radius * 1.5 + battle_UI_margin, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)), skill_box_width, skill_box_height);
            fill(0,0,100);
@@ -297,6 +306,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         }
         battle_mode = 10;
         break;
+      
       
       //battle turn & round end
       case 10:

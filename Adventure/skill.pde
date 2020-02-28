@@ -2,7 +2,7 @@ boolean doubled = false;
 
 class Skill{
   Skill[] skill;
-  public int id, type, dmg_type;
+  public int id, type, dmg_type, skill_count = 1;
   public String name;
   public String[] monster_skill_name = new String[5];
   public String job_name;

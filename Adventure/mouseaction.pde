@@ -47,27 +47,31 @@ int command;
                 
               if(p_class != 0){
                 p[0] = new Player(p_class);
-                p[0].set_img(p[0].job.name,1);
+                p[0].set_img("player_2",1);
                 p[0].name = "Adam";
                 p[0].set_id(0);
+                
+                p[0].battle_img = loadImage("src/player/battle/Player.png");
+                p[0].icon = loadImage("src/player/icon/1.png");
+                p[0].avatar = loadImage("src/player/avatar/player.png");
                 p[0].set_loc(800,450);
               }   
               
-                p[1] = new Player(1);
-                p[1].set_img(p[1].job.name,1);
-                p[1].set_id(1);
-                p[1].name = "Tester 1";
+                //p[1] = new Player(1);
+                //p[1].set_img(p[1].job.name,1);
+                //p[1].set_id(1);
+                //p[1].name = "Tester 1";
                 
-                p[2] = new Player(1);
-                p[2].set_img(p[2].job.name,1);
-                p[2].set_id(2);
-                p[2].name = "Tester 2";
+                //p[2] = new Player(1);
+                //p[2].set_img(p[2].job.name,1);
+                //p[2].set_id(2);
+                //p[2].name = "Tester 2";
                 
                 //p[3] = new Player(5);
                 //p[3].set_img(p[3].job.name,1);
                 //p[3].set_id(3);
                 //p[3].name = "Tester 3";
-                c_pt = 3;
+                //c_pt = 3;
         
         break;
         
@@ -202,7 +206,73 @@ int command;
              
          }
         
-       break;
+         break;
+       
+       case 98:
+         //accept into party
+         if(new_companion != 0){
+           if(mouseX >= width*0.2 && mouseX <= width*0.2 + 100 && mouseY >= height/ 2 && mouseY <= height/ 2 + 100){
+             println("yes");
+             p[c_pt] = new Player(new_companion);
+             c_pt++;
+             npc_in_cell[new_companion - 1] = false;
+             switch(new_companion){
+                  case 1:
+                    floor_1[2].del_npc(13, 8);
+                    p[c_pt-1].name = "Knight";
+                    new_companion = 0;
+                    cell_key = false;
+                    break;
+                  
+                  case 2:
+                    floor_1[2].del_npc(18, 8);
+                    p[c_pt-1].name = "Paladin";
+                    new_companion = 0;
+                    cell_key = false;
+                    break;
+                      
+                  case 3:
+                    floor_1[2].del_npc(23, 8);
+                    p[c_pt-1].name = "Ranger";
+                    new_companion = 0;
+                    cell_key = false;
+                    break;
+                      
+                  case 4:
+                    floor_1[2].del_npc(13, 13);
+                    p[c_pt-1].name = "Assassin";
+                    new_companion = 0;
+                    cell_key = false;
+                    break;  
+                  
+                  case 5:
+                    floor_1[2].del_npc(18, 13);
+                    p[c_pt-1].name = "Mage";
+                    new_companion = 0;
+                    cell_key = false;
+                    break;  
+                    
+                  case 6:
+                    floor_1[2].del_npc(23, 13);
+                    p[c_pt-1].name = "Priest";
+                    new_companion = 0;
+                    cell_key = false;
+                    break;  
+             }
+                      
+           }
+            
+           if(mouseX >= width*0.8 && mouseX <= width*0.8 + 100 && mouseY >= height/ 2 && mouseY <= height/ 2 + 100){
+             println("no");
+             new_companion = 0;
+           }
+           
+           room = 2;
+         }else{
+           room = 2;
+         }
+         
+         break;
        
        case 99:  //  option menu
             
@@ -354,10 +424,10 @@ void battle_commands(){
 }
 
 void skill_commands(){
-  for(int i = 0; i < 6; i++){
+  for(int i = 0; i < p[battle_list[cur].get_id()].skills.skill_count; i++){
                 if(x >= command_x + command_radius * 1.5 + battle_UI_margin && x <= command_x + command_radius * 1.5 + battle_UI_margin + skill_box_width 
                   && y >= (command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5))) && y <= (command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5))) + skill_box_height){
-                    println("use skill " + (i+1));
+                    //println("use skill " + (i+1));
                     command = i;
                     
                     if(p[battle_list[cur].get_id()].skills.skill[i].type == 2){
