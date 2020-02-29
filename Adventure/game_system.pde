@@ -13,6 +13,7 @@ move function, link to keyaction
 ********************************************/ 
 
 void move() {
+  
   if(frameCount % 2 == 0){
     p[0].change_map_img();
   }
@@ -29,7 +30,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            //steps++;
+            steps++;
             up = false;
           }
           
@@ -53,7 +54,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            //steps++;
+            steps++;
             down = false;
           }
           
@@ -75,7 +76,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            //steps++;
+            steps++;
             right = false;
           }
         }else{
@@ -96,7 +97,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            //steps++;
+            steps++;
             left = false;
           }
         }else{
@@ -581,4 +582,17 @@ void npc_on_map(){
       if(floor == 5 && floor_room == 4){
         image(safe, 10 * sqw, 12 * sqh, sqw, sqh);
       }
+}
+
+void remove_cell_key(){
+  for(int i = 0; i < bag.inv.length; i++){
+    for(int j = 0; j < bag.inv[i].length; j++){
+      if(bag.inv[i][j] == 99){
+        bag.inv[i][j] = item_count - 1;
+      }
+    }
+  }
+  
+  
+  cell_key = false;
 }

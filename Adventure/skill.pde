@@ -1960,10 +1960,12 @@ class F2_Skill_1 extends Skill{
       
       this.mod = 1.8;
       
-      this.mp_dec =  m[mid].get_max_mp() * 0.3;           
+              
     }
     
     public void skilldamage(){
+      
+      this.mp_dec =  m[mid].get_max_mp() * 0.3;   
     
       this.damage = m[mid].get_matk() * this.mod;
     
@@ -1972,6 +1974,29 @@ class F2_Skill_1 extends Skill{
 
 class F2_Skill_2 extends Skill{
     public F2_Skill_2(){
+      
+      this.name = "Parsing";
+      
+      this.dmg_type = 2;
+      
+               
+    }
+    
+    public void skilldamage(){
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.4; 
+            
+      this.mod = 1.4;
+      
+      this.damage = m[mid].get_matk() * this.mod;
+      
+      m[mid].inc_matk(m[mid].get_matk() * 0.2);      
+    }
+}
+
+
+class F2_Skill_3 extends Skill{
+    public F2_Skill_3(){
         
       this.name = "Endlessly";
       
@@ -1982,9 +2007,9 @@ class F2_Skill_2 extends Skill{
     
     public void skilldamage(){
     
-      if(m[mid].get_cur_hp() < m[mid].get_max_hp() * 0.5)
+      if(m[mid].get_cur_hp() < m[mid].get_max_hp() * 0.2)
       {
-        this.mod = 0.15;
+        this.mod = 0.2;
         
         this.healing = true;
         
@@ -2000,26 +2025,6 @@ class F2_Skill_2 extends Skill{
     }
 }
 
-class F2_Skill_3 extends Skill{
-    public F2_Skill_3(){
-      
-      this.name = "Parsing";
-      
-      this.dmg_type = 2;
-      
-      this.mp_dec = m[mid].get_max_mp() * 0.4;          
-    }
-    
-    public void skilldamage(){
-            
-      this.mod = 1.4;
-      
-      this.damage = m[mid].get_matk() * this.mod;
-      
-      m[mid].inc_matk(m[mid].get_matk() * 0.2);      
-    }
-}
-
 class F2_Skill_4 extends Skill{
     
       public F2_Skill_4(){
@@ -2028,10 +2033,12 @@ class F2_Skill_4 extends Skill{
       
       this.name = "Oppression of libraries";
       
-      this.mp_dec = m[mid].get_max_mp() * 0.4;  
+       
         
     }   
     public void skilldamage(){
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.4; 
 
       this.mod = 1.2;
       
@@ -2072,10 +2079,12 @@ class F3_Skill_1 extends Skill{
       
       this.name = "Feeding mania";
     
-      this.mp_dec = m[mid].get_max_mp() * 0.2;
+      
     }
     
     public void skilldamage(){
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.2;
       
       this.mod = 1.4;
       
@@ -2091,10 +2100,12 @@ class F3_Skill_2 extends Skill{
       
       this.name = "Cannibalism";
     
-      this.mp_dec = m[mid].get_max_mp() * 0.3;
+      
     }
     
     public void skilldamage(){
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.3;
       
       this.mod = 1.3;
       
@@ -2145,10 +2156,12 @@ class F3_Skill_4 extends Skill{
       
       this.name = "Necrotic Realm";
     
-      this.mp_dec = m[mid].get_max_mp() * 0.6;
+      
     }
     
     public void skilldamage(){
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.6;
       
       this.mod = 1.4;
       
@@ -2190,11 +2203,13 @@ class F4_Skill_1 extends Skill{
     
     this.name = "Duke Engine";
     
-    this.mp_dec = m[mid].get_max_mp() * 0.1;
+    
 
   }
   
   public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
     
     this.mod = 1.2;
     
@@ -2213,10 +2228,12 @@ class F4_Skill_2 extends Skill{
     
     this.healing = true;    
     
-    this.mp_dec = m[mid].get_max_mp() * 0.4;
+    
   }
   
   public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.4;
     
     this.heal = m[mid].get_max_hp() * 0.1;
     
@@ -2263,10 +2280,12 @@ class F4_Skill_4 extends Skill{
     
     this.name = "Elemental Storm";
     
-    this.mp_dec = m[mid].get_max_mp() * 0.6;
+    
   }
   
   public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.6;
     
     this.mod = 1.6;
     
@@ -2304,10 +2323,12 @@ class F5_Skill_1 extends Skill{
     
     this.dmg_type = 1;
     
-    this.mp_dec = m[mid].get_max_mp() * 0.1;
+    
   }
   
   public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
     
     this.mod = 1.2;
     
@@ -2324,11 +2345,13 @@ class F5_Skill_2 extends Skill{
     
     this.dmg_type = 2;
     
-    this.mp_dec = m[mid].get_max_mp() * 0.1;
+    
     
   }
   
    public void skilldamage(){
+     
+     this.mp_dec = m[mid].get_max_mp() * 0.1;
     
     this.mod = 1.2;
     
@@ -2376,10 +2399,12 @@ class F5_Skill_4 extends Skill{
     
     this.dmg_type = 2;
     
-    this.mp_dec = m[mid].get_max_mp() * 0.1;
+    
   }
   
   public void skilldamage(){
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
     
     this.mod = 1.2;
     

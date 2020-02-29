@@ -42,7 +42,7 @@ int empty_slots = 0;
               if( (mouseX >= boxX && mouseX <= boxX + boxwidth) && (mouseY >= i*60+boxY+40-12.5 && mouseY < i*60+boxY+40+12.5) ){
                 println("Reading job" + (i+1) + " status");
                   p_class = i+1;
-                  map.drawmap(floor, floor_room);
+                  room = 3;
               }
             }
                 
@@ -331,7 +331,7 @@ int empty_slots = 0;
                     p[c_pt-1].name = "Knight";
                     p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
-                    cell_key = false;
+                    remove_cell_key();
                     break;
                   
                   case 2:
@@ -339,7 +339,7 @@ int empty_slots = 0;
                     p[c_pt-1].name = "Paladin";
                     p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
-                    cell_key = false;
+                    remove_cell_key();
                     break;
                       
                   case 3:
@@ -347,7 +347,7 @@ int empty_slots = 0;
                     p[c_pt-1].name = "Ranger";
                     p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
-                    cell_key = false;
+                    remove_cell_key();
                     break;
                       
                   case 4:
@@ -355,7 +355,7 @@ int empty_slots = 0;
                     p[c_pt-1].name = "Assassin";
                     p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
-                    cell_key = false;
+                    remove_cell_key();
                     break;  
                   
                   case 5:
@@ -363,7 +363,7 @@ int empty_slots = 0;
                     p[c_pt-1].name = "Mage";
                     p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
-                    cell_key = false;
+                    remove_cell_key();
                     break;  
                     
                   case 6:
@@ -371,7 +371,7 @@ int empty_slots = 0;
                     p[c_pt-1].name = "Priest";
                     p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
-                    cell_key = false;
+                    remove_cell_key();
                     break;  
              }
                       

@@ -12,7 +12,7 @@ float cx, cy = height*2/3 + battle_UI_margin;
   float attacker_x, attacker_y;
   float defender_x, defender_y;
   float distance_x, distance_y;
-  int atk, def;
+  int atk, def, mob_skill;
   int total_exp = 0,total_gold = 0;
 
 /*******************************************
@@ -57,8 +57,6 @@ void dmg(float x, int rec, int rec_type){
       enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
     }
     display_dmg = (int)x;
-    //println((int)x);
-    //println("dmg: " + m[rec].get_hp_dec());
   }
 }
 
@@ -66,6 +64,7 @@ void dmg(float x, int rec, int rec_type){
 void attack(int attacker, int defender, int def_type){
   start_frame = frameCount;
   float damage = 0.0f;
+  play_aa = true;
   
   if(def_type == 0){
     pid = attacker;
@@ -138,6 +137,10 @@ void attack(int attacker, int defender, int def_type){
 
 
 void skill(int releaser, int receiver, int def_type, int skill_id){
+  atk = releaser;
+  def = receiver;
+  start_frame = frameCount;
+  skill = true;
   float damage;
   if(def_type == 0){
     
@@ -168,7 +171,9 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
                 dmg(damage,receiver,def_type);
-                p[releaser].calc_stats();            
+                p[releaser].calc_stats();     
+                
+                room = 91;
           
             }else{
               room = 94;
@@ -202,7 +207,9 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
                 dmg(damage,receiver,def_type);
-                p[releaser].calc_stats();    
+                p[releaser].calc_stats();  
+                
+                room = 91;
                 
           //not enough mp      
           }else{
@@ -237,6 +244,8 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
                 dmg(damage,receiver,def_type);
                 p[releaser].calc_stats();
+                
+                room = 91;
             
           //not enough mp  
           }else{
@@ -262,7 +271,9 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                          p[releaser].dec_mp(p[releaser].skills.skill[skill_id].mp_dec);
                          p[releaser].calc_stats();
                          p[receiver].calc_stats();
-                     }          
+                     }
+                     
+                     room = 91;
              }
              else{
                room = 94;
@@ -281,7 +292,9 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
 
                        
                        p[releaser].dec_mp(p[releaser].skills.skill[skill_id].mp_dec);
-                       p[releaser].calc_stats();          
+                       p[releaser].calc_stats();   
+                       
+                       room = 91;
              }
              else{
                room = 94;
@@ -294,7 +307,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
   
   else{
     //m[attacker].skills.skill[skill_id].skilldamage();
-     
+     mob_skill = skill_id;
      //println("monster use skill");
      
      mid = releaser;
@@ -322,6 +335,8 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 
                 m[releaser].calc_stats();
                 p[receiver].calc_stats();
+                
+                room = 91;
                
           }
               else{
@@ -346,6 +361,8 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 dmg(damage,receiver,def_type);
                 m[releaser].calc_stats();
                 p[receiver].calc_stats();
+                
+                room = 91;
             
           }
               else{
@@ -370,7 +387,9 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                          m[releaser].dec_mp(m[releaser].skills.skill[skill_id].mp_dec);
                          m[releaser].calc_stats();
                          m[receiver].calc_stats();
-                     }          
+                     }
+                     
+                     room = 91;
              }
              else{
                 select_target = false;
@@ -486,77 +505,144 @@ void attackanimation(int attacker, int def_type){
   
   display_buff_icons();
   
-  if(def_type == 0){
-    noStroke();
-    //fill(0,0,100);
-    //rect(p[attacker].battle_x, p[attacker].battle_y, pc_width, pc_height);
+  if(skill){
     
-    if(!arrive){
-      if(attacker_x > defender_x + m[def].get_mod() * enemy_width){
-        //println("move");
-        //println("atk_x: " + attacker_x + " atk_y: " + attacker_y);
-        image(p[attacker].battle_img, attacker_x, attacker_y, pc_width, pc_height);
+    if(frameCount - start_frame < 60){
+      pc_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt + 1);
+      pc_height = (height*2/3 - 3.0f * battle_UI_margin)/ (float)(max_pt + 2);
+      pcx = width*2/3.0f + battle_UI_margin + (float)(max_pt/2.0) * pc_width;
+      pcy = battle_UI_margin + pc_height/2.0f;
       
-        attacker_x -= distance_x/rate;
-        attacker_y -= distance_y/rate;
-      }else{
-        arrive = true;
-      }
-    }else{
-      if(attacker_x < p[attacker].battle_x){
-        image(p[attacker].battle_img, attacker_x, attacker_y, pc_width, pc_height);
-      
-        attacker_x += distance_x/rate;
-        attacker_y += distance_y/rate;
-      }else{
-        returned = true;
-      }
-    }
+      enemy_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt+1);
+      enemy_height = (height*2/3.0f - 3.0f * battle_UI_margin)/ (float)(max_pt+2);
+      enemy_start_x = battle_UI_margin + (float)enemy_width;
+      enemy_start_y = battle_UI_margin + enemy_height/2.0f;
+      enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+      enemy_y = enemy_start_y;
     
-    if(returned){
-      room = 90;
-      battle_mode = 10;
-      arrive = false;
-      returned = false;
-    }
-    
-    //println("monster x: " + m[def].battle_x + " px : " + attacker_x);
-    //println("monster y: " + m[def].battle_y + " py : " + attacker_y);
-  }else{
-    //println("monster attack");
-    noStroke();
-    //fill(0,0,100);
-    //rect(p[attacker].battle_x, p[attacker].battle_y, pc_width, pc_height);
-    
-    if(!arrive){
-      //println("monster go");
-      if(attacker_x + m[atk].get_mod() * enemy_width < defender_x ){
+      //monster use skill
+      if(def_type == 1){
         
-        image(m[attacker].img, attacker_x, attacker_y, m[atk].get_mod() * enemy_width, m[atk].get_mod() * enemy_height);
-      
-        attacker_x += distance_x/rate;
-        attacker_y += distance_y/rate;
+        for(int i = 0; i < enemy_count; i++){
+          if(i != 0){
+            
+            if(i % 2 == 0){
+              enemy_x += enemy_width * m[i-1].get_mod();
+            }else{
+              enemy_x -= enemy_width * m[i-1].get_mod();
+            }
+            
+          }
+          
+          if(battle_list[cur].get_id() == m[i].get_id()){
+            
+              image(m[i].battle_img, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+            
+          }
+          enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
+        }
+       
+      //player skill  
       }else{
-        arrive = true;
-      }
+        
+        for(int i = 0; i < c_pt; i++){
       
+          p[i].battle_x = i*pc_width/2.0f + pcx;
+          p[i].battle_y = i*pc_height*1.5f + pcy;
+          
+          if(battle_list[cur].get_id() == p[i].get_id()){
+            if(battle_list[cur].get_id() == 0){
+            
+              image(loadImage("src/player/battle/Player_attack.png"), p[i].battle_x, p[i].battle_y, pc_width, pc_height);
+            }else{
+              image(loadImage("src/player/battle/" + p[i].job.name + "_attack.png"), p[i].battle_x, p[i].battle_y, pc_width, pc_height);
+            }
+            
+            image(battle_list[cur].skills.skill[command].icon, p[i].battle_x - pc_width - 10, p[i].battle_y, pc_width, pc_height);
+            
+          }
+        }
+      }
     }else{
-      //println("monster back");
-      if(attacker_x > m[atk].battle_x){
-        image(m[attacker].img, attacker_x, attacker_y, m[atk].get_mod() * enemy_width, m[atk].get_mod() * enemy_height);
-      
-        attacker_x -= distance_x/rate;
-        attacker_y -= distance_y/rate;
-      }else{
-        returned = true;
-      }
+      skill = false;
+      room = 90;  
     }
     
-    if(returned){
-      room = 90;
-      battle_mode = 10;
-      arrive = false;
-      returned = false;
+    
+  //normal attack animation
+  }else{
+    if(def_type == 0){
+      noStroke();
+      //fill(0,0,100);
+      //rect(p[attacker].battle_x, p[attacker].battle_y, pc_width, pc_height);
+      
+      if(!arrive){
+        if(attacker_x > defender_x + m[def].get_mod() * enemy_width){
+          //println("move");
+          //println("atk_x: " + attacker_x + " atk_y: " + attacker_y);
+          image(p[attacker].battle_img, attacker_x, attacker_y, pc_width, pc_height);
+        
+          attacker_x -= distance_x/rate;
+          attacker_y -= distance_y/rate;
+        }else{
+          arrive = true;
+        }
+      }else{
+        if(attacker_x < p[attacker].battle_x){
+          image(p[attacker].battle_img, attacker_x, attacker_y, pc_width, pc_height);
+        
+          attacker_x += distance_x/rate;
+          attacker_y += distance_y/rate;
+        }else{
+          returned = true;
+        }
+      }
+      
+      if(returned){
+        room = 90;
+        battle_mode = 10;
+        arrive = false;
+        returned = false;
+      }
+      
+      //println("monster x: " + m[def].battle_x + " px : " + attacker_x);
+      //println("monster y: " + m[def].battle_y + " py : " + attacker_y);
+    }else{
+      //println("monster attack");
+      noStroke();
+      //fill(0,0,100);
+      //rect(p[attacker].battle_x, p[attacker].battle_y, pc_width, pc_height);
+      
+      if(!arrive){
+        //println("monster go");
+        if(attacker_x + m[atk].get_mod() * enemy_width < defender_x ){
+          
+          image(m[attacker].img, attacker_x, attacker_y, m[atk].get_mod() * enemy_width, m[atk].get_mod() * enemy_height);
+        
+          attacker_x += distance_x/rate;
+          attacker_y += distance_y/rate;
+        }else{
+          arrive = true;
+        }
+        
+      }else{
+        //println("monster back");
+        if(attacker_x > m[atk].battle_x){
+          image(m[attacker].img, attacker_x, attacker_y, m[atk].get_mod() * enemy_width, m[atk].get_mod() * enemy_height);
+        
+          attacker_x -= distance_x/rate;
+          attacker_y -= distance_y/rate;
+        }else{
+          returned = true;
+        }
+      }
+      
+      if(returned){
+        room = 90;
+        battle_mode = 10;
+        arrive = false;
+        returned = false;
+      }
     }
     
   }
@@ -724,6 +810,8 @@ void battle_end(){
     }
     
     if(boss_battle){
+      boss_bgm[floor - 1].stop();
+      
       boss_battle = false;
       boss_defeated++;
       
@@ -780,36 +868,41 @@ void battle_end(){
           break;
       }
       
-      if(!cell_key){
-        for(int i = 0; i < bag.inv.length; i++){
-          for(int j = 0; j < bag.inv[i].length; j++){
-            if(bag.inv[i][j] == item_count - 1){
-              bag.inv[i][j] = 99;
-              i = bag.inv.length - 1;
-              j = bag.inv[i].length - 1;
-            }
-          }
-        }
-        
-        cell_key = true;
-      }
       
-      if(!box_key){
-        for(int i = 0; i < bag.inv.length; i++){
-          for(int j = 0; j < bag.inv[i].length; j++){
-            if(bag.inv[i][j] == item_count - 1){
-              bag.inv[i][j] = 100;
-              i = bag.inv.length - 1;
-              j = bag.inv[i].length - 1;
+        if(!cell_key){
+          for(int i = 0; i < bag.inv.length; i++){
+            for(int j = 0; j < bag.inv[i].length; j++){
+              if(bag.inv[i][j] == item_count - 1){
+                bag.inv[i][j] = 99;
+                i = bag.inv.length - 1;
+                j = bag.inv[i].length - 1;
+              }
             }
           }
+          
+          cell_key = true;
         }
         
-        box_key = true;
+        
+       if(floor > 1){ 
+        if(!box_key){
+          for(int i = 0; i < bag.inv.length; i++){
+            for(int j = 0; j < bag.inv[i].length; j++){
+              if(bag.inv[i][j] == item_count - 1){
+                bag.inv[i][j] = 100;
+                i = bag.inv.length - 1;
+                j = bag.inv[i].length - 1;
+              }
+            }
+          }
+          
+          box_key = true;
+        }
       }
     }
     
       loot();
+
     
     play_bgm = true;
   }
@@ -817,23 +910,28 @@ void battle_end(){
 
 void display_damage(int target, int def_type){
   //println("display damage");
-  fill(30,70,100);
+  fill(60,100,100);
   noStroke();
-  rect(command_x - command_radius, command_y - command_radius, command_radius * 2, command_radius * 2, 20);
+  rect(width/4, bag.vertical_margin + battle_UI_margin * 3, width/2, command_radius * 1.5, 20);
   
-  stroke(0,100,100);
+  stroke(0,0,100);
   strokeWeight(2);
   textSize(30);
-  fill(0,100,100);
+  fill(0,0,100);
   if(!esc){
-    text("Escape Failed!" , command_x , command_y - command_radius/2);
+    text("Escape Failed!" , width/2 , bag.vertical_margin + battle_UI_margin * 7);
   }
   switch(def_type){
     case 0:
-      text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, command_x, command_y);
+      text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
       break;
     case 1:
-      text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[pid].name, command_x, command_y);
+    
+      if(skill){
+        text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + p[pid].name, width/2, bag.vertical_margin + battle_UI_margin * 13);
+      }else{
+        text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[pid].name, width/2, bag.vertical_margin + battle_UI_margin * 13);
+      }
       break;
   }
 }

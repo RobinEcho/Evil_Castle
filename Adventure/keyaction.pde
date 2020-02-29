@@ -2,7 +2,7 @@
 function about keyboard, set variable first, all action base on room 
 *********************************************************************/
 
-boolean opt = false,inhelp = false;
+boolean opt = false,inhelp = true;
 boolean up = false, down = false, left = false, right = false;
 int temp_room;
 
@@ -80,6 +80,7 @@ void keyPressed(){
         case 'a':
         case 'A':
           if(!up && !down && !left && !right){
+            moving = true;
             move_count = 0;
             left = true;
             p[0].dir = 3;
@@ -91,6 +92,7 @@ void keyPressed(){
         case 'd':
         case 'D':
           if(!up && !down && !left && !right){
+            moving = true;
             move_count = 0;
             right = true;
             p[0].dir = 1;
@@ -101,6 +103,7 @@ void keyPressed(){
         case 'w':
         case 'W':
           if(!up && !down && !left && !right){
+            moving = true;
             move_count = 0;
             up = true;
             p[0].dir = 0;
@@ -111,6 +114,7 @@ void keyPressed(){
         case 's':
         case 'S':
           if(!up && !down && !left && !right){
+            moving = true;
             move_count = 0;
             down = true;
             p[0].dir = 2;
@@ -327,6 +331,12 @@ void keyPressed(){
                     }
                   }
                   
+                  if(floor_room == 7){
+                    if(target_coord[1] == 10 && target_coord[0] == 19){
+                      room = 999;
+                    }
+                  }
+                  
                   //shop and heal
                   if(floor_room == 4){
                     if(target_coord[0] == 26 && (target_coord[1] == 11 || target_coord[1] == 12)){
@@ -373,7 +383,6 @@ void keyPressed(){
               room = 2;
             }
         
-          steps = 100;
           break;
         
         case 'x':
@@ -401,25 +410,23 @@ void keyPressed(){
 movement part
 ********************************************/ 
   
-  //void keyReleased(){
-  //  switch(keyCode){
-  //    case 'a':
-  //    case 'A':
-  //        left = false;
-  //        break;
-  //      case 'd':
-  //      case 'D':
-  //        right = false;
-  //        break;
-  //      case 'w':
-  //      case 'W':
-  //        if(move_count == 5){
-  //          up = false;
-  //        }
-  //        break;
-  //      case 's':
-  //      case 'S':
-  //        down = false;
-  //        break;
-  //  }
-  //}
+  void keyReleased(){
+    switch(keyCode){
+      case 'a':
+      case 'A':
+          moving = false;
+          break;
+        case 'd':
+        case 'D':
+          moving = false;
+          break;
+        case 'w':
+        case 'W':
+          moving = false;
+          break;
+        case 's':
+        case 'S':
+          moving = false;
+          break;
+    }
+  }

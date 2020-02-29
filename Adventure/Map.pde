@@ -496,6 +496,8 @@ Map map = new Map();
               floor_5[floor_room_id-1].exit[11][23] = 6;
               floor_5[floor_room_id-1].exit[12][23] = 6;
               floor_5[floor_room_id-1].exit[13][23] = 6;
+              
+              floor_5[floor_room_id-1].npc[10][19] = true;
               break;
             
         }

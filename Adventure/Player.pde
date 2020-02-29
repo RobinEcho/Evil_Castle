@@ -206,7 +206,7 @@ class Player extends Units{
            this.mp_dec = 0;
            
            this.calc_stats(); 
-           // println("Level up!, level now: "+this.level+" hp now: "+this.cur_hp+" mp now: "+this.cur_mp);         
+           // println("Level up!, level now: "+this.level+" hp now: "+this.cur_hp+" mp now: "+this.cur_mp);   
  }
    
   
@@ -554,7 +554,7 @@ public int[] interact(){
     for(int n = 1; n <= Strip_num; n++){
       
       for(int l=1; l <=2 ;l++){
-        
+        fill(0,0,100);
     rect(horizontal_margin + l*sq_distance + (l-1)*Strip_width + (l-1)*(addsq_sl+sq_distance),vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance,Strip_width,Strip_height,10);
         
     //stroke(0);
@@ -654,6 +654,8 @@ public int[] interact(){
      text("+",horizontal_margin + sq_distance + Strip_width + sq_distance + 0.5*addsq_sl,vertical_margin + Avatarsq_sl + 13*strip_distance + (n-1)*sq_distance +0.75*addsq_sl);
      
      fill(0,0,100);
+     
+     text("Gold: " + p[0].gold, horizontal_margin + UI_width/2, height - vertical_margin - Strip_height/2 - battle_UI_margin);
     
     }
     

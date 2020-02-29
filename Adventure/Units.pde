@@ -207,6 +207,7 @@ class Units{
   //dead and alive
   public void dead(){
     if(this.can_die){
+      //death.play();
       this.alive = false;
     }else{
       this.alive = true;

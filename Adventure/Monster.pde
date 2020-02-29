@@ -116,25 +116,30 @@ class Monster extends Units{
         switch(floor){
           case 1:
             this.img = loadImage("src/monster/elite/floor_1/e1.png");
+            this.battle_img = loadImage("src/monster/elite/floor_1/e1_battle.png");
             break;
           case 2:
             
             this.img = loadImage("src/monster/elite/floor_2/e1.png");
+            this.battle_img = loadImage("src/monster/elite/floor_2/e1_battle.png");
             
             this.name = f2_elite;
             break;
           case 3:
             this.img = loadImage("src/monster/elite/floor_3/e1.png");
+            this.battle_img = loadImage("src/monster/elite/floor_3/e1_battle.png");
             
             this.name = f3_elite;
             break;
           case 4:
             this.img = loadImage("src/monster/elite/floor_4/e1.png");
+            this.battle_img = loadImage("src/monster/elite/floor_4/e1_battle.png");
             
             this.name = f4_elite;
             break;
           case 5:
             this.img = loadImage("src/monster/elite/floor_5/e1.png");
+            this.battle_img = loadImage("src/monster/elite/floor_5/e1_battle.png");
             
             this.name = f5_elite;
             break;
@@ -155,32 +160,37 @@ class Monster extends Units{
         switch(floor){
           case 1:
             this.img = loadImage("src/monster/boss/floor_1/b1.png");
+            this.battle_img = loadImage("src/monster/boss/floor_1/b1_battle.png");
             
             this.name = f1_boss;
             break;
           case 2:
             this.img = loadImage("src/monster/boss/floor_2/b1.png");
+            this.battle_img = loadImage("src/monster/boss/floor_2/b1_battle.png");
             
             this.name = f2_boss;
             break;
           case 3:
             this.img = loadImage("src/monster/boss/floor_3/b1.png");
+            this.battle_img = loadImage("src/monster/boss/floor_3/b1_battle.png");
             
             this.name = f3_boss;
             break;
           case 4:
             this.img = loadImage("src/monster/boss/floor_4/b1.png");
+            this.battle_img = loadImage("src/monster/boss/floor_4/b1_battle.png");
             
             this.name = f4_boss;
             break;
           case 5:
             this.img = loadImage("src/monster/boss/floor_5/b1.png");
+            this.battle_img = loadImage("src/monster/boss/floor_5/b1_battle.png");
             
             this.name = f5_boss;
             break;
         }
         
-        this.skill_count = 3;
+        this.skill_count = 4;
         
         switch(floor){
           case 2:
@@ -206,15 +216,15 @@ class Monster extends Units{
       
     }
     
-    this.patk = (level * 10) * mod;
-    this.pdef = (level * 10) * mod;
-    this.matk = (level * 10) * mod;
-    this.mdef = (level * 10) * mod;
-    this.spd = (level * 1) * mod;
-    this.max_hp = (level * 2) * mod;
-    this.max_mp = (level * 2) * mod;
-    this.cur_hp = (level * 2) * mod;
-    this.cur_mp = (level * 2) * mod;
+    this.patk = (level * 5) * mod;
+    this.pdef = (level * 5) * mod;
+    this.matk = (level * 5) * mod;
+    this.mdef = (level * 5) * mod;
+    this.spd = (level * 2) * mod;
+    this.max_hp = (level * 3) * mod;
+    this.max_mp = (level * 3) * mod;
+    this.cur_hp = (level * 3) * mod;
+    this.cur_mp = (level * 3) * mod;
     this.hp_dec = 0;
     this.mp_dec = 0;
     

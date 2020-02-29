@@ -56,8 +56,9 @@ import library
   
   boolean shop_set = false, cell_key = false, box_key = false;
   boolean[] npc_in_cell = {true, true, true, true, true, true};
-  boolean boss_battle = false;
+  boolean boss_battle = false, skill = false;
   boolean play_bgm = true, play_battle = false, play_end = false;
+  boolean moving = false, play_menu = true, play_aa = false;
   
   PImage[] buff_icon = new PImage[buff_count];
   PImage[] boss_img = new PImage[5];
@@ -97,7 +98,10 @@ import library
     
     Merchant shop = new Merchant();
     
-    SoundFile bgm, battle_bgm, ending;
+    SoundFile boss_bgm[] = new SoundFile[5];
+    SoundFile bgm, battle_bgm, ending, menu;
+    //SoundFile move,aa, lv, gold, death, buy, win;
+    
   
   /*******************************************
     key variable to draw or action
@@ -203,11 +207,9 @@ import library
                     text("No character detected, please start new game.", width/2, 150);
                   }
                   
-                    if(play_bgm){
-                      battle_bgm.stop();
-                      ending.stop();
-                      bgm.loop();
-                      play_bgm = false;
+                    if(play_menu){
+                      menu.loop();
+                      play_menu = false;
                     } 
                     
         break; 
@@ -234,6 +236,7 @@ import library
       p[0].display();
       
       if(play_bgm){
+        menu.stop();
         battle_bgm.stop();
         ending.stop();
         bgm.loop();
@@ -264,8 +267,6 @@ import library
        if(frameCount - start_frame < 60)
        {
           display_gain();  
-          //test only
-          display_level_up();
        }       
        else if(frameCount - start_frame < 120)
        {
@@ -298,7 +299,7 @@ import library
             
       case 80:
         
-        background(0,0,100);
+        background(bg);
         p[pid].charPanel();
         bag.display_bag();
         
@@ -311,7 +312,7 @@ import library
       
       case 81:
       
-        background(0,0,100);
+        background(bg);
         p[pid].charPanel();
         bag.display_bag();
         
@@ -398,6 +399,16 @@ import library
         
         option();
         
+        break;
+        
+      //ending
+      case 999:
+        fill(60,100,100);
+        rect(width/2 - 150, height / 2 - 100, 300, 200);
+        textSize(40);
+        fill(0,0,100);
+        textAlign(CENTER, CENTER);
+        text("Thank you for saving me Adam.", width/2, height / 2);
         break;
     
     }                    //close switch condition for room

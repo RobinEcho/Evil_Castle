@@ -465,6 +465,18 @@ void boss_fight(){
   play_battle = true;
   boss_battle = true;
   
+  if(play_battle){
+    bgm.pause();
+    
+    for(int i = 0; i < 5; i++){
+      boss_bgm[floor - 1].stop();
+    }
+    
+    boss_bgm[floor - 1].loop();
+    
+    play_battle = false;  
+  }
+  
   switch(floor){
     case 1:
       enemy_count = 1;
@@ -482,8 +494,14 @@ void boss_fight(){
       enemy_count = 1;
       m[0].setMType(3);
       //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(10);
       m[0].init_stats();
+      m[0].set_patk(30);
+      m[0].set_pdef(50);
+      m[0].set_matk(80);
+      m[0].set_mdef(65);
+      m[0].set_max_hp(500);
+      m[0].set_max_mp(800);
       break;
       
     case 3:
