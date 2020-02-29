@@ -341,23 +341,6 @@ void keyPressed(){
               }
           
             break;
-          
-          case 'x':
-           case'X':
-               dmg(10,0,1);
-               p[0].dec_mp(10);
-               p[0].calc_stats();
-             break;
-         
-         case 'l':
-           case'L':
-               start_frame = frameCount;
-               p[0].gainExp(1000);
-               //p[1].gainExp(100);
-               //p[2].gainExp(100);
-               //p[3].gainExp(100);
-               //steps = 100;
-               break;
         }
       }
     
