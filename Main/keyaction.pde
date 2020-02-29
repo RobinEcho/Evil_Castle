@@ -24,53 +24,6 @@ void keyPressed(){
             room = temp_room;
           }
         break;
-        case ' ':
-          switch(floor){
-            case 1:
-              if(floor_room < floor_1.length){
-                floor_room++;
-              }else{
-                floor_room = 1;
-                floor++;
-              }
-            break;
-            
-            case 2:
-              if(floor_room < floor_2.length){
-                floor_room++;
-              }else{
-                floor_room = 1;
-                floor++;
-              }
-            break;
-            
-            case 3:
-              if(floor_room < floor_3.length){
-                floor_room++;
-              }else{
-                floor_room = 1;
-                floor++;
-              }
-            break;
-            
-            case 4:
-              if(floor_room < floor_4.length){
-                floor_room++;
-              }else{
-                floor_room = 1;
-                floor++;
-              }
-            break;
-            
-            case 5:
-              if(floor_room < floor_5.length){
-                floor_room++;
-              }else{
-                floor_room = 1;
-              }
-            break;
-          }
-          break;
       }
     }
     
@@ -351,82 +304,62 @@ void keyPressed(){
             
             println("room: " + room);
             break;
-      }
+        }
       }
       
-      if(room > 1 && room < 90){
-      switch(keyCode){
-        case 'b':
-        case 'B':
-            pid = 0;
-            if(!inBag){
-              inBag = true;
-              room = 80;
-            }else{
-              inBag = false;
-    
-              room = map.get_map_room();
-            }
-        break;
-        
-        case 'h':
-        case 'H':
-            if(!inhelp){
-              
-              inhelp = true;
-              
-              room = 3;
-            }else{
-              
-              inhelp = false;
-              
-              room = 2;
-            }
-        
+      if(room == 2 || room == 80 || room == 81){
+        switch(keyCode){
+          case 'b':
+          case 'B':
+              pid = 0;
+              if(!inBag){
+                inBag = true;
+                room = 80;
+              }else{
+                inBag = false;
+      
+                room = map.get_map_room();
+              }
           break;
-        
-        case 'x':
-         case'X':
-             dmg(10,0,1);
-             p[0].dec_mp(10);
-             p[0].calc_stats();
-           break;
-       
-       case 'l':
-         case'L':
-             start_frame = frameCount;
-             p[0].gainExp(10);
-             //p[1].gainExp(100);
-             //p[2].gainExp(100);
-             //p[3].gainExp(100);
-             //steps = 100;
-             break;
+        }  
       }
+      
+      if(room > 1 && room < 80){
+        switch(keyCode){
+          case 'h':
+          case 'H':
+              if(!inhelp){
+                
+                inhelp = true;
+                
+                room = 3;
+              }else{
+                
+                inhelp = false;
+                
+                room = 2;
+              }
+          
+            break;
+          
+          case 'x':
+           case'X':
+               dmg(10,0,1);
+               p[0].dec_mp(10);
+               p[0].calc_stats();
+             break;
+         
+         case 'l':
+           case'L':
+               start_frame = frameCount;
+               p[0].gainExp(1000);
+               //p[1].gainExp(100);
+               //p[2].gainExp(100);
+               //p[3].gainExp(100);
+               //steps = 100;
+               break;
+        }
       }
     
   }
  
-/*******************************************
-movement part
-********************************************/ 
-  
-  void keyReleased(){
-    switch(keyCode){
-      case 'a':
-      case 'A':
-          moving = false;
-          break;
-        case 'd':
-        case 'D':
-          moving = false;
-          break;
-        case 'w':
-        case 'W':
-          moving = false;
-          break;
-        case 's':
-        case 'S':
-          moving = false;
-          break;
-    }
-  }

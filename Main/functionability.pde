@@ -595,12 +595,8 @@ void equipment_safe(){
     
     //no room
     if(free < eq.length){
-      fill(60,100,100);
-      rect(width/2 - 200, height / 2 - 100, 400, 200);
-      fill(0, 0, 100);
-      textAlign(CENTER, CENTER);
-      textSize(40);
-      text("Not enough room in bag!", width/2, height/2);
+      
+      room = 84;
       
     //get item
     }else{
@@ -621,7 +617,12 @@ void equipment_safe(){
             //put item in bag
             if(bag.inv[j][k] == item_count - 1){
               
-              bag.inv[j][k] = eq[i];
+              for(int x = 0; x < item_list.length; x++){
+                if(eq[i] == item_list[x].id){
+                  bag.inv[j][k] = x;
+                }
+              }
+                
               j = bag.inv.length - 1;
               k = bag.inv[j].length - 1;
               

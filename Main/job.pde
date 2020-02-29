@@ -192,25 +192,25 @@ public class Knight extends Jobs{
   //Skill skill = new Skill(1);
   
   public Knight(){
-    base_stats[0] = 7.0;
-    base_stats[1] = 11.0;
-    base_stats[2] = 2.0;
-    base_stats[3] = 6.0;
-    base_stats[4] = 4.0;
+    base_stats[0] = 10.0;
+    base_stats[1] = 15.0;
+    base_stats[2] = 5.0;
+    base_stats[3] = 9.0;
+    base_stats[4] = 7.0;
     
-    stats_inc[0] = 1.0;
-    stats_inc[1] = 2.0;
-    stats_inc[2] = 0.0;
-    stats_inc[3] = 1.0;
-    stats_inc[4] = 1.0;
+    stats_inc[0] = 2.2;
+    stats_inc[1] = 3.6;
+    stats_inc[2] = 0.8;
+    stats_inc[3] = 2.0;
+    stats_inc[4] = 1.8;
     
-    patkAmp = 1.5;
-    pdefAmp = 2.0;
-    matkAmp = 0.5;
-    mdefAmp = 1.5;
-    spdAmp = 1.0;
+    patkAmp = 2;
+    pdefAmp = 2;
+    matkAmp = 2;
+    mdefAmp = 2;
+    spdAmp = 2;
     hpAmp = 5;
-    mpAmp = 1.5;
+    mpAmp = 2;
   }
 }
 
@@ -218,25 +218,25 @@ class Paladin extends Jobs{
   //Skill skill = new Skill(4);
   
   public Paladin(){
-    base_stats[0] = 5.0;
-    base_stats[1] = 7.0;
-    base_stats[2] = 5.0;
-    base_stats[3] = 9.0;
-    base_stats[4] = 4.0;
+    base_stats[0] = 8.0;
+    base_stats[1] = 10.0;
+    base_stats[2] = 8.0;
+    base_stats[3] = 12.0;
+    base_stats[4] = 6.0;
     
-    stats_inc[0] = 1.0;
-    stats_inc[1] = 1.0;
-    stats_inc[2] = 1.0;
-    stats_inc[3] = 2.0;
-    stats_inc[4] = 0.0;
+    stats_inc[0] = 1.8;
+    stats_inc[1] = 3.0;
+    stats_inc[2] = 1.8;
+    stats_inc[3] = 3.0;
+    stats_inc[4] = 1.5;
     
-    patkAmp = 1.2;
-    pdefAmp = 1.5;
-    matkAmp = 1.5;
-    mdefAmp = 2.0;
-    spdAmp = 0.8;
+    patkAmp = 2;
+    pdefAmp = 2;
+    matkAmp = 2;
+    mdefAmp = 2;
+    spdAmp = 2;
     hpAmp = 5;
-    mpAmp = 2.0;
+    mpAmp = 2;
   }
 }
 
@@ -244,25 +244,25 @@ class Ranger extends Jobs{
   //Skill skill = new Skill(5);
   
   public Ranger(){
-    base_stats[0] = 7.0;
-    base_stats[1] = 5.0;
-    base_stats[2] = 7.0;
-    base_stats[3] = 2.0;
-    base_stats[4] = 9.0;
+    base_stats[0] = 11.0;
+    base_stats[1] = 7.0;
+    base_stats[2] = 11.0;
+    base_stats[3] = 6.0;
+    base_stats[4] = 12.0;
     
-    stats_inc[0] = 1.0;
-    stats_inc[1] = 1.0;
-    stats_inc[2] = 1.0;
-    stats_inc[3] = 0.6;
-    stats_inc[4] = 2.0;
+    stats_inc[0] = 2.8;
+    stats_inc[1] = 1.8;
+    stats_inc[2] = 2.8;
+    stats_inc[3] = 1.2;
+    stats_inc[4] = 3.1;
     
-    patkAmp = 2.0;
-    pdefAmp = 1.0;
-    matkAmp = 2.0;
-    mdefAmp = 1.6;
-    spdAmp = 2.2;
-    hpAmp = 3.6;
-    mpAmp = 1.6;
+    patkAmp = 2;
+    pdefAmp = 2;
+    matkAmp = 2;
+    mdefAmp = 2;
+    spdAmp = 2;
+    hpAmp = 5;
+    mpAmp = 2;
   }
 }
 
@@ -270,25 +270,25 @@ class Assassin extends Jobs{
   //Skill skill = new Skill(5);
   
   public Assassin(){
-    base_stats[0] = 8.0;
-    base_stats[1] = 5.0;
-    base_stats[2] = 1.0;
-    base_stats[3] = 6.0;
-    base_stats[4] = 10.0;
+    base_stats[0] = 13.0;
+    base_stats[1] = 7.5;
+    base_stats[2] = 3.0;
+    base_stats[3] = 8.0;
+    base_stats[4] = 15.0;
     
-    stats_inc[0] = 1.0;
-    stats_inc[1] = 1.0;
-    stats_inc[2] = 0.6;
-    stats_inc[3] = 1.0;
-    stats_inc[4] = 2.0;
+    stats_inc[0] = 3.0;
+    stats_inc[1] = 2.0;
+    stats_inc[2] = 0.4;
+    stats_inc[3] = 1.5;
+    stats_inc[4] = 3.6;
     
-    patkAmp = 2.2;
-    pdefAmp = 1.4;
-    matkAmp = 0.5;
-    mdefAmp = 1.6;
-    spdAmp = 2.5;
-    hpAmp = 4.5;
-    mpAmp = 1.2;
+    patkAmp = 2;
+    pdefAmp = 2;
+    matkAmp = 2;
+    mdefAmp = 2;
+    spdAmp = 2;
+    hpAmp = 5;
+    mpAmp = 2;
   }
 }
 
@@ -296,25 +296,25 @@ public class Mage extends Jobs{
   //Skill skill = new Skill(3);
   
   public Mage(){
-    base_stats[0] = 1.0;
-    base_stats[1] = 3.0;
-    base_stats[2] = 13.0;
-    base_stats[3] = 8.0;
-    base_stats[4] = 5.0;
+    base_stats[0] = 4.0;
+    base_stats[1] = 6.0;
+    base_stats[2] = 18.0;
+    base_stats[3] = 10.0;
+    base_stats[4] = 6.0;
     
-    stats_inc[0] = 0.0;
-    stats_inc[1] = 1.0;
-    stats_inc[2] = 2.0;
-    stats_inc[3] = 2.0;
-    stats_inc[4] = 0.0;
+    stats_inc[0] = 1.0;
+    stats_inc[1] = 2.3;
+    stats_inc[2] = 3.5;
+    stats_inc[3] = 2.5;
+    stats_inc[4] = 1.2;
     
-    patkAmp = 0.2;
-    pdefAmp = 1.0;
-    matkAmp = 2.8;
+    patkAmp = 2;
+    pdefAmp = 2;
+    matkAmp = 2;
     mdefAmp = 2;
-    spdAmp = 1.0;
-    hpAmp = 3.5;
-    mpAmp = 2.2;
+    spdAmp = 2;
+    hpAmp = 5;
+    mpAmp = 2;
   }
 }
 
@@ -322,24 +322,24 @@ class Priest extends Jobs{
   //Skill skill = new Skill(2);
   
   public Priest(){
-    base_stats[0] = 2.0;
-    base_stats[1] = 6.0;
-    base_stats[2] = 7.0;
-    base_stats[3] = 10.0;
-    base_stats[4] = 5.0;
+    base_stats[0] = 6.0;
+    base_stats[1] = 9.0;
+    base_stats[2] = 11.0;
+    base_stats[3] = 15.0;
+    base_stats[4] = 7.0;
     
-    stats_inc[0] = 0.0;
-    stats_inc[1] = 1.0;
-    stats_inc[2] = 1.0;
-    stats_inc[3] = 2.0;
-    stats_inc[4] = 1.0;
+    stats_inc[0] = 1.0;
+    stats_inc[1] = 2.7;
+    stats_inc[2] = 2.0;
+    stats_inc[3] = 3.6;
+    stats_inc[4] = 1.8;
     
-    patkAmp = 1.0;
-    pdefAmp = 1.5;
-    matkAmp = 1.0;
-    mdefAmp = 1.8;
-    spdAmp = 1.2;
-    hpAmp = 2.2;
-    mpAmp = 2.3;
+    patkAmp = 2;
+    pdefAmp = 2;
+    matkAmp = 2;
+    mdefAmp = 2;
+    spdAmp = 2;
+    hpAmp = 5;
+    mpAmp = 2;
   }
 }

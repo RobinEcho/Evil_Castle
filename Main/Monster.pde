@@ -216,15 +216,15 @@ class Monster extends Units{
       
     }
     
-    this.patk = (level * 5) * mod;
-    this.pdef = (level * 5) * mod;
-    this.matk = (level * 5) * mod;
-    this.mdef = (level * 5) * mod;
-    this.spd = (level * 2) * mod;
-    this.max_hp = (level * 3) * mod;
-    this.max_mp = (level * 3) * mod;
-    this.cur_hp = (level * 3) * mod;
-    this.cur_mp = (level * 3) * mod;
+    this.patk = (level * 15) * mod;
+    this.pdef = (level * 15) * mod;
+    this.matk = (level * 15) * mod;
+    this.mdef = (level * 15) * mod;
+    this.spd = (level * 8) * mod;
+    this.max_hp = (level * 40) * mod;
+    this.max_mp = (level * 40) * mod;
+    this.cur_hp = (level * 40) * mod;
+    this.cur_mp = (level * 40) * mod;
     this.hp_dec = 0;
     this.mp_dec = 0;
     
@@ -294,7 +294,7 @@ class Monster extends Units{
   
   public int get_gold(){
     
-    this.gold = (this.level * 40) + r.nextInt(100);
+    this.gold = (this.level * 20) + r.nextInt(50);
     
     return this.gold;
   }

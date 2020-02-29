@@ -20,18 +20,21 @@ class Item{
       ******************************/ 
       case 11:
         this.name = "Small HP Potion";
-        this.rec_hp = 30;
+        this.rec_hp = 100;
         this.rec_mp = 0;
+        this.gold = 50;
         break;
       case 12:
         this.name = "Medium HP Potion";
-        this.rec_hp = 100;
+        this.rec_hp = 500;
         this.rec_mp = 0;
+        this.gold = 150;
         break;
       case 13:
         this.name = "Large HP Potion";
-        this.rec_hp = 300;
+        this.rec_hp = 1000;
         this.rec_mp = 0;
+        this.gold = 400;
         break;
     
     
@@ -40,18 +43,21 @@ class Item{
       ******************************/ 
       case 21:
         this.name = "Small MP Potion";
-        this.rec_mp = 30;
+        this.rec_mp = 100;
         this.rec_hp = 0;
+        this.gold = 50;
         break;
       case 22:
         this.name = "Small MP Potion";
-        this.rec_mp = 100;
+        this.rec_mp = 500;
         this.rec_hp = 0;
+        this.gold = 150;
         break;
       case 23:
         this.name = "Small MP Potion";
-        this.rec_mp = 300;
+        this.rec_mp = 1000;
         this.rec_hp = 0;
+        this.gold = 400;
         break;
         
       /*****************************
@@ -61,6 +67,7 @@ class Item{
         this.name = "Max Potion";
         this.rec_hp = 99999;
         this.rec_mp = 99999;
+        this.gold = 1000;
         break;
         
       /*****************************
@@ -70,6 +77,7 @@ class Item{
         this.name = "Revive";
         this.rec_hp = 10;
         this.rec_mp = 0;
+        this.gold = 100;
         break;
        
       /*****************************
@@ -80,11 +88,11 @@ class Item{
         break;
       
       case 91:
-        this.name = "Key 2";
+        this.name = "Prison Cell Key";
         break;
         
       case 92:
-        this.name = "Key 3";
+        this.name = "Golden Key";
         break;
       /*****************************
       *  Knight equipment
@@ -92,67 +100,67 @@ class Item{
       //weapon
       case 111:
         this.name = "Old Sword";
-        str = 1; con = 2; intel = 0; wis = 0; agi = 0; patk = 5; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
+        str = 2; con = 5; intel = 0; wis = 0; agi = 0; patk = 5; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
         break;
       case 112:
         this.name = "Great Sword";
-        str = 2; con = 4; intel = 0; wis = 0; agi = 0; patk = 10; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
+        str = 6; con = 10; intel = 0; wis = 0; agi = 0; patk = 15; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
         break;
       case 113:
         this.name = "Knight Sword";
-        str = 3; con = 6; intel = 0; wis = 0; agi = 0; patk = 15; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
+        str = 12; con = 15; intel = 0; wis = 0; agi = 0; patk = 40; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
         break;
       case 114:
         this.name = "Light Saber";
-        str = 4; con = 8; intel = 0; wis = 0; agi = 0; patk = 20; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
+        str = 20; con = 20; intel = 0; wis = 0; agi = 0; patk = 70; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
         break;
       case 115:
         this.name = "Devil's Sword - Dante";
-        str = 5; con = 10; intel = 0; wis = 0; agi = 0; patk = 30; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
+        str = 30; con = 30; intel = 0; wis = 0; agi = 0; patk = 90; pdef = 0; matk = 0; mdef = 0; spd = 0; hp = 0; mp = 0;
         break;
       
       //armour
       case 121:
         this.name = "Worn Breastplate";
-        str = 0; con = 3; intel = 0; wis = 0; agi = 0; patk = 0; pdef = 10; matk = 0; mdef = 5; spd = 0; hp = 50; mp = 0;
+        str = 0; con = 10; intel = 0; wis = 0; agi = 0; patk = 0; pdef = 10; matk = 0; mdef = 5; spd = 0; hp = 50; mp = 0;
         break;
       case 122:
         this.name = "Knight Armour";
-        str = 1; con = 4; intel = 0; wis = 0; agi = 0; patk = 0; pdef = 20; matk = 0; mdef = 10; spd = 0; hp = 80; mp = 0;
+        str = 0; con = 15; intel = 0; wis = 0; agi = 0; patk = 0; pdef = 30; matk = 0; mdef = 10; spd = 0; hp = 80; mp = 0;
         break;
       case 123:
         this.name = "Shining Silver Breastplate";
-        str = 2; con = 5; intel = 0; wis = 1; agi = 0; patk = 0; pdef = 30; matk = 0; mdef = 15; spd = -1; hp = 105; mp = 0;
+        str = 0; con = 25; intel = 0; wis = 1; agi = 0; patk = 0; pdef = 50; matk = 0; mdef = 20; spd = 0; hp = 105; mp = 0;
         break;
       case 124:
         this.name = "Dragonscale Breastplate";
-        str = 3; con = 6; intel = 0; wis = 2; agi = 0; patk = 0; pdef = 40; matk = 0; mdef = 20; spd = -2; hp = 140; mp = 0;
+        str = 0; con = 30; intel = 0; wis = 2; agi = 0; patk = 0; pdef = 70; matk = 0; mdef = 35; spd = 0; hp = 140; mp = 0;
         break;
       case 125:
         this.name = "Imperial Armour";
-        str = 4; con = 7; intel = 0; wis = 3; agi = 0; patk = 0; pdef = 50; matk = 0; mdef = 30; spd = -3; hp = 0; mp = 0;
+        str = 0; con = 40; intel = 0; wis = 3; agi = 0; patk = 0; pdef = 100; matk = 0; mdef = 60; spd = 0; hp = 250; mp = 0;
         break;
       
       //accessory
       case 131:
         this.name = "Ordinary Handguard";
-        str = 1; con = 2; intel = 0; wis = 0; agi = 0; patk = 1; pdef = 5; matk = 0; mdef = 2; spd = 0; hp = 10; mp = 3;
+        str = 0; con = 4; intel = 0; wis = 0; agi = 0; patk = 10; pdef = 10; matk = 0; mdef = 5; spd = 0; hp = 30; mp = 30;
         break;
       case 132:
         this.name = "Guardian";
-        str = 2; con = 4; intel = 0; wis = 0; agi = 0; patk = 2; pdef = 6; matk = 0; mdef = 3; spd = 0; hp = 20; mp = 4;
+        str = 0; con = 8; intel = 0; wis = 0; agi = 0; patk = 20; pdef = 20; matk = 0; mdef = 10; spd = 0; hp = 60; mp = 40;
         break;
       case 133:
         this.name = "Blood Hanguard";
-        str = 3; con = 6; intel = 0; wis = 0; agi = 0; patk = 3; pdef = 7; matk = 0; mdef = 4; spd = 0; hp = 30; mp = 5;
+        str = 5; con = 12; intel = 0; wis = 0; agi = 0; patk = 30; pdef = 30; matk = 0; mdef = 15; spd = 0; hp = 90; mp = 50;
         break;
       case 134:
         this.name = "Mysterious Hanguard";
-        str = 4; con = 8; intel = 0; wis = 0; agi = 0; patk = 4; pdef = 8; matk = 0; mdef = 5; spd = 0; hp = 40; mp = 6;
+        str = 10; con = 16; intel = 0; wis = 0; agi = 0; patk = 40; pdef = 40; matk = 0; mdef = 20; spd = 0; hp = 120; mp = 60;
         break;
       case 135:
         this.name = "Emperor's Hand";
-        str = 5; con = 10; intel = 0; wis = 0; agi = 0; patk = 5; pdef = 9; matk = 0; mdef = 6; spd = 0; hp = 50; mp = 7;
+        str = 15; con = 20; intel = 0; wis = 0; agi = 0; patk = 50; pdef = 50; matk = 0; mdef = 25; spd = 0; hp = 300; mp = 70;
         break;
       
       /*****************************
@@ -509,6 +517,7 @@ class Item{
     //level requirement for item
     if(id > 100){
       this.level = (id % 10) * 5;
+      this.gold = (id % 10) * 50;
     }else{
       this.level = 1;
     }
@@ -723,9 +732,11 @@ class Item{
             bag.inv[bag_y][bag_x] = item_count - 1;
           }
         }else{
-          p[target].rec_hp(this.rec_hp);
-          p[target].rec_mp(this.rec_mp);
-          bag.inv[bag_y][bag_x] = item_count - 1;
+          if(p[target].get_cur_hp() < p[target].get_max_hp()){
+            p[target].rec_hp(this.rec_hp);
+            p[target].rec_mp(this.rec_mp);
+            bag.inv[bag_y][bag_x] = item_count - 1;
+          }
         }
         
         p[target].calc_stats();

@@ -4,7 +4,7 @@
 
 boolean dodge, esc = true;
 boolean inBattle = false, victory = false;
-boolean show_damage = false;
+boolean show_damage = false, skill_used = false;;
 boolean arrive = false, returned = false;
 int battle_UI_margin = 10;
 float c_width = (width - battle_UI_margin * 5)/4, c_height = height/3 - 2 * battle_UI_margin;
@@ -137,6 +137,7 @@ void attack(int attacker, int defender, int def_type){
 
 
 void skill(int releaser, int receiver, int def_type, int skill_id){
+  skill_used = true;
   atk = releaser;
   def = receiver;
   start_frame = frameCount;
@@ -658,6 +659,12 @@ void escape(){
       inBattle = false;
       esc = true;
   
+      for(int i = 0; i < boss_bgm.length; i++){
+        boss_bgm[i].stop();
+      }
+      
+      battle_bgm.stop();
+      
       room = map.get_map_room();
     }
     
@@ -755,7 +762,7 @@ void battle_end(){
   
   if(player_dead_count == c_pt){
     
-    //println("GAME OVER!");
+    room = 900;
     
     inBattle = false;
     
@@ -810,7 +817,7 @@ void battle_end(){
     }
     
     if(boss_battle){
-      boss_bgm[floor - 1].stop();
+      
       
       boss_battle = false;
       boss_defeated++;
@@ -903,6 +910,11 @@ void battle_end(){
     
       loot();
 
+    for(int i = 0; i < boss_bgm.length; i++){
+      boss_bgm[i].stop();
+    }
+    
+    battle_bgm.stop();
     
     play_bgm = true;
   }
@@ -923,14 +935,28 @@ void display_damage(int target, int def_type){
   }
   switch(def_type){
     case 0:
-      text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
+      if(skill_used){
+        if(battle_list[cur].skills.skill[command].dmg_type == 3){
+          text(battle_list[cur].name + " Used " + battle_list[cur].skills.skill[command].name + " on " + p[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
+        }else{
+          text(battle_list[cur].name + " Used " + battle_list[cur].skills.skill[command].name + " on " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
+          text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 13);
+        }
+      }else{
+        text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
+      }
       break;
     case 1:
     
-      if(skill){
-        text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + p[pid].name, width/2, bag.vertical_margin + battle_UI_margin * 13);
+      if(skill_used){
+        if(battle_list[cur].skills.skill[command].dmg_type == 3){
+          text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
+        }else{
+          text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + p[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
+          text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[pid].name, width/2, bag.vertical_margin + battle_UI_margin * 13);
+        }
       }else{
-        text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[pid].name, width/2, bag.vertical_margin + battle_UI_margin * 13);
+        text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[pid].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
       }
       break;
   }
