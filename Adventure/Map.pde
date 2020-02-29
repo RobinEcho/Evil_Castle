@@ -809,6 +809,12 @@ void init_2F(){
                   floor_2[i].wall[j][k] = false;
                 }
               }
+              
+              for(int j = 7; j <= 11; j++){
+                for(int k = 17; k <= 19; k++){
+                  floor_2[i].npc[j][k] = true;
+                }
+              }
           break;
         
         case 5:
@@ -1152,6 +1158,12 @@ void init_3F(){
                   floor_3[i].wall[j][k] = false;
                 }
               }
+              
+              for(int j = 7; j <= 11; j++){
+                for(int k = 17; k <= 19; k++){
+                  floor_3[i].npc[j][k] = true;
+                }
+              }
           break;  
     }
   }
@@ -1314,6 +1326,12 @@ void init_4F(){
           for(int i = 9; i <= 11; i++){
             for(int j = 26; j <= 28; j++){
               floor_4[f].wall[i][j] = false;
+            }
+          }
+          
+          for(int i = 7; i <= 11; i++){
+            for(int j = 17; j <= 19; j++){
+              floor_4[f].npc[i][j] = true;
             }
           }
           

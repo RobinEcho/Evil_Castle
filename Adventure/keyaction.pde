@@ -74,7 +74,7 @@ void keyPressed(){
       }
     }
     
-    if(room > 1 && room < 90){
+    if(room == 2){
       switch(keyCode){
         case 'h':
         case 'H':
@@ -199,24 +199,21 @@ void keyPressed(){
                 case 2:
                   if(floor_room == 5){
                     if(!in_shop){
-                      in_shop = true;
-                      room = 88;
-                    }else{
-                      
+                      room = 89;
                     }
                   }
                   break;
                 case 3:
                   if(floor_room == 9){
                     if(!in_shop){
-                      room = 88;
+                      room = 89;
                     }
                   }
                   break;
                 case 4:
                   if(floor_room == 6){
                     if(!in_shop){
-                      room = 88;
+                      room = 89;
                     }
                   }
                   break;
@@ -224,7 +221,7 @@ void keyPressed(){
                   if(floor_room == 4){
                     if(target_coord[0] == 26 && (target_coord[1] == 11 || target_coord[1] == 12)){
                       if(!in_shop){
-                        room = 88;
+                        room = 89;
                       }
                     }
                   }
@@ -234,7 +231,11 @@ void keyPressed(){
             
             println("room: " + room);
             break;
-            
+      }
+      }
+      
+      if(room > 1 && room < 90){
+      switch(keyCode){
         case 'b':
         case 'B':
             pid = 0;
@@ -259,14 +260,15 @@ void keyPressed(){
        case 'l':
          case'L':
              start_frame = frameCount;
-             p[0].gainExp(100);
-             p[1].gainExp(100);
-             p[2].gainExp(100);
+             p[0].gainExp(10);
+             //p[1].gainExp(100);
+             //p[2].gainExp(100);
              //p[3].gainExp(100);
              //steps = 100;
              break;
       }
-    }
+      }
+    
   }
  
 /*******************************************

@@ -92,7 +92,44 @@
        Bloodthirsty
        
     
-  /************  
+  /************ 
+  BOSS
+  
+  floor 2:
+  
+  Manipulator of Flame: magical damage, matk*1.8, mpdec = 30%
+  
+  Endlessly: if hp < 50%, regenerate hp 15%, otherwise regenerate all mp, mpdec = 0
+  
+  Oppression of libraries: AOE magical attack, matk * 1.2, mpdec = 40%
+  
+  Parsing: cause magical damage and increse self matk, matk * 1.4, mpdec = 40%
+  
+  
+  floor 3:
+  
+  Feeding mania: physical, patk * 1.4 , mpdec = 20%
+  
+  Cannibalism: cause physical damage and regenerate same hp, mpdec = 30%
+  
+  Digestion: regenerate 60%mp and if hp < 50%, pdef increse 20% otherwise patk incrse 10%
+  
+  Necrotic Realm: physical AOE damage, patk * 1.4,mp_dec = 60%
+  
+  floor 4: 
+  
+  Duke engine: Case magical damage matk * 1.2 mpdec = 10%
+  
+  Reset: Reset all playerside buff and regenerate hp 20% mp_dec = 40%
+  
+  Meditation: Regenerate 50 % mp and increse 10 % matk
+  
+  Elemental Storm: cause magical damage, matk * 1.6 mpdec = 60 %
+  
+  floor 5:
+  
+  
+  
 */
 
 

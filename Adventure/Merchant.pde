@@ -5,7 +5,7 @@ class Merchant{
   int sale_count = 10;
   Item[] sell = new Item[sale_count];
   Item[] cart = new Item[sale_count];
-  int empty_slots = 0;
+  int buy = 0;
   int gold_req = 0;
   float dis_y;
   
@@ -14,7 +14,10 @@ class Merchant{
   }
   
   public void set_up(int floor){
+    buy = 0;
+    
     for(int i = 0; i < sell.length; i++){
+      cart[i] = item_list[item_count - 1];
       rand = r.nextInt((item_count - 4) * 3) % (item_count - 4);
       
       if(item_list[rand].level <= (floor - 1) * 5){
@@ -22,6 +25,7 @@ class Merchant{
       }else{
         i--;
       }
+      
     }
     
     shop_set = true;
@@ -29,12 +33,12 @@ class Merchant{
   
   //shop display
   public void display_shop(){
-    this.empty_slots = 0;
+    this.buy = 0;
     this.gold_req = 0;
     
-    for(int i = 0; i < bag.inv.length; i++){
-      for(int j = 0; j < bag.inv[i].length; j++){
-        this.empty_slots++;
+    for(int i = 0; i < this.cart.length; i++){
+      if(this.cart[i] != item_list[item_count - 1]){
+        this.buy++;
       }
     }
     

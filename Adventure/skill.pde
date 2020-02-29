@@ -129,7 +129,7 @@ knight skill 3 unlock at lv10
                
                if(i != mid){          
                  
-                 this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                 this.damage = battle_list[cur].get_patk() * this.mod - m[i].get_pdef();
         
                  dmg(this.damage,i,0);
                }
@@ -233,7 +233,7 @@ knight skill 6 unlock at lv25
                     {
                        hit[i] = i;   
                        
-                       this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                       this.damage = battle_list[cur].get_patk() * this.mod - m[i].get_pdef();
                        
                        if(this.damage < 1){
                         this.damage = 1;
@@ -435,7 +435,7 @@ class pal_skill_4 extends Skill {
            for(int i = 0; i < enemy_count; i++){
                hit[i] = i;
                  
-               this.damage = p[pid].get_matk() * this.mod - m[i].get_mdef();
+               this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef();
                
                if(this.damage < 1){
                         this.damage = 1;
@@ -721,7 +721,7 @@ class r_skill_6 extends Skill{
                                   
                                   hit[i] = i;
 
-                                  this.damage = (p[pid].get_matk()+p[pid].get_patk())*this.mod - m[i].get_mdef();
+                                  this.damage = (battle_list[cur].get_matk()+battle_list[cur].get_patk())*this.mod - m[i].get_mdef();
                                   
                                   if(this.damage < 1){
                                       this.damage = 1;
@@ -885,7 +885,7 @@ class a_skill_4 extends Skill{
                        
                        hit[i] = i;
 
-                       this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                       this.damage = battle_list[cur].get_patk() * this.mod - m[i].get_pdef();
                        
                        if(this.damage < 1){
                         this.damage = 1;
@@ -932,12 +932,14 @@ class a_skill_5 extends Skill{
       
       this.dmg_type = 4;
       
-      this.mp_dec = p[pid].get_max_mp() * 0.3;
+      
     }
 
     
 @Override
             public  void skillUsed(){
+              
+            this.mp_dec = battle_list[cur].get_max_mp() * 0.3;
             
             this.mod = 0.3;
             
@@ -1058,7 +1060,7 @@ class m_skill_2 extends Skill{
                   
                    hit[i] = i;
 
-                   this.damage = p[pid].get_matk() * this.mod - m[i].get_mdef(); 
+                   this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef(); 
                    
                    if(this.damage < 1){
                         this.damage = 1;
@@ -1205,7 +1207,7 @@ class m_skill_6 extends Skill{
                     
                      hit[i] = i;
 
-                     this.damage = p[pid].get_matk() * this.mod - m[i].get_mdef();                      
+                     this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef();                      
                       
                      if(this.damage < 1){
                         this.damage = 1;
@@ -1439,7 +1441,11 @@ class pri_skill_6 extends Skill{
 }
 
 
-//normal type monster skill set
+/**********************************
+
+Normal skill list
+
+*********************************/
 
 class Normal_Skill extends Skill{  
   
@@ -1592,10 +1598,12 @@ class Normal_Skill_6 extends Skill{
   }
 }
 
+
+
 class Elite_Skill extends Skill{  
   
   public Elite_Skill(){
-     this.skill = new Skill[6];
+     this.skill = new Skill[7];
      skill[0] = new Elite_Skill_1();
      skill[1] = new Elite_Skill_2();
      skill[2] = new Elite_Skill_3();
@@ -1717,7 +1725,7 @@ class Elite_Skill_4 extends Skill{
       {
          hit[i] = i;
          
-         this.damage = m[mid].get_patk() - p[i].get_pdef();
+         this.damage = battle_list[cur].get_patk() - p[i].get_pdef();
          
          dmg(this.damage, i , 1);
          
@@ -1727,6 +1735,12 @@ class Elite_Skill_4 extends Skill{
     }
   }
 }
+
+/**********************************
+
+Elite skill list
+
+*********************************/
 
 
 class Elite_Skill_5 extends Skill{
@@ -1785,7 +1799,7 @@ class Elite_Skill_6 extends Skill{
     {
         if(i != mid)
         {
-          this.damage = m[mid].get_matk() * this.mod - p[i].get_mdef();
+          this.damage = battle_list[cur].get_matk() * this.mod - p[i].get_mdef();
           
           dmg(this.damage,i,1);
         }
@@ -1820,4 +1834,466 @@ class Elite_Skill_7 extends Skill{
     
     dmg(this.damage,r.nextInt(100) % c_pt,1);
   }
+}
+
+/**********************************
+
+Boss skill list
+
+*********************************/
+
+class Boss_Skill_floor_2 extends Skill{  
+  
+  public Boss_Skill_floor_2(){
+     this.skill = new Skill[4];
+     skill[0] = new F2_Skill_1();
+     skill[1] = new F2_Skill_2();
+     skill[2] = new F2_Skill_3();
+     skill[3] = new F2_Skill_4();
+  }
+}
+
+class F2_Skill_1 extends Skill{
+    public F2_Skill_1(){
+        
+      this.dmg_type = 2;
+      
+      this.name = "Manipulator of Flame";
+      
+      this.mod = 1.8;
+      
+      this.mp_dec =  m[mid].get_max_mp() * 0.3;           
+    }
+    
+    public void skilldamage(){
+    
+      this.damage = m[mid].get_matk() * this.mod;
+    
+  }
+}
+
+class F2_Skill_2 extends Skill{
+    public F2_Skill_2(){
+        
+      this.name = "Endlessly";
+      
+      this.dmg_type = 3;
+      
+      this.mp_dec = 0;    
+    }
+    
+    public void skilldamage(){
+    
+      if(m[mid].get_cur_hp() < m[mid].get_max_hp() * 0.5)
+      {
+        this.mod = 0.15;
+        
+        this.healing = true;
+        
+        this.heal = m[mid].get_max_hp() * this.mod;
+      }
+      else{
+        this.healing = false;
+        
+        this.heal = m[mid].get_max_mp();     
+      }
+      
+      
+    }
+}
+
+class F2_Skill_3 extends Skill{
+    public F2_Skill_3(){
+      
+      this.name = "Oppression of libraries";
+      
+      this.dmg_type = 2;
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.4;          
+    }
+    
+    public void skilldamage(){
+      
+      this.mod = 1.2;
+      
+      for(int i = 0; i <c_pt;i++)
+      {
+        hit[i] = i;
+        
+        if(i != pid)
+        {
+          
+          this.damage =  battle_list[cur].get_matk() * this.mod - p[pid].get_mdef();
+          
+          dmg(this.damage,i,1);
+          
+          p[i].calc_stats();      
+        }
+      }
+      
+      this.damage = m[mid].get_matk() * this.mod;
+      
+    }
+}
+
+class F2_Skill_4 extends Skill{
+    public F2_Skill_4(){
+        
+      this.dmg_type = 2;
+      
+      this.name = "Parsing";
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.4;  
+        
+    }
+    
+    public void skilldamage(){
+      
+      this.mod = 1.4;
+      
+      this.damage = m[mid].get_matk() * this.mod;
+      
+      m[mid].inc_matk(m[mid].get_matk() * 0.2);
+      
+    }
+}
+
+class Boss_Skill_floor_3 extends Skill{  
+  
+  public Boss_Skill_floor_3(){
+     this.skill = new Skill[4];
+     skill[0] = new F3_Skill_1();
+     skill[1] = new F3_Skill_2();
+     skill[2] = new F3_Skill_3();
+     skill[3] = new F3_Skill_4();
+  }  
+}
+
+class F3_Skill_1 extends Skill{
+    public F3_Skill_1(){
+      
+      this.dmg_type = 1; 
+      
+      this.name = "Feeding mania";
+    
+      this.mp_dec = m[mid].get_max_mp() * 0.2;
+    }
+    
+    public void skilldamage(){
+      
+      this.mod = 1.4;
+      
+      this.damage = m[mid].get_patk() * this.mod;
+    
+    }
+}
+
+class F3_Skill_2 extends Skill{
+    public F3_Skill_2(){
+      
+      this.dmg_type = 3; 
+      
+      this.name = "Cannibalism";
+    
+      this.mp_dec = m[mid].get_max_mp() * 0.3;
+    }
+    
+    public void skilldamage(){
+      
+      this.mod = 1.3;
+      
+      this.healing = true;
+      
+      this.damage = m[mid].get_patk() * this.mod - p[pid].get_pdef();
+      
+      dmg(this.damage,pid,1);
+      
+      this.heal = this.damage;
+    }
+}
+
+class F3_Skill_3 extends Skill{
+    public F3_Skill_3(){
+      
+      this.dmg_type = 3; 
+      
+      this.name = "Digestion";
+      
+      this.healing = false;
+      
+      this.mp_dec = 0;
+    }
+    
+    public void skilldamage(){
+      
+      this.mod = 0.6;
+      
+      if(m[mid].get_cur_hp() < m[mid].get_max_hp() * 0.5)
+      {
+         m[mid].inc_pdef(m[mid].get_pdef() * 0.2);  
+      }
+      else{
+        
+         m[mid].inc_patk(m[mid].get_patk() * 0.1);  
+      }
+      
+      this.heal =  m[mid].get_max_mp() * this.mod;
+    }
+
+}
+
+class F3_Skill_4 extends Skill{
+    public F3_Skill_4(){
+      
+      this.dmg_type = 1; 
+      
+      this.name = "Necrotic Realm";
+    
+      this.mp_dec = m[mid].get_max_mp() * 0.6;
+    }
+    
+    public void skilldamage(){
+      
+      this.mod = 1.4;
+      
+      for(int i = 0;i<c_pt;i++)
+      {
+        hit[i] = i;
+        if(i != pid){
+          
+          this.damage = battle_list[cur].get_patk() - p[i].get_pdef();
+          
+          dmg(this.damage,i,1);   
+        }
+        
+        p[i].calc_stats();  
+      }
+      
+      this.damage = m[mid].get_patk() * this.mod;
+    
+    }
+
+}
+
+class Boss_Skill_floor_4 extends Skill{  
+  
+  public Boss_Skill_floor_4(){
+     this.skill = new Skill[4];
+     skill[0] = new F4_Skill_1();
+     skill[1] = new F4_Skill_2();
+     skill[2] = new F4_Skill_3();
+     skill[3] = new F4_Skill_4();
+  }  
+}
+
+class F4_Skill_1 extends Skill{  
+  
+  public F4_Skill_1(){
+    
+    this.dmg_type = 2;
+    
+    this.name = "Duke Engine";
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
+
+  }
+  
+  public void skilldamage(){
+    
+    this.mod = 1.2;
+    
+    this.damage = m[mid].get_matk() * this.mod;
+  }
+
+}
+
+class F4_Skill_2 extends Skill{  
+  
+  public F4_Skill_2(){
+    
+    this.dmg_type = 3;
+    
+    this.name = "Reset"; 
+    
+    this.healing = true;    
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.4;
+  }
+  
+  public void skilldamage(){
+    
+    this.heal = m[mid].get_max_hp() * 0.1;
+    
+    for(int i = 0; i<c_pt; i++)
+    {
+        for(int j = 0; j < buff_count; j++)
+        {
+                  p[i].buff_round[j] = 0;
+        }
+    }
+  }
+}
+
+class F4_Skill_3 extends Skill{  
+  
+  public F4_Skill_3(){
+    
+    this.dmg_type = 3;
+    
+    this.name = "Meditation";
+    
+    this.healing =false;
+    
+    this.mp_dec = 0;
+}  
+  
+  public void skilldamage(){
+    
+    this.heal = m[mid].get_max_mp() * 0.5;
+    
+    m[mid].inc_matk(m[mid].get_matk() * 0.1);  
+  }
+}
+
+
+class F4_Skill_4 extends Skill{  
+  
+  public F4_Skill_4(){
+    this.dmg_type = 2;
+    
+    this.name = "Elemental Storm";
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.6;
+  }
+  
+  public void skilldamage(){
+    
+    this.mod = 1.6;
+    
+    for(int i = 0; i<c_pt;i++)
+    {
+      hit[i] = i;
+      if(i != pid)
+      {
+        this.damage = battle_list[cur].get_matk() * this.mod - p[i].get_mdef();
+        
+        dmg(this.damage,i,1);
+      }
+      p[i].calc_stats();
+    }
+    
+    this.damage = m[mid].get_matk() * this.mod;
+  }
+}
+
+class Boss_Skill_floor_5 extends Skill{  
+  
+  public Boss_Skill_floor_5(){
+     this.skill = new Skill[4];
+     skill[0] = new F5_Skill_1();
+     skill[1] = new F5_Skill_2();
+     skill[2] = new F5_Skill_3();
+     skill[3] = new F5_Skill_4();
+  }  
+}
+
+class F5_Skill_1 extends Skill{  
+  
+  public F5_Skill_1(){
+    this.name = "Bite";
+    
+    this.dmg_type = 1;
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
+  }
+  
+  public void skilldamage(){
+    
+    this.mod = 1.2;
+    
+    
+    this.damage = m[mid].get_patk() * this.mod;
+  }
+}
+
+class F5_Skill_2 extends Skill{  
+  
+  public F5_Skill_2(){
+    
+    this.name = "Dark oppression";
+    
+    this.dmg_type = 2;
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
+    
+  }
+  
+   public void skilldamage(){
+    
+    this.mod = 1.2;
+    
+    
+    this.damage = m[mid].get_matk() * this.mod;
+  }
+}
+
+
+class F5_Skill_3 extends Skill{  
+  
+  public F5_Skill_3(){
+    
+    this.name = "Curse of Vampire";
+    
+    this.dmg_type = 3;
+    
+    this.mp_dec = 0;
+    
+    this.healing = false;
+  } 
+  
+  public void skilldamage(){
+    
+    this.heal = m[mid].get_max_mp() * 0.8;
+    
+    for(int i = 0; i<c_pt; i++)
+    {
+        for(int j = 0; j < buff_count; j++)
+        {
+           p[i].buff_round[j] = 0;
+        }
+    } 
+  }
+}
+
+
+class F5_Skill_4 extends Skill{  
+  
+  public F5_Skill_4(){
+    
+    this.name = "Shadow falls";
+    
+    this.dmg_type = 2;
+    
+    this.mp_dec = m[mid].get_max_mp() * 0.1;
+  }
+  
+  public void skilldamage(){
+    
+    this.mod = 1.2;
+    
+    this.damage = m[mid].get_matk() * this.mod;
+    
+    for(int i = 0; i <c_pt;i++)
+    {
+      
+      if(i != pid)
+      {
+         this.damage = battle_list[cur].get_matk() * this.mod - p[i].get_mdef();
+         
+         dmg(this.damage,i,1);
+      }
+      p[i].calc_stats();
+    }
+  this.damage = m[mid].get_matk() * this.mod;
+    }
 }

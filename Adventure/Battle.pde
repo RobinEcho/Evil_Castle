@@ -56,7 +56,7 @@ void dmg(float x, int rec, int rec_type){
       enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
     }
     display_dmg = (int)x;
-    println((int)x);
+    //println((int)x);
     //println("dmg: " + m[rec].get_hp_dec());
   }
 }
@@ -87,11 +87,21 @@ void attack(int attacker, int defender, int def_type){
     
     if(m[mid].buff_list[13]> 0){
         m[mid].buff_round[13] = 0;        
-    }  
+    } 
+    
+  //monster normal attack
   }else{
     mid = attacker;
     pid = defender;
     
+    atk = attacker;
+    def = defender;
+    attacker_x = m[attacker].battle_x;
+    attacker_y = m[attacker].battle_y;
+    defender_x = p[defender].battle_x;
+    defender_y = p[defender].battle_y;
+    distance_x = defender_x - attacker_x + m[attacker].get_mod() * enemy_width;
+    distance_y = defender_y - attacker_y;
     println("atk: " + attacker + "def: " + defender);
     damage = m[attacker].get_patk() - p[defender].get_pdef();
     
@@ -104,7 +114,7 @@ void attack(int attacker, int defender, int def_type){
   
     dodge = false;
   
-   //if_dodge(attacker,defender, (def_type + 1)% 2);
+   if_dodge(attacker,defender, (def_type + 1)% 2);
   
   if(dodge){
     
@@ -160,10 +170,11 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
                 dmg(damage,receiver,def_type);
                 p[releaser].calc_stats();            
-          }
-              else{
-                print("low mp");
-              }
+          
+            }else{
+              room = 94;
+                select_target = false;
+            }
 
          break;
               // cause physical damage
@@ -192,10 +203,12 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 
                 p[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
                 dmg(damage,receiver,def_type);
-                p[releaser].calc_stats();          
-          }
-              else{
-                print("low mp");
+                p[releaser].calc_stats();    
+                
+          //not enough mp      
+          }else{
+                room = 94;
+                select_target = false;
               }
           break;
                 // cause magical damage
@@ -226,9 +239,10 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 dmg(damage,receiver,def_type);
                 p[releaser].calc_stats();
             
-          }
-              else{
-                print("low mp");
+          //not enough mp  
+          }else{
+                room = 94;
+                select_target = false;
               }
               
           break;
@@ -252,7 +266,8 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                      }          
              }
              else{
-               println("low mp");
+               room = 94;
+                select_target = false;
              }
            break;
                      // buff set
@@ -270,7 +285,8 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                        p[releaser].calc_stats();          
              }
              else{
-               println("low mp");
+               room = 94;
+                select_target = false;
              }
                          
            break;
@@ -280,7 +296,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
   else{
     //m[attacker].skills.skill[skill_id].skilldamage();
      
-     println("monster use skill");
+     //println("monster use skill");
      
      mid = releaser;
      
@@ -310,7 +326,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                
           }
               else{
-                print("monster low mp");
+                select_target = false;
               }
           break;
                 // cause magical damage
@@ -334,7 +350,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
             
           }
               else{
-                print("monster low mp");
+                select_target = false;
               }
               
           break;
@@ -358,7 +374,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                      }          
              }
              else{
-               println("monster low mp");
+                select_target = false;
              }
            break;
     }
@@ -466,7 +482,9 @@ void ani_draw(int cover, int type){
 }
 
 void attackanimation(int attacker, int def_type){
-    
+  
+  display_buff_icons();
+  
   if(def_type == 0){
     noStroke();
     //fill(0,0,100);
@@ -496,6 +514,7 @@ void attackanimation(int attacker, int def_type){
     
     if(returned){
       room = 90;
+      battle_mode = 10;
       arrive = false;
       returned = false;
     }
@@ -503,8 +522,42 @@ void attackanimation(int attacker, int def_type){
     //println("monster x: " + m[def].battle_x + " px : " + attacker_x);
     //println("monster y: " + m[def].battle_y + " py : " + attacker_y);
   }else{
-    println("monster attack");
-    room = 90;
+    //println("monster attack");
+    noStroke();
+    //fill(0,0,100);
+    //rect(p[attacker].battle_x, p[attacker].battle_y, pc_width, pc_height);
+    
+    if(!arrive){
+      //println("monster go");
+      if(attacker_x + m[atk].get_mod() * enemy_width < defender_x ){
+        
+        image(m[attacker].img, attacker_x, attacker_y, m[atk].get_mod() * enemy_width, m[atk].get_mod() * enemy_height);
+      
+        attacker_x += distance_x/rate;
+        attacker_y += distance_y/rate;
+      }else{
+        arrive = true;
+      }
+      
+    }else{
+      //println("monster back");
+      if(attacker_x > m[atk].battle_x){
+        image(m[attacker].img, attacker_x, attacker_y, m[atk].get_mod() * enemy_width, m[atk].get_mod() * enemy_height);
+      
+        attacker_x -= distance_x/rate;
+        attacker_y -= distance_y/rate;
+      }else{
+        returned = true;
+      }
+    }
+    
+    if(returned){
+      room = 90;
+      battle_mode = 10;
+      arrive = false;
+      returned = false;
+    }
+    
   }
 
 }
@@ -525,7 +578,7 @@ void escape(){
 
       
       cur = (cur + 1) % (c_pt + enemy_count);
-      println("escape fail, cur: " + cur);
+      //println("escape fail, cur: " + cur);
       esc = false;
       if(battle_list[cur].get_type() == 0){
         battle_mode = -1;
@@ -616,7 +669,7 @@ void battle_end(){
   
   if(player_dead_count == c_pt){
     
-    println("GAME OVER!");
+    //println("GAME OVER!");
     
     inBattle = false;
     
@@ -624,7 +677,7 @@ void battle_end(){
   }
   else if(monster_dead_count == enemy_count)
   {
-    println("Victory!");
+    //println("Victory!");
     
     start_frame = frameCount;
     
@@ -664,8 +717,9 @@ void battle_end(){
         m[i].buff_round[j] = 0;
       }
     }
+    
+    loot();
   }
-    //victory or defeted
 }
 
 void display_damage(int target, int def_type){

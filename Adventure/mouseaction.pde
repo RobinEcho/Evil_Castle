@@ -8,6 +8,7 @@ float skill_box_width, skill_box_height;
 boolean move_item = false, select_item = false, select_target = false, usable = true;
 float x, y, distance;
 int command;
+int empty_slots = 0;
  
  public void mousePressed(){
     
@@ -52,7 +53,7 @@ int command;
                 p[0].set_id(0);
                 
                 p[0].battle_img = loadImage("src/player/battle/Player.png");
-                p[0].icon = loadImage("src/player/icon/1.png");
+                p[0].icon = loadImage("src/player/icon/Player.png");
                 p[0].avatar = loadImage("src/player/avatar/player.png");
                 p[0].set_loc(800,450);
               }   
@@ -104,7 +105,26 @@ int command;
          
        
          break;
-         
+       
+       //bag full for shop
+       case 84:
+         room = 88;
+         break;
+       
+       //confirm purchase
+       case 86:
+         in_shop = false;
+         shop_set = false;
+         room = 2;
+         break;
+       
+       //confirm save
+       case 87:
+         in_shop = false;
+         room = 2;
+         break;
+       
+       //shop UI
        case 88:
           shop.dis_y = bag.vertical_margin + bag.vs;
           for(int i = 0; i < shop.sale_count; i++){
@@ -156,6 +176,51 @@ int command;
           if(x >= (bag.horizontal_margin + bag.square_width) && x <= (bag.horizontal_margin + bag.square_width) +  bag.square_width * 2
             && y >= (height - bag.vertical_margin - bag.square_height) && y <= (height - bag.vertical_margin - bag.square_height) + bag.square_height / 2){
               if(p[0].get_gold() >= shop.gold_req){
+                empty_slots = 0;
+                
+                for(int i = 0; i < bag.inv.length; i++){
+                  for(int j = 0; j < bag.inv[i].length; j++){
+                    if(bag.inv[i][j] == item_count - 1){
+                      empty_slots++;
+                    }
+                  }
+                }
+                
+                if(empty_slots >= shop.buy){
+                  
+                  for(int i = 0; i < shop.cart.length; i++){
+                    
+                    for(int j = 0; j < bag.inv.length; j++){
+                      
+                      for(int k = 0; k < bag.inv[j].length; k++){
+                        
+                        if(shop.cart[i] != item_list[item_count - 1]){
+                          if(bag.inv[j][k] == item_count - 1){
+                            
+                            for(int x = 0; x < item_list.length; x++){
+                              
+                              if(item_list[x].id == shop.cart[i].id){
+                                bag.inv[j][k] = x;
+                                j = bag.inv.length - 1;
+                                k = bag.inv[j].length - 1;
+                              }
+                              
+                            }//end for x
+                            
+                          }//end if
+                        }//end if cart slot is empty
+                        
+                      }//end for k
+                    }//end for j
+                  }//end for i
+                  
+                  room = 86;
+                  
+                }else{
+                  println("buy: " + shop.buy + " free: " + empty_slots);
+                  room = 84;
+                  
+                }
                 
               }
             }
@@ -163,7 +228,38 @@ int command;
           //cancel and quit box
           if(x >= (bag.horizontal_margin + bag.UI_width/2 + bag.square_width) && x <= (bag.horizontal_margin + bag.UI_width/2 + bag.square_width) +  bag.square_width * 2
             && y >= (height - bag.vertical_margin - bag.square_height) && y <= (height - bag.vertical_margin - bag.square_height) + bag.square_height / 2){
+              in_shop = false;
+              shop_set = false;
+              room = 2;
             }
+         break;
+         
+       //option menu for shop and save  
+       case 89:
+         if((x >= boxX && x <= boxX+boxwidth)&&(y >= mainY-text_height && y<= mainY+text_height)){ 
+           
+           //to shop UI
+           in_shop = true;
+           room = 88;   
+           
+         }
+             
+         if((x >= boxX && x<=boxX+boxwidth) && (y >= saveY-text_height && y<= saveY+text_height)){
+                              
+           saveData();
+           //save confirmation
+           in_shop = false;
+           room = 87;
+           
+         }
+             
+         if((x >= boxX && x <= boxX+boxwidth) && (y >= exitY-text_height && y<= exitY+text_height)){
+           
+           //back to game
+           in_shop = false;
+           room = 2;
+                        
+         }
          break;
        
        case 90:
@@ -207,6 +303,11 @@ int command;
          }
         
          break;
+         
+       //not enough MP
+       case 94:
+         room = 90;
+         break;
        
        case 98:
          //accept into party
@@ -220,6 +321,7 @@ int command;
                   case 1:
                     floor_1[2].del_npc(13, 8);
                     p[c_pt-1].name = "Knight";
+                    p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
                     cell_key = false;
                     break;
@@ -227,6 +329,7 @@ int command;
                   case 2:
                     floor_1[2].del_npc(18, 8);
                     p[c_pt-1].name = "Paladin";
+                    p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
                     cell_key = false;
                     break;
@@ -234,6 +337,7 @@ int command;
                   case 3:
                     floor_1[2].del_npc(23, 8);
                     p[c_pt-1].name = "Ranger";
+                    p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
                     cell_key = false;
                     break;
@@ -241,6 +345,7 @@ int command;
                   case 4:
                     floor_1[2].del_npc(13, 13);
                     p[c_pt-1].name = "Assassin";
+                    p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
                     cell_key = false;
                     break;  
@@ -248,6 +353,7 @@ int command;
                   case 5:
                     floor_1[2].del_npc(18, 13);
                     p[c_pt-1].name = "Mage";
+                    p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
                     cell_key = false;
                     break;  
@@ -255,6 +361,7 @@ int command;
                   case 6:
                     floor_1[2].del_npc(23, 13);
                     p[c_pt-1].name = "Priest";
+                    p[c_pt-1].id = c_pt -1;
                     new_companion = 0;
                     cell_key = false;
                     break;  
@@ -283,7 +390,7 @@ int command;
              
              if((x >= boxX && x<=boxX+boxwidth) && (y >= saveY-text_height && y<= saveY+text_height)){
                               
-               saveData();
+               load();
              
              }
              
@@ -591,16 +698,12 @@ void select_enemy_target(){
             if(distance <= target_diameter * m[i].get_mod() / 2){
               if(m[i].is_alive()){
                 if(command == 6){
+                  select_target = true;
                   attack(pid, i, 0);
                 }else{
+                  select_target = true;
                   skill(pid, i, 0, command);
                 }
-                
-                
-                select_target = true;
-                battle_mode = 0;
-              }else{
-                battle_mode = 0;
               }
             }
           
@@ -647,6 +750,7 @@ void select_ally_target(){
         //use revive
         }else{
           if(!p[i].is_alive()){
+            p[i].ress();
             p[i].rec_hp(item_list[selected_item_code].get_rec_hp());
             p[i].calc_stats();
             
@@ -670,8 +774,8 @@ void select_ally_target(){
             //use on self only
             case 0:
               if(p[i] == battle_list[cur]){
-                skill(battle_list[cur].get_id(), i, 0, command);
                 select_target = true;
+                skill(battle_list[cur].get_id(), i, 0, command);
               }else{
                 battle_mode = 0;
                 select_target = false;
@@ -683,15 +787,15 @@ void select_ally_target(){
               //priest revive
               if(p[battle_list[cur].get_id()].job_code == 6 && command == 5){
                 if(!p[i].is_alive()){
-                    skill(battle_list[cur].get_id(), i, 0, command);
                     select_target = true;
+                    skill(battle_list[cur].get_id(), i, 0, command);
                 }
                 
               //other skills
               }else{
                 if(p[i].is_alive()){
-                    skill(battle_list[cur].get_id(), i, 0, command);
                     select_target = true;
+                    skill(battle_list[cur].get_id(), i, 0, command);
                 }  
               }
               break;

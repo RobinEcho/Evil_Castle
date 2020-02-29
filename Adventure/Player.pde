@@ -164,7 +164,7 @@ class Player extends Units{
       this.hp_dec = this.max_hp;
       this.dead();
     }
-    println("max_hp: " + this.max_hp + " hp dec: " + this.hp_dec + " cur hp: " + this.cur_hp);
+    //println("max_hp: " + this.max_hp + " hp dec: " + this.hp_dec + " cur hp: " + this.cur_hp);
     
     if(this.cur_hp > max_hp){
       this.cur_hp = this.max_hp;
@@ -334,7 +334,10 @@ class Player extends Units{
 	/***************************
 	*	Getters
 	***************************/
-	
+	public int get_job_code(){
+    return this.job_code;
+  }
+  
 	public float get_str(){
 		return this.str;
 	}

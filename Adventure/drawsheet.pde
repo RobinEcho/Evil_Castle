@@ -31,7 +31,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   //
   
     textSize(60);
-    text("Castle Adventure ",side_margin,height_margin/2);
+    text("Evil Castle",side_margin,height_margin/2);
                                   
     textSize(30);
     text("New Game", side_margin, height_margin);
@@ -219,6 +219,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     text("ROUND: " + round, width/2, p[0].vertical_margin/2);
     
     unit_turn();
+    display_buff_icons();
     /*****************************
     *  battle round starts
     *****************************/
@@ -251,6 +252,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         battle_command_UI();
         skill_box_width = command_radius * 1.5;
         skill_box_height = height * 2 / (command_radius/4.0);
+        //println("cur: " + battle_list[cur].name);
         for(int i = 0; i < p[battle_list[cur].get_id()].skills.skill_count; i++){
            fill(65, 100, 100);
            rect(command_x + command_radius * 1.5 + battle_UI_margin, command_y + (skill_box_height * (i - 2) + battle_UI_margin * (i - 1.5)), skill_box_width, skill_box_height);
@@ -323,7 +325,9 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
             //}
         }
         else{
-          
+          esc = true;
+          arrive = false;
+          returned = false;
           if(battle_list[cur].buff_round[12] <= 0){
             cur++;
             if(cur >= (c_pt + enemy_count)){

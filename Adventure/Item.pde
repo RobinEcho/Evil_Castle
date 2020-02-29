@@ -858,15 +858,15 @@ public void load_items(){
     *  Priest equipment
     ******************************/ 
     }else if(i < 80){
-      item_list[i].set_id(511 + (i%5));
+      item_list[i].set_id(611 + (i%5));
       item_list[i].set_img("src/item/equipment/priest/priest_weapon_" + ((i%5)+1) + ".png");
       
     }else if(i < 85){
-      item_list[i].set_id(521 + (i%5));
+      item_list[i].set_id(621 + (i%5));
       item_list[i].set_img("src/item/equipment/priest/priest_armour_" + ((i%5)+1) + ".png");
       
     }else if(i < 90){
-      item_list[i].set_id(531 + (i%5));
+      item_list[i].set_id(631 + (i%5));
       item_list[i].set_img("src/item/equipment/priest/priest_accessory_" + ((i%5)+1) + ".png");
       
     /*****************************

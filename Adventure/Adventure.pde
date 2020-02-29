@@ -54,6 +54,8 @@ import library
   
   boolean shop_set = false, cell_key = true;
   boolean[] npc_in_cell = {true, true, true, true, true, true};
+  
+  PImage[] buff_icon = new PImage[buff_count];
 
 
 /*******************************************
@@ -112,7 +114,7 @@ import library
     
     frameRate(rate);
     background(0,0,100);
-    text("Loading", 400, 400);
+     text("Loading", 400, 400);
     colorMode(HSB, 100);
     indicator = loadImage("src/turn.png");
     
@@ -158,23 +160,37 @@ import library
     map = floor_1[floor_room - 1];
     
     hit_set();
+    
+    buff_icon[0] = loadImage("src/buff/def_up.png");
+    buff_icon[1] = loadImage("src/buff/taunt.png");
+    buff_icon[2] = loadImage("src/buff/patk_up.png");
+    buff_icon[3] = loadImage("src/buff/bleed.png");
+    buff_icon[4] = loadImage("src/buff/stun.png");
+    buff_icon[5] = loadImage("src/buff/no_die.png");
+    buff_icon[6] = loadImage("src/buff/heal.png");
+    buff_icon[7] = loadImage("src/buff/sleep.png");
+    buff_icon[8] = loadImage("src/buff/atk_up.png");
+    buff_icon[9] = loadImage("src/buff/bind.png");
+    buff_icon[10] = loadImage("src/buff/agi_up.png");
+    buff_icon[11] = loadImage("src/buff/bleed.png");
+    buff_icon[12] = loadImage("src/buff/patk_up.png");
+    buff_icon[13] = loadImage("src/buff/sleep.png");
+    buff_icon[14] = loadImage("src/buff/all_up.png");
+    buff_icon[15] = loadImage("src/buff/all_up.png");
+    
   /************************************************
   try to check if save file can be loaded normally
   *************************************************/ 
     
-    try{
-      output = createWriter("bin/characterdata/saveddata.txt");
-    }catch(Exception e){
-      System.out.println("SAVE FAILED");
-    }
+    
     
     try{
       profile = loadStrings("bin/characterdata/saveddata.txt");
     }catch(Exception e){
-      text("LOAD FAILED", 100, 200);
+      System.out.println("LOAD FAILED");
     }
     
-    
+    println(profile.length);
   }                                 //close setup()
 
   
@@ -282,6 +298,36 @@ import library
         
         break;
       
+      //bag full for shop
+       case 84:
+         fill(60,100,100);
+         rect(width/2 - 150, height / 2 - 100, 300, 200);
+         textSize(40);
+         fill(0,0,100);
+         textAlign(CENTER, CENTER);
+         text("Bag is full!", width/2, height / 2);
+         break;
+       
+       //confirm purchase
+       case 86:
+         fill(60,100,100);
+         rect(width/2 - 150, height / 2 - 100, 300, 200);
+         textSize(40);
+         fill(0,0,100);
+         textAlign(CENTER, CENTER);
+         text("Purchase Complete", width/2, height / 2);
+         break;
+      
+      //confirm save
+      case 87:
+        fill(60,100,100);
+        rect(width/2 - 150, height / 2 - 100, 300, 200);
+        textSize(40);
+        fill(0,0,100);
+        textAlign(CENTER, CENTER);
+        text("Save Complete", width/2, height / 2);
+        break;
+      
       case 88:
         background(0,0,100);
         shop.display_shop();
@@ -290,6 +336,11 @@ import library
         item_desc(3);
         break;
       
+      case 89:
+        shop_menu();
+        recover();
+        break;
+        
       case 90:
                
         battle_UI(enemy_count);
@@ -301,6 +352,16 @@ import library
       background(0,0,100);
       ani_draw(atk, battle_list[cur].get_type());
         attackanimation(atk, (battle_list[cur].get_type() + 1) % 2);
+        break;
+        
+      //not enough mp
+      case 94:
+        fill(0,0,70);
+        rect(width/2 - 150, height / 2 - 100, 300, 200);
+        textSize(40);
+        fill(0,100,80);
+        textAlign(CENTER, CENTER);
+        text("Not enough MP", width/2, height / 2);
         break;
         
       case 98:

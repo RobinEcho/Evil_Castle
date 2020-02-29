@@ -193,7 +193,7 @@ class Monster extends Units{
     
     this.exp = (this.level * 2) * this.mod;
     
-    println("exp monster: "+this.exp);
+    //println("exp monster: "+this.exp);
     
     return this.exp;
   }

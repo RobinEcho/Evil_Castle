@@ -7,6 +7,7 @@ class units to set some basic data about unit
 class Units{
   protected int id, type, skill_count;
   public int[] skillset;
+  public int active_buffs = 0;
   public String name;
   public float battle_x, battle_y;
   public float patk_mod = 1, pdef_mod = 1, matk_mod = 1, mdef_mod = 1, hp_mod = 1, mp_mod = 1, spd_mod = 1;
@@ -129,6 +130,14 @@ class Units{
       this.mdef_mod += this.buff_list[15];
       this.spd_mod += this.buff_list[15];
     }
+    
+    this.active_buffs = 0;
+    
+    for(int i = 0; i < buff_count; i++){
+      if(buff_round[i] > 0){
+        active_buffs++;
+      }
+    }
   }
   
   public void reset_mod(){
@@ -200,7 +209,9 @@ class Units{
     if(this.can_die){
       this.alive = false;
     }else{
+      this.alive = true;
       this.buff_round[5] = 0;
+      this.cur_hp = 1;
       this.hp_dec = this.max_hp - 1;
       this.can_die = true;
     }
@@ -250,6 +261,10 @@ class Units{
   public void set_id(int x){
     this.id = x;
   }
+  
+  public void set_skill_count(int x){
+    this.skill_count = x;
+  }
 
   public void set_x(int x){
     this.charX = x;
@@ -272,7 +287,7 @@ class Units{
 		this.level = x;
 	}
 
-  public void set_exp(int x){
+  public void set_exp(float x){
     this.exp = x;
   }
 	

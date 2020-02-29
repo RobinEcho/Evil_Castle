@@ -1,3 +1,4 @@
+String [] shop_option = {"Shop", "Save", "Leave"};
    /*******************************************
      function about game data
   ********************************************/ 
@@ -17,18 +18,124 @@
   
   void load(){
     
+    try{
+      profile = loadStrings("bin/characterdata/saveddata.txt");
+    }catch(Exception e){
+      System.out.println("LOAD FAILED");
+    }
+    
+    println(profile.length);
+    
     font = loadFont("main_font.vlw");
     textFont(font);
     
-    if(profile.length != 0){
-      for(int i = 0; i < profile.length; i++){
-        text(profile[i], 300, 300);
-      }
-    }else{
+    if(profile.length > 0){
+      boss_defeated = Integer.parseInt(profile[0]);
+      floor = Integer.parseInt(profile[1]);
+      floor_room = Integer.parseInt(profile[2]);
+      c_pt = Integer.parseInt(profile[3]);
       
+       
+      for(int i = 0; i < c_pt; i++){
+        p[i] = new Player(Integer.parseInt(profile[4 + (i * 12)]));
+        p[i].name = p[i].job.name;
+        p[i].set_id(i);
+        p[i].set_level(Integer.parseInt(profile[5 + (i * 12)]));
+        p[i].set_exp(Float.parseFloat(profile[6 + (i * 12)]));
+        p[i].set_flat_str(Float.parseFloat(profile[7 + (i * 12)]));
+        p[i].set_flat_con(Float.parseFloat(profile[8 + (i * 12)]));
+        p[i].set_flat_intel(Float.parseFloat(profile[9 + (i * 12)]));
+        p[i].set_flat_wis(Float.parseFloat(profile[10 + (i * 12)]));
+        p[i].set_flat_agi(Float.parseFloat(profile[11 + (i * 12)]));
+        p[i].AP = Integer.parseInt(profile[12 + (i * 12)]);
+        p[i].equipment[0] = Integer.parseInt(profile[13 + (i * 12)]);
+        p[i].equipment[1] = Integer.parseInt(profile[14 + (i * 12)]);
+        p[i].equipment[2] = Integer.parseInt(profile[15 + (i * 12)]);
+        p[i].skills.skill_count = (p[i].get_level() / 5) + 1;
+      }
+        
+        p[0].gold = Integer.parseInt(profile[(4 + c_pt * 12) + 1]);
+        
+        for(int i = 0; i < bag.inv.length; i++){
+          for(int j = 0; j < bag.inv[i].length; j++){
+            bag.inv[i][j] = Integer.parseInt(profile[(4 + c_pt * 12) + 1 + i * bag.inv[0].length + j]);
+          }
+        }
+        
+        
+      p[0].set_img("player_2",1);
+      p[0].name = "Adam";
+      p[0].battle_img = loadImage("src/player/battle/Player.png");
+      p[0].icon = loadImage("src/player/icon/Player.png");
+      p[0].avatar = loadImage("src/player/avatar/player.png");
+      p[0].set_loc(20*sqw,9*sqh);
+      
+      if(c_pt > 0){
+        for(int i = 1; i < c_pt; i++){
+          npc_in_cell[p[i].get_job_code() - 1] = false;
+          
+          switch(p[i].get_job_code()){
+            case 1:
+              floor_1[2].del_npc(13, 8);
+              break;
+              
+            case 2:
+              floor_1[2].del_npc(18, 8);
+              break;
+              
+            case 3:
+              floor_1[2].del_npc(23, 8);
+              break;
+              
+            case 4:
+              floor_1[2].del_npc(13, 13);
+              break;
+              
+            case 5:
+              floor_1[2].del_npc(18, 13);
+              break;
+              
+            case 6:
+              floor_1[2].del_npc(23, 13);
+              break;
+          }
+        }
+      }
+      
+      switch(floor){
+        case 1:
+          map = floor_1[floor_room - 1];
+          break;
+          
+        case 2:
+          map = floor_2[floor_room - 1];
+          break;
+          
+        case 3:
+          map = floor_3[floor_room - 1];
+          break;
+          
+        case 4:
+          map = floor_4[floor_room - 1];
+          break;
+          
+        case 5:
+          map = floor_1[floor_room - 1];
+                  
+          p[0].set_loc(26*sqw,11*sqh);
+          break;
+      }
+      
+      room = 2;
+      saved = false;
+      println("load save finish");
+                  
+    }else{
+      println("no save");
       saved = true;
       
     }
+    
   }                    //close load()
   
   
@@ -40,9 +147,36 @@
     }catch(Exception e){
       System.out.println("SAVE FAILED");
     }
-    output.println(p[0].job.code);
-    output.println(p[0].level);
-    output.println(p[0].exp);
+    
+    output.println(boss_defeated);
+    output.println(floor);
+    output.println(floor_room);
+    output.println(c_pt);
+    
+    for(int i = 0; i < c_pt; i++){
+      output.println(p[i].get_job_code());
+      output.println(p[i].get_level());
+      output.println(p[i].get_exp());
+      output.println(p[i].get_flat_str());
+      output.println(p[i].get_flat_con());
+      output.println(p[i].get_flat_intel());
+      output.println(p[i].get_flat_wis());
+      output.println(p[i].get_flat_agi());
+      output.println(p[i].AP);
+      
+      output.println(p[i].equipment[0]);
+      output.println(p[i].equipment[1]);
+      output.println(p[i].equipment[2]);
+    }
+    
+    output.println(p[0].gold);
+    
+    for(int i = 0; i < bag.inv.length; i++){
+      for(int j = 0; j < bag.inv[i].length; j++){
+        output.println(bag.inv[i][j]);
+      }
+    }
+    
     output.close();
   }                    //close saveData()
   
@@ -159,5 +293,170 @@ void NPC_join(){
     case 6:
       text("would you like Priest to join your party!", width/2, height*2/3 + (height / 3 - 10)/2);
       break;
+  }
+}
+
+void display_buff_icons(){
+  int rows, shown = 0;
+  
+  pc_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt + 1);
+  pc_height = (height*2/3 - 3.0f * battle_UI_margin)/ (float)(max_pt + 2);
+  pcx = width*2/3.0f + battle_UI_margin + (float)(max_pt/2.0) * pc_width;
+  pcy = battle_UI_margin + pc_height/2.0f;
+  
+  enemy_width = (width/3.0f - 4.0f * battle_UI_margin)/ (float)(max_pt+1);
+  enemy_height = (height*2/3.0f - 3.0f * battle_UI_margin)/ (float)(max_pt+2);
+  enemy_start_x = battle_UI_margin + (float)enemy_width;
+  enemy_start_y = battle_UI_margin + enemy_height/2.0f;
+  enemy_x = enemy_start_x + enemy_width * m[0].get_mod();
+  enemy_y = enemy_start_y;
+  
+  //Draw enemies
+  noStroke();
+  for(int i = 0; i < enemy_count; i++){
+    shown = 0;
+    rows = m[i].active_buffs / 4 + 1;
+    
+    if(i != 0){
+      if(i % 2 == 0){
+        enemy_x += enemy_width * m[i-1].get_mod();
+      }else{
+        enemy_x -= enemy_width * m[i-1].get_mod();
+      }
+    }
+    
+    for(int j = 0; j < buff_count; j++){
+      if(m[i].buff_round[j] > 0){
+        image(buff_icon[j], enemy_x + (shown % 4) * 25, enemy_y - (rows - (shown / 4)) * 25, 20, 20);
+        shown++;
+      }
+    }
+    
+    enemy_y += enemy_height * m[i].get_mod() + enemy_height/2.0;
+     
+  }
+  
+  //Draw player images and player status
+  for(int i = 0; i < c_pt; i++){
+    shown = 0;
+    rows = p[i].active_buffs / 4 + 1;
+    
+    //println(p[i].name + " has " + p[i].active_buffs + " number of buffs.");
+    
+    for(int j = 0; j < buff_count; j++){
+      if(p[i].buff_round[j] > 0){
+        image(buff_icon[j], p[i].battle_x - (shown % 4) * 25 - 25, p[i].battle_y - (rows - (shown / 4)) * 25, 20, 20);
+        shown++;
+      }
+    }
+    
+  }
+}
+
+void loot(){
+  int rand, loot_count = (enemy_count * (r.nextInt(floor) + floor / 3));
+  int rand_med, rand_eq;
+  int[] loots;
+  
+  if(loot_count > 0){
+    loots = new int[loot_count];
+    
+    for(int i = 0; i < loots.length; i++){
+      rand = r.nextInt(10000) % 100;
+      
+      //key for equipment
+      if(rand < 10){
+        println("key");
+        loots[i] = 100;
+        
+      //gold
+      }else if(rand < 29){
+        println("gold");
+        p[0].gold += r.nextInt(100) * floor;
+        
+      //potions
+      }else if(rand < 80){
+        println("med");
+        rand_med = r.nextInt(100);
+        
+        if(rand_med < 30){
+          loots[i] = 90;
+        }else if(rand_med < 60){
+          loots[i] = 93;
+        }else if(rand_med < 75){
+          loots[i] = 91;
+        }else if(rand_med < 90){
+          loots[i] = 94;
+        }else if(rand_med < 95){
+          loots[i] = 92;
+        }else{
+          loots[i] = 95;
+        }
+      
+      //equipment
+      }else{
+        println("equipment");
+          rand_eq = r.nextInt(1000) % c_pt;
+          
+          rand = r.nextInt(100) % (floor - 1);
+          
+          loots[i] = (p[rand_eq].job_code * 100) + ((r.nextInt(3) + 1) * 10) + (rand + 1);
+          
+          for(int j = 0; j < item_list.length; j++){
+            if(item_list[j].get_id() == loots[i]){
+              loots[i] = j;
+            }
+          }
+      }
+      
+      for(int j = 0; j < bag.inv.length; j++){
+        for(int k = 0; k < bag.inv[j].length; k++){
+          if(bag.inv[j][k] == item_count - 1){
+            bag.inv[j][k] = loots[i];
+            j = bag.inv.length - 1;
+            k = bag.inv[j].length - 1;
+          }else if(j == bag.inv.length - 1 && k == bag.inv[j].length - 1){
+            println("Bag Full!");
+            i = loots.length - 1;
+          }
+        }
+      }
+    }
+    
+  }else{
+    println("empty loot");
+  }
+}
+
+void shop_menu(){
+  text_height = 40;
+  boxwidth = 240;
+  boxheight = 360;
+    
+  boxX = (width-boxwidth)/2;
+  boxY = (height-boxheight)/2;
+    
+  fill(60, 100, 100, 60);
+  noStroke();
+  rect(boxX,boxY,boxwidth,boxheight,30);
+    
+  fill(90, 80, 80, 80);
+  textSize(text_height);
+  textAlign(CENTER);
+  for(int i =0; i<3;i++)
+  {
+    text(shop_option[i],boxX+(boxwidth/2),boxY+i*(text_height+30)+boxheight/3);
+  }
+    
+  mainY = boxY+boxheight/3;
+  saveY = mainY + 70;
+  exitY = saveY + 70;
+}
+
+void recover(){
+  for(int i = 0; i < c_pt; i++){
+    p[i].rec_hp(p[i].get_max_hp());
+    p[i].rec_mp(p[i].get_max_mp());
+    p[i].calc_stats();
   }
 }
