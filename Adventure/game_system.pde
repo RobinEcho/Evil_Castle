@@ -29,7 +29,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            steps++;
+            //steps++;
             up = false;
           }
           
@@ -53,7 +53,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            steps++;
+            //steps++;
             down = false;
           }
           
@@ -75,7 +75,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            steps++;
+            //steps++;
             right = false;
           }
         }else{
@@ -96,7 +96,7 @@ void move() {
           move_count++;
           if(move_count == 5){
             move_count = 0;
-            steps++;
+            //steps++;
             left = false;
           }
         }else{
@@ -124,6 +124,7 @@ void monsterappear() {
         cur = 0;
         round = 1;
         inBattle = true;
+        play_battle = true;
         battle_end = false;
         Units[] order;
         
@@ -184,6 +185,7 @@ void change_room(int cur_room){
         
         //move to next floor
         if(floor_1[floor_room-1].exit[loc_y][loc_x] > floor_1.length){
+          battle_bg = loadImage("src/backgroundimage/battle_room_2/battle_room_1.png");
           floor++;
           floor_room = 1;
           
@@ -202,6 +204,7 @@ void change_room(int cur_room){
         //move to connected room
         }else{
           floor_room = floor_1[floor_room-1].exit[loc_y][loc_x];
+          battle_bg = loadImage("src/backgroundimage/battle_room_1/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_1[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_1[floor_room-1].exit[i].length; j++){
@@ -224,6 +227,7 @@ void change_room(int cur_room){
         
         //move to next floor
         if(floor_2[floor_room-1].exit[loc_y][loc_x] > floor_2.length){
+          battle_bg = loadImage("src/backgroundimage/battle_room_3/battle_room_1.png");
           floor++;
           floor_room = 1;
           
@@ -243,6 +247,7 @@ void change_room(int cur_room){
         }else if(floor_2[floor_room-1].exit[loc_y][loc_x] < 0){
           floor--;
           floor_room = -1 * (floor_2[floor_room-1].exit[loc_y][loc_x]);
+          battle_bg = loadImage("src/backgroundimage/battle_room_1/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_1[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_1[floor_room-1].exit[i].length; j++){
@@ -259,6 +264,7 @@ void change_room(int cur_room){
         //move to connected room
         }else{
           floor_room = floor_2[floor_room-1].exit[loc_y][loc_x];
+          battle_bg = loadImage("src/backgroundimage/battle_room_2/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_2[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_2[floor_room-1].exit[i].length; j++){
@@ -281,6 +287,7 @@ void change_room(int cur_room){
         
         //move to next floor
         if(floor_3[floor_room-1].exit[loc_y][loc_x] > floor_3.length){
+          battle_bg = loadImage("src/backgroundimage/battle_room_4/battle_room_1.png");
           floor++;
           floor_room = 1;
           
@@ -300,6 +307,7 @@ void change_room(int cur_room){
         }else if(floor_3[floor_room-1].exit[loc_y][loc_x] < 0){
           floor--;
           floor_room = -1 * (floor_3[floor_room-1].exit[loc_y][loc_x]);
+          battle_bg = loadImage("src/backgroundimage/battle_room_2/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_2[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_2[floor_room-1].exit[i].length; j++){
@@ -316,6 +324,7 @@ void change_room(int cur_room){
         //move to connected room
         }else{
           floor_room = floor_3[floor_room-1].exit[loc_y][loc_x];
+          battle_bg = loadImage("src/backgroundimage/battle_room_3/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_3[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_3[floor_room-1].exit[i].length; j++){
@@ -338,6 +347,7 @@ void change_room(int cur_room){
         
         //move to next floor
         if(floor_4[floor_room-1].exit[loc_y][loc_x] > floor_4.length){
+          battle_bg = loadImage("src/backgroundimage/battle_room_5/battle_room_1.png");
           floor++;
           floor_room = 1;
           
@@ -357,6 +367,7 @@ void change_room(int cur_room){
         }else if(floor_4[floor_room-1].exit[loc_y][loc_x] < 0){
           floor--;
           floor_room = -1 * (floor_4[floor_room-1].exit[loc_y][loc_x]);
+          battle_bg = loadImage("src/backgroundimage/battle_room_3/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_3[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_3[floor_room-1].exit[i].length; j++){
@@ -373,6 +384,7 @@ void change_room(int cur_room){
         //move to connected room
         }else{
           floor_room = floor_4[floor_room-1].exit[loc_y][loc_x];
+          battle_bg = loadImage("src/backgroundimage/battle_room_4/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_4[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_4[floor_room-1].exit[i].length; j++){
@@ -397,6 +409,7 @@ void change_room(int cur_room){
         if(floor_5[floor_room-1].exit[loc_y][loc_x] < 0){
           floor--;
           floor_room = -1 * (floor_5[floor_room-1].exit[loc_y][loc_x]);
+          battle_bg = loadImage("src/backgroundimage/battle_room_4/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_4[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_4[floor_room-1].exit[i].length; j++){
@@ -413,6 +426,7 @@ void change_room(int cur_room){
         //move to connected room
         }else{
           floor_room = floor_5[floor_room-1].exit[loc_y][loc_x];
+          battle_bg = loadImage("src/backgroundimage/battle_room_5/battle_room_" + floor_room + ".png");
           
           for(int i = 0; i < floor_5[floor_room-1].exit.length; i++){
             for(int j = 0; j < floor_5[floor_room-1].exit[i].length; j++){
@@ -473,25 +487,25 @@ void test_move(){
     //up
     case 0:
       //println("WALL up: " + map.wall[cur_y-1][cur_x]);
-      can_move = !map.wall[cur_y-1][cur_x];
+      can_move = !map.wall[cur_y-1][cur_x] && !map.npc[cur_y-1][cur_x];
       break;
                     
     //right
     case 1:
       //println("WALL right: " + map.wall[cur_y-1][cur_x]);
-      can_move = !map.wall[cur_y][cur_x+1];
+      can_move = !map.wall[cur_y][cur_x+1] && !map.npc[cur_y][cur_x+1];
       break;
                     
     //down
     case 2:
       //println("WALL down: " + map.wall[cur_y-1][cur_x]);
-      can_move = !map.wall[cur_y+1][cur_x];
+      can_move = !map.wall[cur_y+1][cur_x] && !map.npc[cur_y+1][cur_x];
       break;
                     
    //left
    case 3:
      //println("WALL left: " + map.wall[cur_y-1][cur_x]);
-     can_move = !map.wall[cur_y][cur_x-1];
+     can_move = !map.wall[cur_y][cur_x-1] && !map.npc[cur_y][cur_x-1];
      break;
      
    default:
@@ -499,4 +513,72 @@ void test_move(){
      can_move = false;
      break;
   }
+}
+
+void npc_on_map(){
+      //companions
+      if(floor == 1 && floor_room == 3){
+        if(npc_in_cell[0])
+          draw_NPC(13*sqw, 6*sqh, 0);
+          
+        if(npc_in_cell[1])
+          draw_NPC(18*sqw, 6*sqh, 1);
+        
+        if(npc_in_cell[2])
+          draw_NPC(23*sqw, 6*sqh, 2);
+        
+        if(npc_in_cell[3])
+          draw_NPC(13*sqw, 15*sqh, 3);
+        
+        if(npc_in_cell[4])
+          draw_NPC(18*sqw, 15*sqh, 4);
+        
+        if(npc_in_cell[5])
+          draw_NPC(23*sqw, 15*sqh, 5);
+      }
+      
+      //Boss
+      if(floor == 1 && floor_room == 2){
+        if(boss_defeated < 1){
+          image(boss_img[floor - 1], 11 * sqw, 10 * sqh, sqw, sqh);
+        }
+      }else if(floor == 2 && floor_room == 4){
+        if(boss_defeated < 2){
+          image(boss_img[floor - 1], 19.5 * sqw, 5.75 * sqh, sqw * 1.5, sqh * 1.5);
+        }
+      }else if(floor == 3 && floor_room == 3){
+        if(boss_defeated < 3){
+          image(boss_img[floor - 1], 15 * sqw, 7 * sqh, sqw * 2, sqh * 2);
+        }
+      }else if(floor == 4 && floor_room == 7){
+        if(boss_defeated < 4){
+          image(boss_img[floor - 1], 20 * sqw, 9 * sqh, sqw, sqh);
+        }
+      }else if(floor == 5 && floor_room == 6){
+        if(boss_defeated < 5){
+          image(boss_img[floor - 1], 20 * sqw, 6 * sqh, sqw * 2, sqh * 2);
+        }
+      }
+      
+      //princess
+      if(floor == 5 && floor_room == 7){
+        image(princess, 18.5 * sqw, 6.5 * sqh, sqw * 1.3, sqh * 1.5);
+      }
+      
+      //equipment safe
+      if(floor == 2 && floor_room == 6){
+        image(safe, 10 * sqw, 13 * sqh, sqw, sqh);
+      }
+      
+      if(floor == 3 && floor_room == 3){
+        image(item_list[98].img, 22 * sqw, 6 * sqh, sqw, sqh);
+      }
+      
+      if(floor == 4 && floor_room == 8){
+        image(safe, 10 * sqw, 13 * sqh, sqw, sqh);
+      }
+      
+      if(floor == 5 && floor_room == 4){
+        image(safe, 10 * sqw, 12 * sqh, sqw, sqh);
+      }
 }

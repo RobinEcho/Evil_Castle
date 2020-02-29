@@ -170,6 +170,90 @@ class Elite extends Monster_AI{
 }
 
 class Boss extends Monster_AI{
-
+  int aoe = 0;
+  @Override
+  public void attack_mode(){
+    switch(floor){
+      
+      case 1:
+        attack(0,0,1);
+        break;
+        
+      case 2:
+        do{
+          this.target = r.nextInt(100) % c_pt;
+        }while(!p[this.target].is_alive());
+        
+        aoe = r.nextInt(100) % 10;
+        
+        //on first round ignore taunt
+        if(round == 1){
+          if(aoe > 7){
+            skill(battle_list[cur].id, this.target, 1, 3);
+          }else if(aoe > 6){
+            skill(battle_list[cur].id, this.target, 1, 2);
+          }else if(aoe > 1){
+            skill(battle_list[cur].id, this.target, 1, 0);
+          }else{
+            attack(battle_list[cur].id, this.target, 1);
+          }
+          
+        //if taunted
+        }else if(battle_list[cur].buff_round[1] > 0){
+          attack(battle_list[cur].id, (int)battle_list[cur].buff_list[1], 1);
+          
+        //if mp < 40% recover
+        }else if(battle_list[cur].get_cur_mp() / battle_list[cur].get_max_mp() < 40){
+          skill(battle_list[cur].id, battle_list[cur].id, 0, 1);
+          
+        //if hp > 90% 
+        }else if(battle_list[cur].get_cur_hp() / battle_list[cur].get_max_hp() > 0.9){
+          attack(battle_list[cur].id, this.target, 1);
+          
+        //if hp > 60% % <= 90%
+        }else if(battle_list[cur].get_cur_hp() / battle_list[cur].get_max_hp() > 0.6){
+          if(aoe == 0){
+            skill(battle_list[cur].id, this.target, 1, 3);
+          }else if(aoe == 1){
+            skill(battle_list[cur].id, this.target, 1, 2);
+          }else if(aoe == 2){
+            attack(battle_list[cur].id, this.target, 1);
+          }else{
+            skill(battle_list[cur].id, this.target, 1, 0);
+          }
+          
+        //if hp >= 20% % <= 60%
+        }else if(battle_list[cur].get_cur_hp() / battle_list[cur].get_max_hp() >= 0.2){
+          if(aoe == 0){
+            attack(battle_list[cur].id, this.target, 1);
+          }else if(aoe < 3){
+            skill(battle_list[cur].id, this.target, 1, 2);
+          }else if(aoe < 5){
+            skill(battle_list[cur].id, this.target, 1, 3);
+          }else{
+            skill(battle_list[cur].id, this.target, 1, 0);
+          }
+          
+        //last stage boss has 80% chance to use recover skill
+        }else{
+          if(aoe > 7){
+            attack(battle_list[cur].id, this.target, 1);
+          }else{
+            skill(battle_list[cur].id, battle_list[cur].id, 0, 1);
+          }
+        }
+        break;
+        
+      case 3:
+        break;
+        
+      case 4:
+        break;
+        
+      case 5:
+        break;
+        
+    }
+  }
 
 }

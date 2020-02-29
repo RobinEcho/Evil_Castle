@@ -3,17 +3,36 @@
   Monster status setting
   ********************************************/ 
 
+String f1_normal[] = {"Slime","Bat","Skeleton Soldier"};
+String f1_boss = "Skeleton Warden";
+
+String f2_normal[] = {"Poison Rat","Stoveg Host","Briquettes"};
+String f2_elite = "Skeleton Guard";
+String f2_boss = "Demon Librarian";
+
+String f3_normal[] = {"Little Demon","Poison Spider","Pumpkin Demon"};
+String f3_elite = "Devil Butler";
+String f3_boss = "Bloodthirsty Butcher";
+
+String f4_normal[] = {"Greenface","Wild crocodile","Puppet"};
+String f4_elite = "Vampire warrior";
+String f4_boss = "War adviser";
+
+String f5_normal[] = {"Green devil snake","Unicorn Beetle","Ghost warrior","Bloodthirsty bird"};
+String f5_elite = "Dracula's avatar";
+String f5_boss = "Dracula";
 
 
 class Monster extends Units{
   protected int m_type;
   protected String monster_type = "Normal";
   protected float mod = 1.0;
+  PImage battle_img;
   
   public Monster(){
     type = 0;
     
-    this.skillset = new int[3];
+    this.skillset = new int[4];
   }
   
   public Monster(int t){
@@ -32,27 +51,58 @@ class Monster extends Units{
 
   
   public void init_stats(){
+    
+    
     this.alive = true;
+    
+    int type = 0;
+    
+    type = r.nextInt(3)+1;
     
     switch(m_type){
       case 1:
         this.monster_type = "Normal";
         this.mod = 1.0;
         switch(floor){
+          
           case 1:
-            this.img = loadImage("src/monster/normal/floor_1/n" + (r.nextInt(3)+1) + ".png");
+            this.img = loadImage("src/monster/normal/floor_1/n" + type + ".png");
+            this.battle_img = loadImage("src/monster/normal/floor_1/n" + type + "_battle.png");
+            
+            this.name = f1_normal[type-1];
             break;
+          
           case 2:
-            this.img = loadImage("src/monster/normal/floor_2/n" + (r.nextInt(3)+1) + ".png");
+            this.img = loadImage("src/monster/normal/floor_2/n" + type + ".png");
+            this.battle_img = loadImage("src/monster/normal/floor_2/n" + type + "_battle.png");
+            
+            this.name = f2_normal[type-1];
+            
             break;
+          
           case 3:
-            this.img = loadImage("src/monster/normal/floor_3/n" + (r.nextInt(3)+1) + ".png");
+            this.img = loadImage("src/monster/normal/floor_3/n" + type + ".png");
+            this.battle_img = loadImage("src/monster/normal/floor_3/n" + type + "_battle.png");
+            
+            this.name = f3_normal[type-1];
+            
             break;
           case 4:
-            this.img = loadImage("src/monster/normal/floor_4/n" + (r.nextInt(3)+1) + ".png");
+            this.img = loadImage("src/monster/normal/floor_4/n" + type + ".png");
+            this.battle_img = loadImage("src/monster/normal/floor_4/n" + type + "_battle.png");
+            
+            this.name = f4_normal[type-1];
+            
             break;
           case 5:
-            this.img = loadImage("src/monster/normal/floor_5/n" + (r.nextInt(4)+1) + ".png");
+            
+            type = r.nextInt(4)+1;;
+            
+            this.img = loadImage("src/monster/normal/floor_5/n" + type + ".png");
+            this.battle_img = loadImage("src/monster/normal/floor_5/n" + type + "_battle.png");
+            
+            this.name = f5_normal[type-1];
+            
             break;
         }
         this.skill_count = 1;
@@ -68,16 +118,25 @@ class Monster extends Units{
             this.img = loadImage("src/monster/elite/floor_1/e1.png");
             break;
           case 2:
+            
             this.img = loadImage("src/monster/elite/floor_2/e1.png");
+            
+            this.name = f2_elite;
             break;
           case 3:
             this.img = loadImage("src/monster/elite/floor_3/e1.png");
+            
+            this.name = f3_elite;
             break;
           case 4:
             this.img = loadImage("src/monster/elite/floor_4/e1.png");
+            
+            this.name = f4_elite;
             break;
           case 5:
             this.img = loadImage("src/monster/elite/floor_5/e1.png");
+            
+            this.name = f5_elite;
             break;
         }
         this.skill_count = 2;
@@ -96,28 +155,53 @@ class Monster extends Units{
         switch(floor){
           case 1:
             this.img = loadImage("src/monster/boss/floor_1/b1.png");
+            
+            this.name = f1_boss;
             break;
           case 2:
             this.img = loadImage("src/monster/boss/floor_2/b1.png");
+            
+            this.name = f2_boss;
             break;
           case 3:
             this.img = loadImage("src/monster/boss/floor_3/b1.png");
+            
+            this.name = f3_boss;
             break;
           case 4:
             this.img = loadImage("src/monster/boss/floor_4/b1.png");
+            
+            this.name = f4_boss;
             break;
           case 5:
             this.img = loadImage("src/monster/boss/floor_5/b1.png");
+            
+            this.name = f5_boss;
             break;
         }
         
         this.skill_count = 3;
         
-        for(int i = 0; i < skill_count; i++){
-          this.skillset[i] = r.nextInt(7);
+        switch(floor){
+          case 2:
+            this.skills = new Boss_Skill_floor_2();
+            break;
+            
+          case 3:
+            this.skills = new Boss_Skill_floor_3();
+            break;
+            
+          case 4:
+            this.skills = new Boss_Skill_floor_4();
+            break;
+            
+          case 5:
+            this.skills = new Boss_Skill_floor_5();
+            break;
+            
         }
         
-        this.skills = new Elite_Skill();
+        
         break;
       
     }
@@ -126,7 +210,7 @@ class Monster extends Units{
     this.pdef = (level * 10) * mod;
     this.matk = (level * 10) * mod;
     this.mdef = (level * 10) * mod;
-    this.spd = (level * 10) * mod;
+    this.spd = (level * 1) * mod;
     this.max_hp = (level * 2) * mod;
     this.max_mp = (level * 2) * mod;
     this.cur_hp = (level * 2) * mod;

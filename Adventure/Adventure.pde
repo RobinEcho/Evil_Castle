@@ -6,6 +6,7 @@ import library
   import java.io.*;
   import java.util.Random;
   import java.lang.Math.*;
+  import processing.sound.*;
 
 
  
@@ -24,7 +25,8 @@ import library
  Create style
 ********************************************/   
   
-  PImage bg, bag_img, indicator;
+  PImage bg, bag_img, princess, safe;
+  PImage battle_bg, dead;
   PImage[] npc = new PImage[6];
   PFont font;
   
@@ -52,10 +54,13 @@ import library
   
   int new_companion;
   
-  boolean shop_set = false, cell_key = true;
+  boolean shop_set = false, cell_key = false, box_key = false;
   boolean[] npc_in_cell = {true, true, true, true, true, true};
+  boolean boss_battle = false;
+  boolean play_bgm = true, play_battle = false, play_end = false;
   
   PImage[] buff_icon = new PImage[buff_count];
+  PImage[] boss_img = new PImage[5];
 
 
 /*******************************************
@@ -91,6 +96,8 @@ import library
     Boss boss = new Boss();
     
     Merchant shop = new Merchant();
+    
+    SoundFile bgm, battle_bgm, ending;
   
   /*******************************************
     key variable to draw or action
@@ -114,18 +121,22 @@ import library
     
     frameRate(rate);
     background(0,0,100);
-     text("Loading", 400, 400);
+    text("Loading", 400, 400);
     colorMode(HSB, 100);
-    indicator = loadImage("src/turn.png");
     
-    npc[0] = loadImage("src/npc/knight.png");
-    npc[1] = loadImage("src/npc/paladin.png");
-    npc[2] = loadImage("src/npc/ranger.png");
-    npc[3] = loadImage("src/npc/assassin.png");
-    npc[4] = loadImage("src/npc/mage.png");
-    npc[5] = loadImage("src/npc/priest.png");
+
+    
+    img_Set();
+    
+    audio_init();
     
     load_items();
+        
+    
+    
+    hit_set();
+    
+
     
     for(int i = 0; i < 4; i++){
       m[i] = new Monster();
@@ -155,34 +166,9 @@ import library
       floor_5[i] = new Map();
       floor_5[i].init_exit(5, (i+1));
     }
-    
-    wall_set();
-    map = floor_1[floor_room - 1];
-    
-    hit_set();
-    
-    buff_icon[0] = loadImage("src/buff/def_up.png");
-    buff_icon[1] = loadImage("src/buff/taunt.png");
-    buff_icon[2] = loadImage("src/buff/patk_up.png");
-    buff_icon[3] = loadImage("src/buff/bleed.png");
-    buff_icon[4] = loadImage("src/buff/stun.png");
-    buff_icon[5] = loadImage("src/buff/no_die.png");
-    buff_icon[6] = loadImage("src/buff/heal.png");
-    buff_icon[7] = loadImage("src/buff/sleep.png");
-    buff_icon[8] = loadImage("src/buff/atk_up.png");
-    buff_icon[9] = loadImage("src/buff/bind.png");
-    buff_icon[10] = loadImage("src/buff/agi_up.png");
-    buff_icon[11] = loadImage("src/buff/bleed.png");
-    buff_icon[12] = loadImage("src/buff/patk_up.png");
-    buff_icon[13] = loadImage("src/buff/sleep.png");
-    buff_icon[14] = loadImage("src/buff/all_up.png");
-    buff_icon[15] = loadImage("src/buff/all_up.png");
-    
   /************************************************
   try to check if save file can be loaded normally
   *************************************************/ 
-    
-    
     
     try{
       profile = loadStrings("bin/characterdata/saveddata.txt");
@@ -190,8 +176,9 @@ import library
       System.out.println("LOAD FAILED");
     }
     
-    println(profile.length);
-  }                                 //close setup()
+    map = floor_1[floor_room - 1];
+    wall_set();
+ }                                 //close setup()
 
   
   
@@ -215,7 +202,14 @@ import library
                     textAlign(CENTER);
                     text("No character detected, please start new game.", width/2, 150);
                   }
-      
+                  
+                    if(play_bgm){
+                      battle_bgm.stop();
+                      ending.stop();
+                      bgm.loop();
+                      play_bgm = false;
+                    } 
+                    
         break; 
     
       
@@ -234,46 +228,73 @@ import library
       //structureline();
       change_room(floor_room);
       move();
-      
+      npc_on_map();
       map.isBoundary();
       
-      if(floor == 1 && floor_room == 3){
-        if(npc_in_cell[0])
-          draw_NPC(13*sqw, 6*sqh, 0);
-          
-        if(npc_in_cell[1])
-          draw_NPC(18*sqw, 6*sqh, 1);
-        
-        if(npc_in_cell[2])
-          draw_NPC(23*sqw, 6*sqh, 2);
-        
-        if(npc_in_cell[3])
-          draw_NPC(13*sqw, 15*sqh, 3);
-        
-        if(npc_in_cell[4])
-          draw_NPC(18*sqw, 15*sqh, 4);
-        
-        if(npc_in_cell[5])
-          draw_NPC(23*sqw, 15*sqh, 5);
-      }
-      
-      //fill(17, 64, 98, 75);
-      //rect(0,0,500, 900);
-      //rect(p[0].charX, p[0].charY, sqw, sqh);
       p[0].display();
+      
+      if(play_bgm){
+        battle_bgm.stop();
+        ending.stop();
+        bgm.loop();
+        play_bgm = false;
+      }
+        break;
+        
+      case 3:
+        help_letter();
+        
+        break;
+        
+      case 4:
+        fill(60,100,100);
+        rect(width/2 - 200, height / 2 - 100, 400, 200);
+        fill(0, 0, 100);
+        textAlign(CENTER, CENTER);
+        textSize(40);
+        text("Door is locked", width/2, height/2);
+        break;
+        
+      case 8:
+        equipment_safe();
         break;
       
       case 11:
       
-       if(frameCount - start_frame < 100)
-       {           
-         display_level_up();
-       }else{
+       if(frameCount - start_frame < 60)
+       {
+          display_gain();  
+          //test only
+          display_level_up();
+       }       
+       else if(frameCount - start_frame < 120)
+       {
+          display_level_up();
+       }
+       
+       else{
+         
+         victory = false;
+         
          room = 2;
        }
        
        break;
+       
+       case 12:
       
+       if(frameCount - start_frame < 60)
+       {
+          display_gain();        
+       }              
+       else{
+         
+         victory = false;
+         
+         room = 2;
+       }
+       
+       break;
             
       case 80:
         
@@ -342,14 +363,19 @@ import library
         break;
         
       case 90:
-               
+        if(play_battle){
+          ending.stop();
+          bgm.stop();
+          battle_bgm.loop();
+          play_battle = false;
+        }       
         battle_UI(enemy_count);
         
         break;
       
       //attack animation
       case 91:
-      background(0,0,100);
+      background(battle_bg);
       ani_draw(atk, battle_list[cur].get_type());
         attackanimation(atk, (battle_list[cur].get_type() + 1) % 2);
         break;

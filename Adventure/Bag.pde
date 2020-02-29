@@ -27,10 +27,18 @@ class Bag{
     for(int i = 0; i < row; i++){
       for(int j = 0; j < col; j++)
       {
+        
         //image(item_list[j%3], (j+1)*hs + (j*square_width) + (width + UI_dis)/2, (i+1)*vs + (i * square_height) + vertical_margin, square_width, square_height);
         //inv[i][j] = r.nextInt(item_count);
         inv[i][j] = item_count - 1;
         //inv[i][j] = i * col + j;
+        
+        if(i == 0 & j ==0){
+          inv[i][j] = 90;
+        }
+        if(i == 0 & j ==1){
+          inv[i][j] = 93;
+        }
       }    //for loop(j)
     }    //for loop (i)
     

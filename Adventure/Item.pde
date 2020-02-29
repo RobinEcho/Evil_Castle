@@ -21,14 +21,17 @@ class Item{
       case 11:
         this.name = "Small HP Potion";
         this.rec_hp = 30;
+        this.rec_mp = 0;
         break;
       case 12:
         this.name = "Medium HP Potion";
         this.rec_hp = 100;
+        this.rec_mp = 0;
         break;
       case 13:
         this.name = "Large HP Potion";
         this.rec_hp = 300;
+        this.rec_mp = 0;
         break;
     
     
@@ -38,14 +41,17 @@ class Item{
       case 21:
         this.name = "Small MP Potion";
         this.rec_mp = 30;
+        this.rec_hp = 0;
         break;
       case 22:
         this.name = "Small MP Potion";
         this.rec_mp = 100;
+        this.rec_hp = 0;
         break;
       case 23:
         this.name = "Small MP Potion";
         this.rec_mp = 300;
+        this.rec_hp = 0;
         break;
         
       /*****************************
@@ -63,6 +69,7 @@ class Item{
       case 39:
         this.name = "Revive";
         this.rec_hp = 10;
+        this.rec_mp = 0;
         break;
        
       /*****************************
@@ -708,9 +715,20 @@ class Item{
     
     
       if(this.id < 50){
-        p[target].rec_hp(this.rec_hp);
-        p[target].rec_mp(this.rec_mp);
-        bag.inv[bag_y][bag_x] = item_count - 1;
+        if(this.id == 39){
+          if(!p[target].is_alive()){
+            p[target].ress();
+            p[target].rec_hp(this.rec_hp);
+            p[target].rec_mp(this.rec_mp);
+            bag.inv[bag_y][bag_x] = item_count - 1;
+          }
+        }else{
+          p[target].rec_hp(this.rec_hp);
+          p[target].rec_mp(this.rec_mp);
+          bag.inv[bag_y][bag_x] = item_count - 1;
+        }
+        
+        p[target].calc_stats();
       }else if(this.id > 100){
         if(p[target].job_code == (this.id / 100)){
           if(p[target].level >= item_list[bag.inv[bag_y][bag_x]].level){
@@ -784,118 +802,118 @@ public void load_items(){
     ******************************/
     if(i < 5){
       item_list[i].set_id(111 + (i%5));
-      item_list[i].set_img("src/item/equipment/knight/knight_weapon_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/knight/knight_weapon_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 10){
       item_list[i].set_id(121 + (i%5));
-      item_list[i].set_img("src/item/equipment/knight/knight_armour_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/knight/knight_armour_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 15){
       item_list[i].set_id(131 + (i%5));
-      item_list[i].set_img("src/item/equipment/knight/knight_accessory_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/knight/knight_accessory_" + ((i%5)+1) + ".jpg");
     
     /*****************************
     *  Paladin equipment
     ******************************/
     }else if(i < 20){
       item_list[i].set_id(211 + (i%5));
-      item_list[i].set_img("src/item/equipment/paladin/paladin_weapon_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/paladin/paladin_weapon_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 25){
       item_list[i].set_id(221 + (i%5));
-      item_list[i].set_img("src/item/equipment/paladin/paladin_armour_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/paladin/paladin_armour_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 30){
       item_list[i].set_id(231 + (i%5));
-      item_list[i].set_img("src/item/equipment/paladin/paladin_accessory_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/paladin/paladin_accessory_" + ((i%5)+1) + ".jpg");
     
     /*****************************
     *  Ranger equipment
     ******************************/
     }else if(i < 35){
       item_list[i].set_id(311 + (i%5));
-      item_list[i].set_img("src/item/equipment/ranger/ranger_weapon_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/ranger/ranger_weapon_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 40){
       item_list[i].set_id(321 + (i%5));
-      item_list[i].set_img("src/item/equipment/ranger/ranger_armour_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/ranger/ranger_armour_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 45){
       item_list[i].set_id(331 + (i%5));
-      item_list[i].set_img("src/item/equipment/ranger/ranger_accessory_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/ranger/ranger_accessory_" + ((i%5)+1) + ".jpg");
     
     /*****************************
     *  Assassin equipment
     ******************************/
     }else if(i < 50){
       item_list[i].set_id(411 + (i%5));
-      item_list[i].set_img("src/item/equipment/assassin/assassin_weapon_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/assassin/assassin_weapon_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 55){
       item_list[i].set_id(421 + (i%5));
-      item_list[i].set_img("src/item/equipment/assassin/assassin_armour_" + ((i%5)+1) + ".png");
-      
+      item_list[i].set_img("src/item/equipment/assassin/assassin_armour_" + ((i%5)+1) + ".jpg");
+
     }else if(i < 60){
       item_list[i].set_id(431 + (i%5));
-      item_list[i].set_img("src/item/equipment/assassin/assassin_accessory_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/assassin/assassin_accessory_" + ((i%5)+1) + ".jpg");
     
     /*****************************
     *  Mage equipment
     ******************************/
     }else if(i < 65){
       item_list[i].set_id(511 + (i%5));
-      item_list[i].set_img("src/item/equipment/mage/mage_weapon_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/mage/mage_weapon_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 70){
       item_list[i].set_id(521 + (i%5));
-      item_list[i].set_img("src/item/equipment/mage/mage_armour_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/mage/mage_armour_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 75){
       item_list[i].set_id(531 + (i%5));
-      item_list[i].set_img("src/item/equipment/mage/mage_accessory_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/mage/mage_accessory_" + ((i%5)+1) + ".jpg");
       
     /*****************************
     *  Priest equipment
     ******************************/ 
     }else if(i < 80){
       item_list[i].set_id(611 + (i%5));
-      item_list[i].set_img("src/item/equipment/priest/priest_weapon_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/priest/priest_weapon_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 85){
       item_list[i].set_id(621 + (i%5));
-      item_list[i].set_img("src/item/equipment/priest/priest_armour_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/priest/priest_armour_" + ((i%5)+1) + ".jpg");
       
     }else if(i < 90){
       item_list[i].set_id(631 + (i%5));
-      item_list[i].set_img("src/item/equipment/priest/priest_accessory_" + ((i%5)+1) + ".png");
+      item_list[i].set_img("src/item/equipment/priest/priest_accessory_" + ((i%5)+1) + ".jpg");
       
     /*****************************
     *  HP consumable
     ******************************/ 
     }else if(i < 93){
       item_list[i].set_id(11 + (i%10));
-      item_list[i].set_img("src/item/consumable/hp_" + ((i%10)+1) + ".png");
+      item_list[i].set_img("src/item/consumable/hp_" + ((i%10)+1) + ".jpg");
       
     /*****************************
     *  MP consumable
     ******************************/ 
     }else if(i < 96){
       item_list[i].set_id(18 + (i%10));
-      item_list[i].set_img("src/item/consumable/mp_" + (((i%10)+18) % 10) + ".png");
+      item_list[i].set_img("src/item/consumable/mp_" + (((i%10)+18) % 10) + ".jpg");
       
     /*****************************
     *  max potion
     ******************************/ 
     }else if(i < 97){
       item_list[i].set_id(31);
-      item_list[i].set_img("src/item/consumable/max_potion.png");
+      item_list[i].set_img("src/item/consumable/max_potion.jpg");
       
     /*****************************
     *  revive potion
     ******************************/ 
     }else if(i < 98){
       item_list[i].set_id(39);
-      item_list[i].set_img("src/item/consumable/revive.png");
+      item_list[i].set_img("src/item/consumable/revive.jpg");
      
     /*****************************
     *  Keys

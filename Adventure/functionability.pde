@@ -460,3 +460,176 @@ void recover(){
     p[i].calc_stats();
   }
 }
+
+void boss_fight(){
+  play_battle = true;
+  boss_battle = true;
+  
+  switch(floor){
+    case 1:
+      enemy_count = 1;
+      m[0].setMType(3);
+      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[0].set_level(1);
+      m[0].init_stats();
+      m[0].set_patk(1);
+      m[0].set_pdef(5);
+      m[0].set_mdef(5);
+      m[0].set_mdef(5);
+      break;
+      
+    case 2:
+      enemy_count = 1;
+      m[0].setMType(3);
+      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[0].set_level(1);
+      m[0].init_stats();
+      break;
+      
+    case 3:
+      enemy_count = 2;
+      m[0].setMType(2);
+      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[0].set_level(1);
+      m[0].init_stats();
+      
+      m[1].setMType(3);
+      //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[1].set_level(1);
+      m[1].init_stats();
+      break;
+      
+    case 4:
+      enemy_count = 3;
+      m[0].setMType(1);
+      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[0].set_level(1);
+      m[0].init_stats();
+      
+      m[1].setMType(3);
+      //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[1].set_level(1);
+      m[1].init_stats();
+      
+      m[2].setMType(1);
+      //m[2].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[2].set_level(1);
+      m[2].init_stats();
+      break;
+      
+    case 5:
+      enemy_count = 3;
+      m[0].setMType(2);
+      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[0].set_level(1);
+      m[0].init_stats();
+      
+      m[1].setMType(3);
+      //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[1].set_level(1);
+      m[1].init_stats();
+      
+      m[2].setMType(2);
+      //m[2].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      m[2].set_level(1);
+      m[2].init_stats();
+      break;
+  }
+  
+  cur = 0;
+  round = 1;
+  inBattle = true;
+  battle_end = false;
+  Units[] order;
+        
+  room = 90;
+  order = round_order();
+        
+  for(int i = 0; i < order.length; i++){
+    battle_list[i] = order[i];
+  }
+        
+  if(order[cur].get_type() == 1){
+    pid = order[cur].get_id();
+            
+    battle_mode = 0;
+  }else{
+    mid = order[cur].get_id();
+            
+    battle_mode = -1;
+  }
+}
+
+void equipment_safe(){
+  int free = 0, rand;
+  int[] eq = new int[3];
+  
+  if(box_key){
+  
+    //count free slots in bag
+    for(int i = 0; i < bag.inv.length; i++){
+        for(int j = 0; j < bag.inv[i].length; j++){
+          if(bag.inv[i][j] == item_count - 1){
+            free++;
+          }
+        }
+    }
+    
+    //no room
+    if(free < eq.length){
+      fill(60,100,100);
+      rect(width/2 - 200, height / 2 - 100, 400, 200);
+      fill(0, 0, 100);
+      textAlign(CENTER, CENTER);
+      textSize(40);
+      text("Not enough room in bag!", width/2, height/2);
+      
+    //get item
+    }else{
+      
+      for(int i = 0; i < eq.length; i++){
+        rand = r.nextInt(1000) % c_pt;
+        
+        eq[i] = (p[rand].job_code * 100) + ((r.nextInt(3) + 1) * 10) + boss_defeated;
+        
+        for(int j = 0; j < bag.inv.length; j++){
+          for(int k = 0; k < bag.inv[j].length; k++){
+            
+            //remove key from bag
+            if(bag.inv[j][k] == 100){
+              bag.inv[j][k] = item_count - 1;
+            }
+            
+            //put item in bag
+            if(bag.inv[j][k] == item_count - 1){
+              
+              bag.inv[j][k] = eq[i];
+              j = bag.inv.length - 1;
+              k = bag.inv[j].length - 1;
+              
+            }//end if
+            
+          }//end for k
+        }//end for j
+      }//end for i
+      
+      box_key = false;
+      
+      fill(60,100,100);
+      rect(width/2 - 200, height / 2 - 100, 400, 200);
+      fill(0, 0, 100);
+      textAlign(CENTER, CENTER);
+      textSize(40);
+      text("Equipment received!", width/2, height/2);
+    }//end else on free equipment
+    
+  //no key
+  }else{
+    fill(60,100,100);
+    rect(width/2 - 200, height / 2 - 100, 400, 200);
+    fill(0, 0, 100);
+    textAlign(CENTER, CENTER);
+    textSize(40);
+    text("You need a key!", width/2, height/2);
+  }
+}

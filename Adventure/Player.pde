@@ -692,7 +692,7 @@ public int[] interact(){
 
 ******************************************/
 
-public void display_level_up(){
+ void display_level_up(){
 
             stroke(0);
             
@@ -727,6 +727,36 @@ public void display_level_up(){
                   p[i].level_up = false;                
                 }
                 
-          }
-           
+          }         
+}
+
+void display_gain(){
+
+            stroke(0);
+            
+            smooth();
+            
+            if(victory)
+          {
+            for(int i = 0; i < c_pt;i++)
+            {   
+              
+                
+                  fill(60,100,100);
+                
+                  rect(width*3/8 ,height/4 + 100*i,width/4,height/8);
+                  
+                  textAlign(CENTER);
+                  
+                  textSize(30);
+                  
+                  fill(0,0,100);
+                  
+                  text(p[i].name+" has gain "+ total_exp +" exp",width/2,  height*5/16 + 100*i);
+                  
+                  textSize(20);  
+                  
+                  text("Team has gain "+ total_gold +" gold",  width/2 ,height*5/16 + 20);                            
+          }           
+       }          
 }

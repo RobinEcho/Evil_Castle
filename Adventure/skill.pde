@@ -11,6 +11,8 @@ class Skill{
   public float fix_rate = 1;
   public int round_count = 0;
   public boolean healing = false,buff_Set = false;
+  PImage icon;
+  
   public void skilldamage(){
   }
   
@@ -52,7 +54,9 @@ knight skill 1 unlock at lv1
          
          this.dmg_type = 1;
          
-         this.mp_dec = 13;        
+         this.mp_dec = 13;     
+         
+         this.icon = loadImage("src/skills/Knight/1.png");
     }
     
     @Override
@@ -84,6 +88,8 @@ knight skill 2 unlock at lv5
       this.dmg_type = 4;
       
       this.mp_dec = 20;
+      
+      this.icon = loadImage("src/skills/Knight/2.png");
     }
     
   
@@ -116,6 +122,8 @@ knight skill 3 unlock at lv10
       this.dmg_type = 1;
       
       this.mp_dec = 36;
+      
+      this.icon = loadImage("src/skills/Knight/3.png");
 
     }
     
@@ -156,6 +164,8 @@ knight skill 4 unlock at lv15
       
       this.description = "Taunt monster with sexy body";
       
+      this.icon = loadImage("src/skills/Knight/4.png");
+      
       //51
       this.mp_dec = 0;
       }
@@ -191,6 +201,8 @@ knight skill 5 unlock at lv20
             
       this.mp_dec = 68;
       
+      this.icon = loadImage("src/skills/Knight/5.png");
+      
       
       }
       
@@ -221,6 +233,8 @@ knight skill 6 unlock at lv25
        
        this.mp_dec = 80;
        
+       this.icon = loadImage("src/skills/Knight/6.png");
+       
      }
       
       @Override
@@ -231,16 +245,22 @@ knight skill 6 unlock at lv25
                   
                   for(int i = 0; i < enemy_count; i++)
                     {
-                       hit[i] = i;   
-                       
+                        
+                       hit[i] = i;
+                        
                        this.damage = battle_list[cur].get_patk() * this.mod - m[i].get_pdef();
                        
                        if(this.damage < 1){
                         this.damage = 1;
-                      }                  
-                       dmg(this.damage,i,0);
+                      }
+                        
+                        dmg(this.damage,i,0);                                                   
+                    
                     }
+                    
+                    this.damage = battle_list[cur].get_patk() * this.mod;
                  }
+
                 
                 public void skillUsed(){
                     
@@ -302,6 +322,8 @@ class pal_skill_1 extends Skill {
       this.dmg_type = 2;
       
       this.mp_dec = 21;
+      
+      this.icon = loadImage("src/skills/Paladin/1.png");
                 
   }
   
@@ -332,6 +354,8 @@ class pal_skill_2 extends Skill {
       this.dmg_type = 4;
       
       this.mp_dec = 39;
+      
+      this.icon = loadImage("src/skills/Paladin/2.png");
           
   }
   
@@ -345,7 +369,7 @@ class pal_skill_2 extends Skill {
                
                  hit[i] = i;
                  
-                 this.damage = p[pid].get_patk() * this.mod - m[i].get_pdef();
+                 this.damage = battle_list[cur].get_patk() * this.mod - m[i].get_pdef();
                  
                  if(this.damage < 1){
                         this.damage = 1;
@@ -385,13 +409,15 @@ class pal_skill_3 extends Skill {
       
       this.name = "kiss of Hel";  
       
-      this.description = "Show the crown of death from Hel, immortal body set";
+      this.description = "Crown of death on your head, immortal set";
       
       this.type = 1;
       
       this.dmg_type = 4;
       
       this.round_count = 6;
+      
+      this.icon = loadImage("src/skills/Paladin/3.png");
   }
   
   @Override
@@ -424,6 +450,8 @@ class pal_skill_4 extends Skill {
     this.dmg_type = 2;  
       
     this.mp_dec = 73;
+    
+    this.icon = loadImage("src/skills/Paladin/4.png");
            
   }
   
@@ -433,17 +461,25 @@ class pal_skill_4 extends Skill {
            this.mod = 1.2;
            
            for(int i = 0; i < enemy_count; i++){
-               hit[i] = i;
+               if(i != mid)
+               {
                  
-               this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef();
+                 hit[i] = i;
+                 
+                 this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef();
+                 
+                 if(this.damage < 1){
+                          this.damage = 1;
+                        }
+                   
+                 dmg(this.damage,i,0);
+  
+                 m[i].calc_stats();
+                              
+               }
                
-               if(this.damage < 1){
-                        this.damage = 1;
-                      }
-                 
-               dmg(this.damage,i,0);
-
-               m[i].calc_stats();
+               this.damage = battle_list[cur].get_matk() * this.mod;
+               
               }
               
   }
@@ -460,13 +496,15 @@ class pal_skill_5 extends Skill {
     
     this.name = "Striker codex";
     
-    this.description = "Codex 1: protect our side. Heal all friendly target";
+    this.description = "Codex 1: protect our friend. Heal all friendly target";
     
     this.type = 0;
     
     this.dmg_type = 4;
     
     this.mp_dec = 85;
+    
+    this.icon = loadImage("src/skills/Paladin/5.png");
 }
   
   
@@ -506,6 +544,8 @@ class pal_skill_6 extends Skill {
     this.dmg_type = 4;
     
     this.mp_dec = 143;
+    
+    this.icon = loadImage("src/skills/Paladin/6.png");
   }
 
   @Override
@@ -561,6 +601,8 @@ class r_skill_1 extends Skill{
       this.dmg_type = 1;
       
       this.mp_dec = 4;
+      
+      this.icon = loadImage("src/skills/Ranger/1.png");
             
     }
     
@@ -589,7 +631,9 @@ class r_skill_2 extends Skill{
       
       this.dmg_type = 2;
       
-      this.mp_dec = 10;    
+      this.mp_dec = 10;  
+      
+      this.icon = loadImage("src/skills/Ranger/2.png");
     }
     
     @Override
@@ -620,6 +664,8 @@ class r_skill_3 extends Skill{
       this.mp_dec = 22;
       
       this.round_count = 4;
+      
+      this.icon = loadImage("src/skills/Ranger/3.png");
     }
 
     @Override
@@ -653,6 +699,8 @@ class r_skill_4 extends Skill{
       
       this.mp_dec = 34;
       
+      this.icon = loadImage("src/skills/Ranger/4.png");
+      
     }
     
       @Override
@@ -682,6 +730,8 @@ class r_skill_5 extends Skill{
       
       this.mp_dec = 48;
       
+      this.icon = loadImage("src/skills/Ranger/5.png");
+      
     }
     
     @Override
@@ -709,7 +759,9 @@ class r_skill_6 extends Skill{
       
       this.dmg_type = 4;
       
-      this.mp_dec = 57;      
+      this.mp_dec = 57;   
+      
+      this.icon = loadImage("src/skills/Ranger/6.png");
     }
     
     @Override
@@ -783,6 +835,8 @@ class a_skill_1 extends Skill{
       
       this.mp_dec = 10;
       
+      this.icon = loadImage("src/skills/Assassin/1.png");
+      
     }
     
     @Override
@@ -803,15 +857,17 @@ class a_skill_2 extends Skill{
     
     public  a_skill_2(){
       
-      this.name = "Back thorn";
+      this.name = "Back stab";
       
-      this.description = "Thorn enemy at their back, cause physical damage";
+      this.description = "Stab enemy at their back, cause physical damage";
       
       this.type = 2;
       
       this.dmg_type = 1;
       
       this.mp_dec = 22;
+      
+      this.icon = loadImage("src/skills/Assassin/2.png");
    
     }
     
@@ -841,6 +897,8 @@ class a_skill_3 extends Skill{
       this.dmg_type = 4;
       
       this.mp_dec = 39;
+      
+      this.icon = loadImage("src/skills/Assassin/3.png");
       
     }
 
@@ -874,6 +932,8 @@ class a_skill_4 extends Skill{
       this.dmg_type = 4;
       
       this.mp_dec = 59;
+      
+      this.icon = loadImage("src/skills/Assassin/4.png");
       
     }
 
@@ -932,6 +992,7 @@ class a_skill_5 extends Skill{
       
       this.dmg_type = 4;
       
+      this.icon = loadImage("src/skills/Assassin/5.png");
       
     }
 
@@ -968,6 +1029,8 @@ class a_skill_6 extends Skill{
       this.type = 2;
       
       this.dmg_type = 1;
+      
+      this.icon = loadImage("src/skills/Assassin/6.png");
       
     }
     
@@ -1017,6 +1080,8 @@ class m_skill_1 extends Skill{
       this.dmg_type = 2;
       
       this.mp_dec = 10;
+      
+      this.icon = loadImage("src/skills/Mage/1.png");
           
     }
     
@@ -1046,6 +1111,8 @@ class m_skill_2 extends Skill{
       this.dmg_type = 2;
       
       this.mp_dec = 38;
+      
+      this.icon = loadImage("src/skills/Mage/2.png");
    
     }
     
@@ -1057,19 +1124,24 @@ class m_skill_2 extends Skill{
            
             
               for(int i = 0; i < enemy_count; i++){
-                  
-                   hit[i] = i;
-
-                   this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef(); 
+                  if(i != mid)
+                  {
+                    
+                    hit[i] = i;
+  
+                     this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef(); 
+                     
+                     if(this.damage < 1){
+                          this.damage = 1;
+                        }
+                     
+                     dmg(this.damage,i,0);
+                     
+                     m[i].calc_stats();
+                  }
+                }                                   
                    
-                   if(this.damage < 1){
-                        this.damage = 1;
-                      }
-                   
-                   dmg(this.damage,i,0);
-
-                   m[i].calc_stats();
-                }
+                 this.damage = battle_list[cur].get_matk() * this.mod;
         }
 }
 
@@ -1081,7 +1153,7 @@ mage skill 3 unlock at lv10
 class m_skill_3 extends Skill{
     
     public m_skill_3(){
-      this.name = "Requiem";
+      this.name = "Meditate";
       
       this.description = "Keep your mind in peace, regenerate your power";
       
@@ -1092,6 +1164,8 @@ class m_skill_3 extends Skill{
       this.mp_dec = 50;
       
       this.healing = false;
+      
+      this.icon = loadImage("src/skills/Mage/3.png");
     }
 
 @Override  
@@ -1118,6 +1192,8 @@ class m_skill_4 extends Skill{
       this.dmg_type = 4;
       
       this.mp_dec = 72;
+      
+      this.icon = loadImage("src/skills/Mage/4.png");
     }
 
 @Override    
@@ -1132,6 +1208,7 @@ class m_skill_4 extends Skill{
                 m[i].buff_list[13] = this.heal;
             
                 m[i].buff_round[13] = this.round_count;
+                
             }
                         
             
@@ -1154,7 +1231,9 @@ class m_skill_5 extends Skill{
       
       this.dmg_type = 2;
       
-      this.mp_dec = 89;          
+      this.mp_dec = 89;   
+      
+      this.icon = loadImage("src/skills/Mage/5.png");
 
     
     }
@@ -1195,6 +1274,8 @@ class m_skill_6 extends Skill{
       this.dmg_type = 2;
       
       this.mp_dec = 150;
+      
+      this.icon = loadImage("src/skills/Mage/6.png");
 
     }
     
@@ -1205,18 +1286,23 @@ class m_skill_6 extends Skill{
               
                   for(int i = 0; i < enemy_count; i++){
                     
-                     hit[i] = i;
-
-                     this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef();                      
-                      
-                     if(this.damage < 1){
-                        this.damage = 1;
-                      }
-                     
-                     dmg(this.damage,i,0);
-
-                     m[i].calc_stats();
+                    if(i != mid)
+                    {
+                          hit[i] = i;
+    
+                         this.damage = battle_list[cur].get_matk() * this.mod - m[i].get_mdef();                      
+                          
+                         if(this.damage < 1){
+                            this.damage = 1;
+                          }
+                         
+                         dmg(this.damage,i,0);
+    
+                         m[i].calc_stats();                    
+                    }  
                   }
+                  
+                  this.damage = battle_list[cur].get_matk() * this.mod;                  
             }
 }
 
@@ -1257,6 +1343,8 @@ class pri_skill_1 extends Skill{
       this.dmg_type = 2;
       
       this.mp_dec = 30;
+      
+      this.icon = loadImage("src/skills/Priest/1.png");
     
     }
     
@@ -1288,6 +1376,8 @@ class pri_skill_2 extends Skill{
       this.healing = true;
       
       this.mp_dec = 40;
+      
+      this.icon = loadImage("src/skills/Priest/2.png");
     }
     
     @Override
@@ -1314,6 +1404,8 @@ class pri_skill_3 extends Skill{
       this.dmg_type = 4;
       
       this.mp_dec = 80;
+      
+      this.icon = loadImage("src/skills/Priest/3.png");
     }
 
 @Override            
@@ -1348,6 +1440,8 @@ class pri_skill_4 extends Skill{
       this.healing = true;
       
       this.mp_dec = 100;
+      
+      this.icon = loadImage("src/skills/Priest/4.png");
   
     }
     
@@ -1386,6 +1480,8 @@ class pri_skill_5 extends Skill{
       this.dmg_type = 4;
       
       this.mp_dec = 112;
+      
+      this.icon = loadImage("src/skills/Priest/5.png");
     }
     
     @Override
@@ -1426,6 +1522,8 @@ class pri_skill_6 extends Skill{
       this.dmg_type = 3;
       
       this.healing = false;
+      
+      this.icon = loadImage("src/skills/Priest/6.png");
   
     }
 
@@ -1905,7 +2003,7 @@ class F2_Skill_2 extends Skill{
 class F2_Skill_3 extends Skill{
     public F2_Skill_3(){
       
-      this.name = "Oppression of libraries";
+      this.name = "Parsing";
       
       this.dmg_type = 2;
       
@@ -1913,7 +2011,28 @@ class F2_Skill_3 extends Skill{
     }
     
     public void skilldamage(){
+            
+      this.mod = 1.4;
       
+      this.damage = m[mid].get_matk() * this.mod;
+      
+      m[mid].inc_matk(m[mid].get_matk() * 0.2);      
+    }
+}
+
+class F2_Skill_4 extends Skill{
+    
+      public F2_Skill_4(){
+        
+      this.dmg_type = 2;
+      
+      this.name = "Oppression of libraries";
+      
+      this.mp_dec = m[mid].get_max_mp() * 0.4;  
+        
+    }   
+    public void skilldamage(){
+
       this.mod = 1.2;
       
       for(int i = 0; i <c_pt;i++)
@@ -1921,8 +2040,7 @@ class F2_Skill_3 extends Skill{
         hit[i] = i;
         
         if(i != pid)
-        {
-          
+        {          
           this.damage =  battle_list[cur].get_matk() * this.mod - p[pid].get_mdef();
           
           dmg(this.damage,i,1);
@@ -1932,29 +2050,7 @@ class F2_Skill_3 extends Skill{
       }
       
       this.damage = m[mid].get_matk() * this.mod;
-      
-    }
-}
 
-class F2_Skill_4 extends Skill{
-    public F2_Skill_4(){
-        
-      this.dmg_type = 2;
-      
-      this.name = "Parsing";
-      
-      this.mp_dec = m[mid].get_max_mp() * 0.4;  
-        
-    }
-    
-    public void skilldamage(){
-      
-      this.mod = 1.4;
-      
-      this.damage = m[mid].get_matk() * this.mod;
-      
-      m[mid].inc_matk(m[mid].get_matk() * 0.2);
-      
     }
 }
 
@@ -2129,7 +2225,11 @@ class F4_Skill_2 extends Skill{
         for(int j = 0; j < buff_count; j++)
         {
                   p[i].buff_round[j] = 0;
+                  
+                  p[i].calc_buff();
         }
+        
+        p[i].calc_buff();
     }
   }
 }
@@ -2260,6 +2360,8 @@ class F5_Skill_3 extends Skill{
         for(int j = 0; j < buff_count; j++)
         {
            p[i].buff_round[j] = 0;
+           
+           p[i].calc_buff();
         }
     } 
   }

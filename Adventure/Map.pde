@@ -134,6 +134,11 @@ Map map = new Map();
               floor_1[floor_room_id-1].exit[10][28] = 3;
               floor_1[floor_room_id-1].exit[11][28] = 3;
               floor_1[floor_room_id-1].exit[12][28] = 3;
+              
+              //door locked
+              floor_1[floor_room_id-1].npc[10][27] = true;
+              floor_1[floor_room_id-1].npc[11][27] = true;
+              floor_1[floor_room_id-1].npc[12][27] = true;
               break;
               
             case 3:
@@ -189,6 +194,8 @@ Map map = new Map();
               
               //go up to floor 3 room 1
               floor_2[floor_room_id-1].exit[5][19] = 7;
+              //locked door
+              floor_2[floor_room_id-1].npc[5][19] = true;
               break;
               
             case 2:
@@ -232,6 +239,9 @@ Map map = new Map();
             case 6:
               floor_2[floor_room_id-1].exit[12][28] = 1;
               floor_2[floor_room_id-1].exit[13][28] = 1;
+              
+              //equipment safe
+              floor_2[floor_room_id-1].npc[13][10] = true; 
               break;
         }
         break;
@@ -255,10 +265,20 @@ Map map = new Map();
                 
                 floor_3[floor_room_id-1].exit[10][9] = 3;
                 floor_3[floor_room_id-1].exit[10][10] = 3;
+                
                 break;
           
           case 3:
                 floor_3[floor_room_id-1].exit[18][19] = 2;
+                
+                //boss
+                floor_3[floor_room_id-1].npc[7][15] = true;
+                floor_3[floor_room_id-1].npc[7][16] = true;
+                floor_3[floor_room_id-1].npc[8][15] = true;
+                floor_3[floor_room_id-1].npc[8][16] = true;
+                
+                //equipment safe
+                floor_3[floor_room_id-1].npc[6][22] = true; 
                 break;
                 
           case 4:
@@ -308,6 +328,8 @@ Map map = new Map();
                 
                 // to 4th, go up
                 floor_3[floor_room_id-1].exit[4][20] = 10;
+                // door locked
+                floor_3[floor_room_id-1].npc[4][20] = true;
                 break;
           
           case 9:
@@ -385,13 +407,21 @@ Map map = new Map();
               floor_4[floor_room_id-1].exit[10][10] = 8;
               floor_4[floor_room_id-1].exit[11][10] = 8;
               
+              //boss
+              floor_4[floor_room_id-1].npc[9][20] = true;
+              
               // to 5th floor, go up 
               floor_4[floor_room_id-1].exit[5][20] = 9;
+              // door locked
+              floor_4[floor_room_id-1].npc[5][20] = true;
               break;
           
           case 8:
               floor_4[floor_room_id-1].exit[12][28] = 7;
               floor_4[floor_room_id-1].exit[13][28] = 7;
+              
+              //equipment safe
+              floor_4[floor_room_id-1].npc[13][10] = true; 
               break;
             
         }
@@ -430,7 +460,10 @@ Map map = new Map();
             
             case 4:
               floor_5[floor_room_id-1].exit[15][18] = 3;
-              floor_5[floor_room_id-1].exit[15][19] = 3;              
+              floor_5[floor_room_id-1].exit[15][19] = 3; 
+              
+              //equipment safe
+              floor_5[floor_room_id-1].npc[12][10] = true; 
               break;
             
             case 5:
@@ -444,8 +477,19 @@ Map map = new Map();
               floor_5[floor_room_id-1].exit[17][20] = 5;
               floor_5[floor_room_id-1].exit[17][21] = 5;
               
+              //to princess room
               floor_5[floor_room_id-1].exit[10][13] = 7;
               floor_5[floor_room_id-1].exit[11][13] = 7;
+              
+              //door locked
+              floor_5[floor_room_id-1].npc[10][13] = true;
+              floor_5[floor_room_id-1].npc[11][13] = true;
+              
+              //boss
+              floor_5[floor_room_id-1].npc[6][20] = true;
+              floor_5[floor_room_id-1].npc[6][21] = true;
+              floor_5[floor_room_id-1].npc[7][20] = true;
+              floor_5[floor_room_id-1].npc[7][21] = true;
               break;
             
             case 7:
@@ -542,7 +586,9 @@ void init_1F(){
                   floor_1[i].wall[j][k] = false;
                 }
               }
-                
+              
+              //boss
+              floor_1[i].npc[10][11] = true;
           break;
         
         case 2:
@@ -773,6 +819,9 @@ void init_2F(){
                 for(int k = 13;k<= 26;k++){
                   floor_2[i].wall[16][k] = false;
                 }
+                
+                //boss
+                floor_2[i].npc[6][20] = true;
           break;
         
         case 4:

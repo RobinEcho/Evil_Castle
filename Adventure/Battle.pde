@@ -2,8 +2,8 @@
  have battle with monster
 ********************************************/
 
-boolean dodge = false, esc = true;
-boolean inBattle = false;
+boolean dodge, esc = true;
+boolean inBattle = false, victory = false;
 boolean show_damage = false;
 boolean arrive = false, returned = false;
 int battle_UI_margin = 10;
@@ -13,6 +13,7 @@ float cx, cy = height*2/3 + battle_UI_margin;
   float defender_x, defender_y;
   float distance_x, distance_y;
   int atk, def;
+  int total_exp = 0,total_gold = 0;
 
 /*******************************************
  calculation damage
@@ -121,13 +122,11 @@ void attack(int attacker, int defender, int def_type){
     damage = 0;
     
     dmg(damage, defender, def_type);
-
 }
   /*
   
    
-  */
-  
+  */  
   else{
   
     dmg(damage, defender, def_type);
@@ -317,12 +316,12 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                         damage = 1;
                       }
                
-                m[releaser].dec_mp( p[releaser].skills.skill[skill_id].mp_dec);  
+                m[releaser].dec_mp( m[releaser].skills.skill[skill_id].mp_dec);  
                 
                 dmg(damage,receiver,def_type);
                 
                 m[releaser].calc_stats();
-                m[receiver].calc_stats();
+                p[receiver].calc_stats();
                
           }
               else{
@@ -346,7 +345,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                 m[releaser].dec_mp( m[releaser].skills.skill[skill_id].mp_dec);  
                 dmg(damage,receiver,def_type);
                 m[releaser].calc_stats();
-                m[receiver].calc_stats();
+                p[receiver].calc_stats();
             
           }
               else{
@@ -367,8 +366,8 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
                          m[receiver].calc_stats();
                      }
                      else{
-                         m[releaser].rec_mp(p[releaser].skills.skill[skill_id].heal);
-                         m[releaser].dec_mp(p[releaser].skills.skill[skill_id].mp_dec);
+                         m[releaser].rec_mp(m[releaser].skills.skill[skill_id].heal);
+                         m[releaser].dec_mp(m[releaser].skills.skill[skill_id].mp_dec);
                          m[releaser].calc_stats();
                          m[receiver].calc_stats();
                      }          
@@ -412,8 +411,7 @@ void ani_draw(int cover, int type){
           m[i].battle_y = enemy_y;
         }
       }else{
-        fill(0,100,100);
-        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        image(dead, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
       }
     }else{
       
@@ -436,8 +434,7 @@ void ani_draw(int cover, int type){
           m[i].battle_y = enemy_y;
         }
       }else{
-        fill(0,100,100);
-        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        image(dead, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
         m[i].battle_x = enemy_x;
         m[i].battle_y = enemy_y;
       }
@@ -453,9 +450,11 @@ void ani_draw(int cover, int type){
   
   //Draw player images and player status
   for(int i = 0; i < c_pt; i++){
-    if(p[i].is_alive()){
+    
       p[i].battle_x = i*pc_width/2.0f + pcx;
       p[i].battle_y = i*pc_height*1.5f + pcy;
+      
+    if(p[i].is_alive()){
       
       if(type == 1){
         if(cover != i){
@@ -473,6 +472,8 @@ void ani_draw(int cover, int type){
       rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width, battle_UI_margin, 50);
       fill(0,100,100);
       rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width * hp_percent, battle_UI_margin, 50);
+    }else{
+      image(dead, p[i].battle_x, p[i].battle_y, pc_width, pc_height);
     }
       
         //player stats
@@ -602,7 +603,6 @@ void if_dodge(int attacker,int defender, int attacker_type){
        
         if(r.nextInt(10000) < dodge_rate * 10000)
         {
-        
           dodge = true;
         
         }else{
@@ -683,9 +683,12 @@ void battle_end(){
     
     inBattle = false;
     
-    room = 2;
+    victory = true;
     
-    int total_exp = 0,total_gold = 0;
+    room = 12;
+    
+    total_exp = 0;
+    total_gold = 0;
     
     //gain exp and gold while victory
     for(int i = 0; i < c_pt; i++)
@@ -698,7 +701,9 @@ void battle_end(){
        p[i].gainExp(total_exp);
     }
      p[0].gold_inc(total_gold);
-
+      
+     display_gain(); 
+      
     //caculate buff
     for(int i = 0; i < c_pt; i++)
     {
@@ -718,7 +723,95 @@ void battle_end(){
       }
     }
     
-    loot();
+    if(boss_battle){
+      boss_battle = false;
+      boss_defeated++;
+      
+      switch(floor){
+        case 1:
+          //remove boss
+          floor_1[1].del_npc(11,10);
+          
+          // open door
+          floor_1[1].del_npc(27,10);
+          floor_1[1].del_npc(27,11);
+          floor_1[1].del_npc(27,12);
+          break;
+          
+        case 2:
+          //remove boss
+          floor_2[3].del_npc(20,6);
+          println("remove 2");
+          
+          //open door to floor 3
+          floor_2[0].del_npc(19,5);
+          break;
+          
+        case 3:
+          //remove boss
+          floor_3[2].del_npc(15,7);
+          floor_3[2].del_npc(16,7);
+          floor_3[2].del_npc(15,8);
+          floor_3[2].del_npc(16,8);
+          println("remove 3");
+          
+          // open door to floor 4
+          floor_3[7].del_npc(20,4);
+          break;
+          
+        case 4:
+          //remove boss
+          floor_4[6].del_npc(20,9);
+          
+          // open door to floor 5
+          floor_4[6].del_npc(20,5);
+        break;
+        
+        case 5:
+          //remove boss
+          floor_5[5].del_npc(20,6);
+          floor_5[5].del_npc(21,6);
+          floor_5[5].del_npc(20,7);
+          floor_5[5].del_npc(21,7);
+          
+          //open door to princess
+          floor_5[5].del_npc(13,10);
+          floor_5[5].del_npc(13,11);
+          break;
+      }
+      
+      if(!cell_key){
+        for(int i = 0; i < bag.inv.length; i++){
+          for(int j = 0; j < bag.inv[i].length; j++){
+            if(bag.inv[i][j] == item_count - 1){
+              bag.inv[i][j] = 99;
+              i = bag.inv.length - 1;
+              j = bag.inv[i].length - 1;
+            }
+          }
+        }
+        
+        cell_key = true;
+      }
+      
+      if(!box_key){
+        for(int i = 0; i < bag.inv.length; i++){
+          for(int j = 0; j < bag.inv[i].length; j++){
+            if(bag.inv[i][j] == item_count - 1){
+              bag.inv[i][j] = 100;
+              i = bag.inv.length - 1;
+              j = bag.inv[i].length - 1;
+            }
+          }
+        }
+        
+        box_key = true;
+      }
+    }
+    
+      loot();
+    
+    play_bgm = true;
   }
 }
 
@@ -740,7 +833,7 @@ void display_damage(int target, int def_type){
       text(battle_list[cur].name + " dealt " + display_dmg + " to " + m[target].name, command_x, command_y);
       break;
     case 1:
-      text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[target].name, command_x, command_y);
+      text(battle_list[cur].name + " dealt " + display_dmg + " to " + p[pid].name, command_x, command_y);
       break;
   }
 }

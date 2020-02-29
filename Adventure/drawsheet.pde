@@ -27,7 +27,8 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     textFont(font);
     
   //should be replaced by image
-    background(0);
+    bg = loadImage("src/backgroundimage/evil_castle.jpg");
+    image(bg, 0, 0, width, height);
   //
   
     textSize(60);
@@ -51,7 +52,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   ********************************************/
   
   void jobchoicestyle(){
-    background(0);
+    image(bg, 0, 0, width, height);
    
     text_height =25;
     boxwidth = 240;
@@ -60,18 +61,20 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
     boxX = (width-boxwidth)/2;
     boxY = (height-boxheight)/2;
     
+    fill(0,0,100);
     textSize(45);
     text("Please choose your job",boxX+boxwidth/2,50);
     
-    fill(33,50);
+    fill(60,100,100);
     noStroke();
     rect(boxX,boxY,boxwidth,boxheight,9);
     stroke(0);
     textAlign(CENTER, CENTER);
     textSize(text_height);
+    fill(0,0,100);
     for(int i =0; i<total_jobs;i++)
     {
-      fill(40,100);
+      
       text(job_list[i],boxX+boxwidth/2,i*60+boxY+40);     
     }
               
@@ -141,7 +144,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   command_y = height/3.0f + battle_UI_margin/2.0; 
   
   textSize(40);
-  background(0,0,100);
+  background(battle_bg);
   /*
   fill(66, 100, 100);
   rect(battle_UI_margin, battle_UI_margin, width/2 - 2 * battle_UI_margin, height*2/3 - 2 * battle_UI_margin);
@@ -159,8 +162,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         m[i].battle_x = enemy_x;
         m[i].battle_y = enemy_y;
       }else{
-        fill(0,100,100);
-        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        image(dead, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
       }
     }else{
       
@@ -175,8 +177,7 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
         m[i].battle_x = enemy_x;
         m[i].battle_y = enemy_y;
       }else{
-        fill(0,100,100);
-        rect( enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
+        image(dead, enemy_x, enemy_y, enemy_width * m[i].get_mod(), enemy_height * m[i].get_mod());
         m[i].battle_x = enemy_x;
         m[i].battle_y = enemy_y;
       }
@@ -191,9 +192,11 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
   
   //Draw player images and player status
   for(int i = 0; i < c_pt; i++){
-    if(p[i].is_alive()){
+    
       p[i].battle_x = i*pc_width/2.0f + pcx;
       p[i].battle_y = i*pc_height*1.5f + pcy;
+      
+    if(p[i].is_alive()){  
       
       image(p[i].battle_img, p[i].battle_x, p[i].battle_y, pc_width, pc_height);
       
@@ -205,6 +208,10 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
       rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width, battle_UI_margin, 50);
       fill(0,100,100);
       rect(i*pc_width/2.0f + pcx, i*pc_height*1.5f + pcy - battle_UI_margin * 2, pc_width * hp_percent, battle_UI_margin, 50);
+    }else{
+      
+      image(dead, p[i].battle_x, p[i].battle_y, pc_width, pc_height);
+      
     }
       
         //player stats
@@ -294,10 +301,10 @@ float pc_width, pc_height, pcx, pcy, hp_percent;
                 normal.attack_mode();
                 break;
               case 2:
-              normal.attack_mode();
+              elite.attack_mode();
                 break;
               case 3:
-              normal.attack_mode();
+              boss.attack_mode();
                 break;
             }
           }else{
@@ -523,3 +530,49 @@ void ally_selection(){
           }
         }
 }
+
+
+    void help_letter(){
+      
+      fill(60,100,100);
+      
+      int size = 25;
+      
+      rect(width/4,height/4,width/2,height/2,50);
+      
+      float text_x = width/4+10;
+      
+      float text_y = height/4;
+      
+      textSize(size);
+      
+      textAlign(LEFT);
+      
+      fill(0,0,100);
+      
+      text("Hello Adam:", text_x +size ,text_y + size);
+      
+      size = 30;
+      
+      text("I am your firend Wang, I got your message and finally found your sister. She was caught",text_x , text_y + 2*size);
+      
+      text("by the king of vampire - Dracula, also the lord of the evil castle. About the reason, I",text_x, text_y + 3*size);
+      
+      text("think is your family's Bloodline. Your sister's blood can keep him alive even with light.",text_x, text_y + 4*size);
+      
+      text("I have ask my friend send you in, but you need to defeat all his Subordinates. Your",text_x, text_y + 5*size);
+      
+      text("sister in on the top floor. I think you can find people in castle who was caught like your",text_x, text_y + 6*size);
+      
+      text("sister.",text_x, text_y + 7*size);
+      
+      text("Good Luck",text_x, text_y + 8*size);
+      
+      text("keycode 'O' for tiny menu",text_x, text_y + 11*size);
+      
+      text("keycode 'F' for interactive",text_x, text_y + 12*size);
+      
+      text("keycode 'B' for open backpack",text_x, text_y + 13*size);  
+      
+      text("keycode 'H' for open this letter again                                       Made by KOGD team",text_x, text_y + 14*size);    
+  }
