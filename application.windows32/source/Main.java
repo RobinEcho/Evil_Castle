@@ -1563,6 +1563,8 @@ public void display_damage(int target, int def_type){
     case 1:
     
       if(skill_used){
+        
+          println("cur:"+cur+"command:" + command);
         if(battle_list[cur].skills.skill[command].dmg_type == 3){
           text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
         }else{
@@ -4558,18 +4560,17 @@ class Monster extends Units{
       
     }
     
-    this.patk = (level * 15) * mod;
-    this.pdef = (level * 15) * mod;
-    this.matk = (level * 15) * mod;
-    this.mdef = (level * 15) * mod;
-    this.spd = (level * 8) * mod;
-    this.max_hp = (level * 40) * mod;
-    this.max_mp = (level * 40) * mod;
-    this.cur_hp = (level * 40) * mod;
-    this.cur_mp = (level * 40) * mod;
+    this.patk = (level * 5) * mod;
+    this.pdef = (level * 3) * mod;
+    this.matk = (level * 5) * mod;
+    this.mdef = (level * 3) * mod;
+    this.spd = (level * 2) * mod;
+    this.max_hp = (level * 10) * mod;
+    this.max_mp = (level * 10) * mod;
+    this.cur_hp = (level * 10) * mod;
+    this.cur_mp = (level * 10) * mod;
     this.hp_dec = 0;
-    this.mp_dec = 0;
-    
+    this.mp_dec = 0;    
     
   }
 	

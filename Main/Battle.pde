@@ -949,6 +949,8 @@ void display_damage(int target, int def_type){
     case 1:
     
       if(skill_used){
+        
+          println("cur:"+cur+"command:" + command);
         if(battle_list[cur].skills.skill[command].dmg_type == 3){
           text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
         }else{
