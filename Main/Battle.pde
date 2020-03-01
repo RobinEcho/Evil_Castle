@@ -960,6 +960,7 @@ void display_damage(int target, int def_type){
       }
       break;
   }
+  skill_used = false;
 }
 
 void hit_set(){

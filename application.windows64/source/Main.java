@@ -130,11 +130,12 @@ import library
   ********************************************/ 
   
       public void settings(){
-        size(width, height);
+        size(1600, 900);
         
         side_margin = width/2 - 60;
         
         height_margin = height/2;
+    
       }                            //close settings()
   
   
@@ -144,6 +145,8 @@ import library
   ********************************************/ 
   
   public void setup(){
+    
+
     
     frameRate(rate);
     background(0,0,100);
@@ -1571,6 +1574,7 @@ public void display_damage(int target, int def_type){
       }
       break;
   }
+  skill_used = false;
 }
 
 public void hit_set(){
@@ -11659,9 +11663,9 @@ class Elite_Skill_1 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.1f;
+    this.mp_dec = m[mid].get_max_mp() * 0.1f;
     
-    this.heal = battle_list[cur].get_max_hp() * this.mod;
+    this.heal = m[mid].get_max_hp() * this.mod;
     
     for(int i = 0; i<enemy_count; i++)
     {  
@@ -11692,11 +11696,11 @@ class Elite_Skill_2 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.5f;
+    this.mp_dec = m[mid].get_max_mp() * 0.5f;
     
-    m[mid].inc_patk(battle_list[cur].get_patk() * this.mod);
+    m[mid].inc_patk(m[mid].get_patk() * this.mod);
     
-    this.damage = battle_list[cur].get_patk() * (1.1f + this.mod);
+    this.damage = m[mid].get_patk() * (1.1f + this.mod);
   }
 }
 
@@ -11719,9 +11723,9 @@ class Elite_Skill_3 extends Skill{
     
     this.mp_dec = 0;
     
-    this.heal = battle_list[cur].get_max_mp();
+    this.heal = m[mid].get_max_mp();
     
-    this.damage = battle_list[cur].get_patk() * this.mod;
+    this.damage = m[mid].get_patk() * this.mod;
     
     dmg(this.damage,mid,1);
   }
@@ -11743,9 +11747,9 @@ class Elite_Skill_4 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.3f;
+    this.mp_dec = m[mid].get_max_mp() * 0.3f;
     
-    this.damage = battle_list[cur].get_patk() * this.mod;
+    this.damage = m[mid].get_patk() * this.mod;
     
     for(int i = 0; i <c_pt;i++)
     {     
@@ -11753,7 +11757,7 @@ class Elite_Skill_4 extends Skill{
       {
          hit[i] = i;
          
-         this.damage = battle_list[cur].get_patk() - p[i].get_pdef();
+         this.damage = m[mid].get_patk() - p[i].get_pdef();
          
          dmg(this.damage, i , 1);
          
@@ -11784,15 +11788,15 @@ class Elite_Skill_5 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.2f;
+    this.mp_dec = m[mid].get_max_mp() * 0.2f;
     
-    if(m[mid].cur_hp < battle_list[cur].get_max_hp() * 0.5f)
+    if(m[mid].cur_hp < m[mid].get_max_hp() * 0.5f)
     {      
         this.mod = 0.3f;
         
         this.healing = true;
         
-        this.heal = battle_list[cur].get_max_hp() * this.mod;  
+        this.heal = m[mid].get_max_hp() * this.mod;  
     }
     else
     {
@@ -11800,7 +11804,7 @@ class Elite_Skill_5 extends Skill{
       
       this.healing = false;
       
-      this.heal = battle_list[cur].get_max_mp() * this.mod;  
+      this.heal = m[mid].get_max_mp() * this.mod;  
     }
       
   }
@@ -11821,13 +11825,13 @@ class Elite_Skill_6 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.5f;
+    this.mp_dec = m[mid].get_max_mp() * 0.5f;
     
     for(int i = 0;i<c_pt;i++)
     {
         if(i != mid)
         {
-          this.damage = battle_list[cur].get_matk() * this.mod - p[i].get_mdef();
+          this.damage = m[mid].get_matk() * this.mod - p[i].get_mdef();
           
           dmg(this.damage,i,1);
         }
@@ -11854,9 +11858,9 @@ class Elite_Skill_7 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.2f;
+    this.mp_dec = m[mid].get_max_mp() * 0.2f;
     
-    this.damage = battle_list[cur].get_matk() * this.mod;
+    this.damage = m[mid].get_matk() * this.mod;
     
     this.heal = this.damage;
     
@@ -11895,9 +11899,9 @@ class F2_Skill_1 extends Skill{
     
     public void skilldamage(){
       
-      this.mp_dec =  battle_list[cur].get_max_mp() * 0.3f;   
+      this.mp_dec =  m[mid].get_max_mp() * 0.3f;   
     
-      this.damage = battle_list[cur].get_matk() * this.mod;
+      this.damage = m[mid].get_matk() * this.mod;
     
   }
 }
@@ -11914,11 +11918,11 @@ class F2_Skill_2 extends Skill{
     
     public void skilldamage(){
       
-      this.mp_dec = battle_list[cur].get_max_mp() * 0.4f; 
+      this.mp_dec = m[mid].get_max_mp() * 0.4f; 
             
       this.mod = 1.4f;
       
-      this.damage = battle_list[cur].get_matk() * this.mod;
+      this.damage = m[mid].get_matk() * this.mod;
       
       m[mid].inc_matk(battle_list[cur].get_matk() * 0.2f);      
     }
@@ -11943,12 +11947,12 @@ class F2_Skill_3 extends Skill{
         
         this.healing = true;
         
-        this.heal = battle_list[cur].get_max_hp() * this.mod;
+        this.heal = m[mid].get_max_hp() * this.mod;
       }
       else{
         this.healing = false;
         
-        this.heal = battle_list[cur].get_max_mp();     
+        this.heal = m[mid].get_max_mp();     
       }
       
       
@@ -11978,7 +11982,7 @@ class F2_Skill_4 extends Skill{
         
         if(i != pid)
         {          
-          this.damage =  battle_list[cur].get_matk() * this.mod - p[pid].get_mdef();
+          this.damage =  m[mid].get_matk() * this.mod - p[pid].get_mdef();
           
           dmg(this.damage,i,1);
           
@@ -11986,7 +11990,7 @@ class F2_Skill_4 extends Skill{
         }
       }
       
-      this.damage = battle_list[cur].get_matk() * this.mod;
+      this.damage = m[mid].get_matk() * this.mod;
 
     }
 }
@@ -12014,11 +12018,11 @@ class F3_Skill_1 extends Skill{
     
     public void skilldamage(){
       
-      this.mp_dec = battle_list[cur].get_max_mp() * 0.2f;
+      this.mp_dec = m[mid].get_max_mp() * 0.2f;
       
       this.mod = 1.4f;
       
-      this.damage = battle_list[cur].get_patk() * this.mod;
+      this.damage = m[mid].get_patk() * this.mod;
     
     }
 }
@@ -12041,7 +12045,7 @@ class F3_Skill_2 extends Skill{
       
       this.healing = true;
       
-      this.damage = battle_list[cur].get_patk() * this.mod - p[pid].get_pdef();
+      this.damage = m[mid].get_patk() * this.mod - p[pid].get_pdef();
       
       dmg(this.damage,pid,1);
       
@@ -12074,7 +12078,7 @@ class F3_Skill_3 extends Skill{
          m[mid].inc_patk(m[mid].get_patk() * 0.1f);  
       }
       
-      this.heal =  battle_list[cur].get_max_mp() * this.mod;
+      this.heal =  m[mid].get_max_mp() * this.mod;
     }
 
 }
@@ -12091,7 +12095,7 @@ class F3_Skill_4 extends Skill{
     
     public void skilldamage(){
       
-      this.mp_dec = battle_list[cur].get_max_mp() * 0.6f;
+      this.mp_dec = m[mid].get_max_mp() * 0.6f;
       
       this.mod = 1.4f;
       
@@ -12100,7 +12104,7 @@ class F3_Skill_4 extends Skill{
         hit[i] = i;
         if(i != pid){
           
-          this.damage = battle_list[cur].get_patk() - p[i].get_pdef();
+          this.damage = m[mid].get_patk() - p[i].get_pdef();
           
           dmg(this.damage,i,1);   
         }
@@ -12108,7 +12112,7 @@ class F3_Skill_4 extends Skill{
         p[i].calc_stats();  
       }
       
-      this.damage = battle_list[cur].get_patk() * this.mod;
+      this.damage = m[mid].get_patk() * this.mod;
     
     }
 
@@ -12139,11 +12143,11 @@ class F4_Skill_1 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.1f;
+    this.mp_dec = m[mid].get_max_mp() * 0.1f;
     
     this.mod = 1.2f;
     
-    this.damage = battle_list[cur].get_matk() * this.mod;
+    this.damage = m[mid].get_matk() * this.mod;
   }
 
 }
@@ -12163,9 +12167,9 @@ class F4_Skill_2 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.4f;
+    this.mp_dec = m[mid].get_max_mp() * 0.4f;
     
-    this.heal = battle_list[cur].get_max_hp() * 0.1f;
+    this.heal = m[mid].get_max_hp() * 0.1f;
     
     for(int i = 0; i<c_pt; i++)
     {
@@ -12196,7 +12200,7 @@ class F4_Skill_3 extends Skill{
   
   public void skilldamage(){
     
-    this.heal = battle_list[cur].get_max_mp() * 0.5f;
+    this.heal = m[mid].get_max_mp() * 0.5f;
     
     m[mid].inc_matk(battle_list[cur].get_matk() * 0.1f);  
   }
@@ -12215,7 +12219,7 @@ class F4_Skill_4 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.6f;
+    this.mp_dec = m[mid].get_max_mp() * 0.6f;
     
     this.mod = 1.6f;
     
@@ -12224,14 +12228,14 @@ class F4_Skill_4 extends Skill{
       hit[i] = i;
       if(i != pid)
       {
-        this.damage = battle_list[cur].get_matk() * this.mod - p[i].get_mdef();
+        this.damage = m[mid].get_matk() * this.mod - p[i].get_mdef();
         
         dmg(this.damage,i,1);
       }
       p[i].calc_stats();
     }
     
-    this.damage = battle_list[cur].get_matk() * this.mod;
+    this.damage = m[mid].get_matk() * this.mod;
   }
 }
 
@@ -12258,12 +12262,12 @@ class F5_Skill_1 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.1f;
+    this.mp_dec = m[mid].get_max_mp() * 0.1f;
     
     this.mod = 1.2f;
     
     
-    this.damage = battle_list[cur].get_patk() * this.mod;
+    this.damage = m[mid].get_patk() * this.mod;
   }
 }
 
@@ -12281,12 +12285,12 @@ class F5_Skill_2 extends Skill{
   
    public void skilldamage(){
      
-     this.mp_dec = battle_list[cur].get_max_mp() * 0.1f;
+     this.mp_dec = m[mid].get_max_mp() * 0.1f;
     
     this.mod = 1.2f;
     
     
-    this.damage = battle_list[cur].get_matk() * this.mod;
+    this.damage = m[mid].get_matk() * this.mod;
   }
 }
 
@@ -12306,7 +12310,7 @@ class F5_Skill_3 extends Skill{
   
   public void skilldamage(){
     
-    this.heal = battle_list[cur].get_max_mp() * 0.8f;
+    this.heal = m[mid].get_max_mp() * 0.8f;
     
     for(int i = 0; i<c_pt; i++)
     {
@@ -12334,24 +12338,24 @@ class F5_Skill_4 extends Skill{
   
   public void skilldamage(){
     
-    this.mp_dec = battle_list[cur].get_max_mp() * 0.1f;
+    this.mp_dec = m[mid].get_max_mp() * 0.1f;
     
     this.mod = 1.2f;
     
-    this.damage = battle_list[cur].get_matk() * this.mod;
+    this.damage = m[mid].get_matk() * this.mod;
     
     for(int i = 0; i <c_pt;i++)
     {
       
       if(i != pid)
       {
-         this.damage = battle_list[cur].get_matk() * this.mod - p[i].get_mdef();
+         this.damage = m[mid].get_matk() * this.mod - p[i].get_mdef();
          
          dmg(this.damage,i,1);
       }
       p[i].calc_stats();
     }
-  this.damage = battle_list[cur].get_matk() * this.mod;
+      this.damage =m[mid].get_matk() * this.mod;
     }
 }
   static public void main(String[] passedArgs) {

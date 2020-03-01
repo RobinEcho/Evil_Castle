@@ -108,11 +108,12 @@ import library
   ********************************************/ 
   
       public void settings(){
-        size(width, height);
+        size(1600, 900);
         
         side_margin = width/2 - 60;
         
         height_margin = height/2;
+    
       }                            //close settings()
   
   
@@ -122,6 +123,8 @@ import library
   ********************************************/ 
   
   public void setup(){
+    
+
     
     frameRate(rate);
     background(0,0,100);
