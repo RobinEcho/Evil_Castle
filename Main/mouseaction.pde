@@ -314,9 +314,12 @@ int empty_slots = 0;
          
        //not enough MP
        case 94:
+       
          room = 90;
          skill = false;
+         skill_used = false;
          battle_mode = 0;
+         
          break;
        
        case 98:
