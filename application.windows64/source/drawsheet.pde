@@ -574,5 +574,5 @@ void ally_selection(){
       
       text("keycode 'B' for open backpack",text_x, text_y + 13*size);  
       
-      text("keycode 'H' for open this letter again                                       Made by KOGD team",text_x, text_y + 14*size);    
+      text("keycode 'H' for close this page or open this letter again             Made by KOGD team",text_x, text_y + 14*size);    
   }

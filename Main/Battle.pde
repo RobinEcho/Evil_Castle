@@ -657,20 +657,22 @@ void escape(){
     if(escape >= 60){
       
       inBattle = false;
+      
       esc = true;
-  
+      
+      battle_end();
+      
       for(int i = 0; i < boss_bgm.length; i++){
         boss_bgm[i].stop();
       }
       
       battle_bgm.stop();
       
-      room = map.get_map_room();
+      room = 2;
     }
     
     else{
 
-      
       cur = (cur + 1) % (c_pt + enemy_count);
       //println("escape fail, cur: " + cur);
       esc = false;

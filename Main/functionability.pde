@@ -462,6 +462,7 @@ void recover(){
 }
 
 void boss_fight(){
+  
   play_battle = true;
   boss_battle = true;
   
@@ -508,12 +509,12 @@ void boss_fight(){
       enemy_count = 2;
       m[0].setMType(2);
       //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(15);
       m[0].init_stats();
       
       m[1].setMType(3);
       //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[1].set_level(1);
+      m[1].set_level(20);
       m[1].init_stats();
       break;
       
@@ -521,7 +522,7 @@ void boss_fight(){
       enemy_count = 3;
       m[0].setMType(1);
       //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(25);
       m[0].init_stats();
       
       m[1].setMType(3);

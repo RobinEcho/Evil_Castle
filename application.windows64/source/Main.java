@@ -1271,20 +1271,22 @@ public void escape(){
     if(escape >= 60){
       
       inBattle = false;
+      
       esc = true;
-  
+      
+      battle_end();
+      
       for(int i = 0; i < boss_bgm.length; i++){
         boss_bgm[i].stop();
       }
       
       battle_bgm.stop();
       
-      room = map.get_map_room();
+      room = 2;
     }
     
     else{
 
-      
       cur = (cur + 1) % (c_pt + enemy_count);
       //println("escape fail, cur: " + cur);
       esc = false;
@@ -6785,7 +6787,7 @@ public void ally_selection(){
       
       text("keycode 'B' for open backpack",text_x, text_y + 13*size);  
       
-      text("keycode 'H' for open this letter again                                       Made by KOGD team",text_x, text_y + 14*size);    
+      text("keycode 'H' for close this page or open this letter again             Made by KOGD team",text_x, text_y + 14*size);    
   }
 String [] shop_option = {"Shop", "Save", "Leave"};
    /*******************************************
@@ -7251,6 +7253,7 @@ public void recover(){
 }
 
 public void boss_fight(){
+  
   play_battle = true;
   boss_battle = true;
   
@@ -7297,12 +7300,12 @@ public void boss_fight(){
       enemy_count = 2;
       m[0].setMType(2);
       //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(15);
       m[0].init_stats();
       
       m[1].setMType(3);
       //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[1].set_level(1);
+      m[1].set_level(20);
       m[1].init_stats();
       break;
       
@@ -7310,7 +7313,7 @@ public void boss_fight(){
       enemy_count = 3;
       m[0].setMType(1);
       //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(25);
       m[0].init_stats();
       
       m[1].setMType(3);
