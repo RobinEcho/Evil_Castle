@@ -774,10 +774,10 @@ class Item{
     p[target].inc_spd(-1 * item_list[prev_eq_code].get_spd());
     p[target].inc_hp(-1 * item_list[prev_eq_code].get_hp());
     p[target].inc_mp(-1 * item_list[prev_eq_code].get_mp());
-    println("dec stats");
-    println("str:  " + item_list[prev_eq_code].get_str());
-    println("con:  " + item_list[prev_eq_code].get_con());
-    println("hp:  " + item_list[prev_eq_code].get_hp());
+    //println("dec stats");
+    //println("str:  " + item_list[prev_eq_code].get_str());
+    //println("con:  " + item_list[prev_eq_code].get_con());
+    //println("hp:  " + item_list[prev_eq_code].get_hp());
     
     //increase player stats by new equipment bonuses
     p[target].inc_str(item_list[new_eq_code].get_str());
@@ -792,10 +792,10 @@ class Item{
     p[target].inc_spd(item_list[new_eq_code].get_spd());
     p[target].inc_hp(item_list[new_eq_code].get_hp());
     p[target].inc_mp(item_list[new_eq_code].get_mp());
-    println("dec stats");
-    println("str:  " + item_list[new_eq_code].get_str());
-    println("con:  " + item_list[new_eq_code].get_con());
-    println("hp:  " + item_list[new_eq_code].get_hp());
+    //println("dec stats");
+    //println("str:  " + item_list[new_eq_code].get_str());
+    //println("con:  " + item_list[new_eq_code].get_con());
+    //println("hp:  " + item_list[new_eq_code].get_hp());
     
     p[target].calc_stats();
   }

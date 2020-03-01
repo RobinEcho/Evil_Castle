@@ -1450,7 +1450,7 @@ public void battle_end(){
         case 2:
           //remove boss
           floor_2[3].del_npc(20,6);
-          println("remove 2");
+          //println("remove 2");
           
           //open door to floor 3
           floor_2[0].del_npc(19,5);
@@ -1462,7 +1462,7 @@ public void battle_end(){
           floor_3[2].del_npc(16,7);
           floor_3[2].del_npc(15,8);
           floor_3[2].del_npc(16,8);
-          println("remove 3");
+          //println("remove 3");
           
           // open door to floor 4
           floor_3[7].del_npc(20,4);
@@ -1563,9 +1563,7 @@ public void display_damage(int target, int def_type){
     case 1:
     
       if(skill_used){
-        
-          println("cur:"+cur+"command:" + command);
-        if(battle_list[cur].skills.skill[command].dmg_type == 3){
+        if(battle_list[cur].skills.skill[mob_skill].dmg_type == 3){
           text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
         }else{
           text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + p[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
@@ -2360,10 +2358,10 @@ class Item{
     p[target].inc_spd(-1 * item_list[prev_eq_code].get_spd());
     p[target].inc_hp(-1 * item_list[prev_eq_code].get_hp());
     p[target].inc_mp(-1 * item_list[prev_eq_code].get_mp());
-    println("dec stats");
-    println("str:  " + item_list[prev_eq_code].get_str());
-    println("con:  " + item_list[prev_eq_code].get_con());
-    println("hp:  " + item_list[prev_eq_code].get_hp());
+    //println("dec stats");
+    //println("str:  " + item_list[prev_eq_code].get_str());
+    //println("con:  " + item_list[prev_eq_code].get_con());
+    //println("hp:  " + item_list[prev_eq_code].get_hp());
     
     //increase player stats by new equipment bonuses
     p[target].inc_str(item_list[new_eq_code].get_str());
@@ -2378,10 +2376,10 @@ class Item{
     p[target].inc_spd(item_list[new_eq_code].get_spd());
     p[target].inc_hp(item_list[new_eq_code].get_hp());
     p[target].inc_mp(item_list[new_eq_code].get_mp());
-    println("dec stats");
-    println("str:  " + item_list[new_eq_code].get_str());
-    println("con:  " + item_list[new_eq_code].get_con());
-    println("hp:  " + item_list[new_eq_code].get_hp());
+    //println("dec stats");
+    //println("str:  " + item_list[new_eq_code].get_str());
+    //println("con:  " + item_list[new_eq_code].get_con());
+    //println("hp:  " + item_list[new_eq_code].get_hp());
     
     p[target].calc_stats();
   }
@@ -9306,14 +9304,14 @@ public void battle_commands(){
              //skill
              distance = (float) ( Math.sqrt(( (x - (command_x + command_radius)) * (x - (command_x + command_radius)) + (y - command_y) * (y - command_y) ) ) );
              if(distance <= command_radius / 2.0f){
-               println("skill!");
+               //println("skill!");
                battle_mode = 2;
              }
              
              //item
              distance = (float) ( Math.sqrt(( (x - (command_x - command_radius)) * (x - (command_x - command_radius)) + (y - command_y) * (y - command_y) ) ) );
              if(distance <= command_radius / 2.0f){
-               println("item!");
+               //println("item!");
                battle_mode = 3;
              }
              

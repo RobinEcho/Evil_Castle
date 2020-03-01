@@ -531,14 +531,14 @@ void battle_commands(){
              //skill
              distance = (float) ( Math.sqrt(( (x - (command_x + command_radius)) * (x - (command_x + command_radius)) + (y - command_y) * (y - command_y) ) ) );
              if(distance <= command_radius / 2.0){
-               println("skill!");
+               //println("skill!");
                battle_mode = 2;
              }
              
              //item
              distance = (float) ( Math.sqrt(( (x - (command_x - command_radius)) * (x - (command_x - command_radius)) + (y - command_y) * (y - command_y) ) ) );
              if(distance <= command_radius / 2.0){
-               println("item!");
+               //println("item!");
                battle_mode = 3;
              }
              

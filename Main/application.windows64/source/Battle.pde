@@ -836,7 +836,7 @@ void battle_end(){
         case 2:
           //remove boss
           floor_2[3].del_npc(20,6);
-          println("remove 2");
+          //println("remove 2");
           
           //open door to floor 3
           floor_2[0].del_npc(19,5);
@@ -848,7 +848,7 @@ void battle_end(){
           floor_3[2].del_npc(16,7);
           floor_3[2].del_npc(15,8);
           floor_3[2].del_npc(16,8);
-          println("remove 3");
+          //println("remove 3");
           
           // open door to floor 4
           floor_3[7].del_npc(20,4);
@@ -949,9 +949,7 @@ void display_damage(int target, int def_type){
     case 1:
     
       if(skill_used){
-        
-          println("cur:"+cur+"command:" + command);
-        if(battle_list[cur].skills.skill[command].dmg_type == 3){
+        if(battle_list[cur].skills.skill[mob_skill].dmg_type == 3){
           text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + m[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
         }else{
           text(battle_list[cur].name + " used " + battle_list[cur].skills.skill[mob_skill].name + " on " + p[target].name, width/2, bag.vertical_margin + battle_UI_margin * 10);
