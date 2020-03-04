@@ -560,9 +560,9 @@ void ally_selection(){
       
       text("by the king of vampire - Dracula, also the lord of the evil castle. About the reason, I",text_x, text_y + 3*size);
       
-      text("think is your family's Bloodline. Your sister's blood can keep him alive even with light.",text_x, text_y + 4*size);
+      text("think is your family's Bloodline. Your sister's blood can keep him alive even in light.",text_x, text_y + 4*size);
       
-      text("I have ask my friend send you in, but you need to defeat all his Subordinates. Your",text_x, text_y + 5*size);
+      text("I have asked my friend to send you in, but you need to defeat all his Subordinates. Your",text_x, text_y + 5*size);
       
       text("sister is on the top floor. I think you can find people in castle who was caught like your",text_x, text_y + 6*size);
       
@@ -576,5 +576,5 @@ void ally_selection(){
       
       text("keycode 'B' for open backpack",text_x, text_y + 13*size);  
       
-      text("keycode 'H' for closing this page or open this letter again           Made by KOGD team",text_x, text_y + 14*size);    
+      text("keycode 'H' to open or close this letter                                         Made by KOGD team",text_x, text_y + 14*size);    
   }

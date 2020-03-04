@@ -166,18 +166,18 @@ knight skill 4 unlock at lv15
       
       this.icon = loadImage("src/skills/Knight/4.png");
       
+      this.round_count = 3;
+      
       //51
-      this.mp_dec = 50;
+      this.mp_dec = 0;
       }
       
       @Override
                public void skillUsed(){
                  
-                 this.round_count = 3;
+                 m[receive].buff_list[1] = pid;
                  
-                 m[mid].buff_list[1] = pid;
-                 
-                 m[mid].buff_round[1] = this.round_count;            
+                 m[receive].buff_round[1] = this.round_count;            
               }
 }
     
@@ -558,9 +558,9 @@ class pal_skill_6 extends Skill {
                 //skip round sleepy shiled
                 this.damage = p[pid].get_matk() * this.mod; 
 
-                  m[mid].buff_list[7] = this.damage;
+                  m[receive].buff_list[7] = this.damage;
                 
-                  m[mid].buff_round[7] = this.round_count;
+                  m[receive].buff_round[7] = this.round_count;
 
               }
  
@@ -1415,9 +1415,9 @@ class pri_skill_3 extends Skill{
           
           this.mod = 0.2;
           
-          p[pid].buff_list[14] = this.mod;
+          p[receive].buff_list[14] = this.mod;
           
-          p[pid].buff_round[14] = this.round_count;   
+          p[receive].buff_round[14] = this.round_count;   
         }
 }
 

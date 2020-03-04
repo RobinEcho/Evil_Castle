@@ -698,7 +698,7 @@ float cx, cy = height*2/3 + battle_UI_margin;
   float attacker_x, attacker_y;
   float defender_x, defender_y;
   float distance_x, distance_y;
-  int atk, def, mob_skill;
+  int atk, def, mob_skill, receive;
   int total_exp = 0,total_gold = 0;
 
 /*******************************************
@@ -971,7 +971,7 @@ public void skill(int releaser, int receiver, int def_type, int skill_id){
       case 4:
             if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
                 
-                pid = receiver;
+                receive = receiver;
                 p[releaser].skills.skill[skill_id].skilldamage();
                 
                        p[releaser].skills.skill[skill_id].skillUsed();
@@ -4695,7 +4695,7 @@ class Monster extends Units{
 	
   public float getExp(){
     
-    this.exp = this.level * this.mod;
+    this.exp = this.level * 2 * this.mod;
     
     //println("exp monster: "+this.exp);
     
@@ -6863,9 +6863,9 @@ public void ally_selection(){
       
       text("by the king of vampire - Dracula, also the lord of the evil castle. About the reason, I",text_x, text_y + 3*size);
       
-      text("think is your family's Bloodline. Your sister's blood can keep him alive even with light.",text_x, text_y + 4*size);
+      text("think is your family's Bloodline. Your sister's blood can keep him alive even in light.",text_x, text_y + 4*size);
       
-      text("I have ask my friend send you in, but you need to defeat all his Subordinates. Your",text_x, text_y + 5*size);
+      text("I have asked my friend to send you in, but you need to defeat all his Subordinates. Your",text_x, text_y + 5*size);
       
       text("sister is on the top floor. I think you can find people in castle who was caught like your",text_x, text_y + 6*size);
       
@@ -6879,7 +6879,7 @@ public void ally_selection(){
       
       text("keycode 'B' for open backpack",text_x, text_y + 13*size);  
       
-      text("keycode 'H' for closing this page or open this letter again           Made by KOGD team",text_x, text_y + 14*size);    
+      text("keycode 'H' to open or close this letter                                         Made by KOGD team",text_x, text_y + 14*size);    
   }
 String [] shop_option = {"Shop", "Save", "Leave"};
    /*******************************************
@@ -7210,7 +7210,7 @@ public void display_buff_icons(){
     
     for(int j = 0; j < buff_count; j++){
       if(m[i].buff_round[j] > 0){
-        image(buff_icon[j], enemy_x + (shown % 4) * 25, enemy_y - (rows - (shown / 4)) * 25, 20, 20);
+        image(buff_icon[j], enemy_x + enemy_width * m[i].mod + (shown % 4) * 25, enemy_y - (rows - (shown / 4)) * 25, 20, 20);
         shown++;
       }
     }
@@ -10285,18 +10285,18 @@ knight skill 4 unlock at lv15
       
       this.icon = loadImage("src/skills/Knight/4.png");
       
+      this.round_count = 3;
+      
       //51
-      this.mp_dec = 50;
+      this.mp_dec = 0;
       }
       
       @Override
                public void skillUsed(){
                  
-                 this.round_count = 3;
+                 m[receive].buff_list[1] = pid;
                  
-                 m[mid].buff_list[1] = pid;
-                 
-                 m[mid].buff_round[1] = this.round_count;            
+                 m[receive].buff_round[1] = this.round_count;            
               }
 }
     
@@ -10677,9 +10677,9 @@ class pal_skill_6 extends Skill {
                 //skip round sleepy shiled
                 this.damage = p[pid].get_matk() * this.mod; 
 
-                  m[mid].buff_list[7] = this.damage;
+                  m[receive].buff_list[7] = this.damage;
                 
-                  m[mid].buff_round[7] = this.round_count;
+                  m[receive].buff_round[7] = this.round_count;
 
               }
  
@@ -11534,9 +11534,9 @@ class pri_skill_3 extends Skill{
           
           this.mod = 0.2f;
           
-          p[pid].buff_list[14] = this.mod;
+          p[receive].buff_list[14] = this.mod;
           
-          p[pid].buff_round[14] = this.round_count;   
+          p[receive].buff_round[14] = this.round_count;   
         }
 }
 

@@ -283,7 +283,7 @@ class Monster extends Units{
 	
   public float getExp(){
     
-    this.exp = this.level * this.mod;
+    this.exp = this.level * 2 * this.mod;
     
     //println("exp monster: "+this.exp);
     

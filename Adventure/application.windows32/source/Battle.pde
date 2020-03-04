@@ -12,7 +12,7 @@ float cx, cy = height*2/3 + battle_UI_margin;
   float attacker_x, attacker_y;
   float defender_x, defender_y;
   float distance_x, distance_y;
-  int atk, def, mob_skill;
+  int atk, def, mob_skill, receive;
   int total_exp = 0,total_gold = 0;
 
 /*******************************************
@@ -285,7 +285,7 @@ void skill(int releaser, int receiver, int def_type, int skill_id){
       case 4:
             if(p[releaser].get_cur_mp() - p[releaser].skills.skill[skill_id].mp_dec >= 0){
                 
-                pid = receiver;
+                receive = receiver;
                 p[releaser].skills.skill[skill_id].skilldamage();
                 
                        p[releaser].skills.skill[skill_id].skillUsed();

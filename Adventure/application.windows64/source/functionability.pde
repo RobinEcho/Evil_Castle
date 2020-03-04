@@ -327,7 +327,7 @@ void display_buff_icons(){
     
     for(int j = 0; j < buff_count; j++){
       if(m[i].buff_round[j] > 0){
-        image(buff_icon[j], enemy_x + (shown % 4) * 25, enemy_y - (rows - (shown / 4)) * 25, 20, 20);
+        image(buff_icon[j], enemy_x + enemy_width * m[i].mod + (shown % 4) * 25, enemy_y - (rows - (shown / 4)) * 25, 20, 20);
         shown++;
       }
     }
