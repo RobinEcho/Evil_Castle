@@ -255,18 +255,18 @@ void keyPressed(){
                 case 5:
                   //boss
                   if(floor_room == 6){
-                    if((target_coord[6] == 7 && target_coord[0] == 20)
-                      || (target_coord[6] == 7 && target_coord[0] == 21)
-                      || (target_coord[7] == 8 && target_coord[0] == 20)
-                      || (target_coord[7] == 8 && target_coord[0] == 21)){
+                    if((target_coord[1] == 7 && target_coord[0] == 20)
+                      || (target_coord[1] == 7 && target_coord[0] == 21)
+                      || (target_coord[1] == 8 && target_coord[0] == 20)
+                      || (target_coord[1] == 8 && target_coord[0] == 21)){
                         
                         boss_fight();
                       
                     }
                     
                     //door
-                    if((target_coord[6] == 10 && target_coord[0] == 13)
-                      || (target_coord[6] == 11 && target_coord[0] == 13)){
+                    if((target_coord[1] == 10 && target_coord[0] == 13)
+                      || (target_coord[1] == 11 && target_coord[0] == 13)){
                         
                         room = 4;
                         

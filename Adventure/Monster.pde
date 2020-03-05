@@ -219,10 +219,10 @@ class Monster extends Units{
     this.matk = (level * 6) * mod;
     this.mdef = (level * 4) * mod;
     this.spd = (level * 3) * mod;
-    this.max_hp = (level * 42) * mod;
-    this.max_mp = (level * 42) * mod;
-    this.cur_hp = (level * 42) * mod;
-    this.cur_mp = (level * 42) * mod;
+    this.max_hp = (level * 20) * mod;
+    this.max_mp = (level * 20) * mod;
+    this.cur_hp = (level * 20) * mod;
+    this.cur_mp = (level * 20) * mod;
     this.hp_dec = 0;
     this.mp_dec = 0;
     

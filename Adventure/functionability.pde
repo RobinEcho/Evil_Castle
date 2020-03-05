@@ -509,36 +509,36 @@ void boss_fight(){
     case 4:
       enemy_count = 3;
       m[0].setMType(1);
-      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      //m[0].set_level(1);
       m[0].init_stats();
       
       m[1].setMType(3);
-      //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[1].set_level(1);
+      m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      //m[1].set_level(1);
       m[1].init_stats();
       
       m[2].setMType(1);
-      //m[2].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[2].set_level(1);
+      m[2].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      //m[2].set_level(1);
       m[2].init_stats();
       break;
       
     case 5:
       enemy_count = 3;
       m[0].setMType(2);
-      //m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[0].set_level(1);
+      m[0].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      //m[0].set_level(1);
       m[0].init_stats();
       
       m[1].setMType(3);
-      //m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[1].set_level(1);
+      m[1].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      //m[1].set_level(1);
       m[1].init_stats();
       
       m[2].setMType(2);
-      //m[2].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
-      m[2].set_level(1);
+      m[2].set_level(r.nextInt(100) % 5 + 1 + (floor-1) * 5);
+      //m[2].set_level(1);
       m[2].init_stats();
       break;
   }
