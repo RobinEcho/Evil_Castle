@@ -2,29 +2,49 @@
 
 Junjie Peng - D18124895
 
-Start menu and job choice interface user interaction
-Option and help menu interface user interaction
-Skills for different jobs
-Monster encounter mechanics
-Battle interface
-Battle commands skill (usage and buff list) and escape
-Monster battle ai
-Save & load function
-BGM
-Game balance
+Start menu and job choice interface user interaction; 
+
+Option and help menu interface user interaction; 
+
+Skills for different jobs; 
+
+Monster encounter mechanics; 
+
+Battle interface; 
+
+Battle commands skill (usage and buff list) and escape; 
+
+Monster battle ai; 
+
+Save & load function; 
+
+BGM; 
+
+Game balance; 
+
 
 Ming Chung Poon - C18748391
 
 Map collision detection and NPC interaction detection
+
 Linking pictures from folder with corresponding game objects
+
 Character and inventory interface user interactions: on click menu, drag and drop system - equiping item and using consumables
+
 Merchant crystal interfact user interactions
+
 Battle interface
+
 Battle commands attack, skill use (buff list) and item from inventory
+
 Battle animation on attack, skill cast
+
 Monster battle ai
+
 Save & load function
+
 BGM
+
 Game balance
 
 Xin Xie - D17128351
