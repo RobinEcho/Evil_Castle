@@ -52,7 +52,7 @@ Game balance
 
 Xin Xie - D17128351:
 
-Drawing pictures for characters, bosses and monsters of first 3 floors
+Drawing pictures for characters, bosses and monsters of first 3 floors, items and equipments
 
 Inventory interface
 
