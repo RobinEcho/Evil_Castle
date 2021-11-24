@@ -3,7 +3,9 @@ Games Fleadh Group
 
 Junjie Peng - D18124895:
 
-Start menu and job choice interface user interaction
+Start menu and class choice interface user interaction
+
+Character and inventory interface user interactions: on click menu, drag and drop system - equiping item and using consumables
 
 Option and help menu interface user interaction
 
@@ -19,6 +21,8 @@ Monster battle ai
 
 Save & load function
 
+Map collision detection and NPC interaction detection
+
 BGM playing
 
 Game balance
@@ -27,11 +31,7 @@ Game balance
 
 Ming Chung Poon - C18748391:
 
-Map collision detection and NPC interaction detection
-
 Linking pictures from folder with corresponding game objects
-
-Character and inventory interface user interactions: on click menu, drag and drop system - equiping item and using consumables
 
 Merchant crystal interfact user interactions
 
